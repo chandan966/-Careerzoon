@@ -1,0 +1,36 @@
+.company-directory { margin-top: 25px; }
+.company-directory .job-directory-heading { margin-bottom: 20px; }
+.company-directory .company-letter-group { scroll-margin-top: 112px; }
+.company-directory .company-letter-group:first-of-type { margin-top: 0; }
+.company-directory .job-site-grid { grid-template-columns: repeat(3,minmax(0,1fr)); }
+.company-directory .company-brand-mark { width: 35px; height: 35px; flex-basis: 35px; border-radius: 9px; box-shadow: none; }
+.company-directory .company-brand-mark img { padding: 5px; }
+.company-site-card { flex-wrap: wrap; }
+.company-site-actions { display: flex; flex: 0 0 auto; align-items: center; gap: 5px; }
+.company-profile-link { min-height: 29px; padding: 0 7px; border: 1px solid var(--border); border-radius: 7px; color: var(--muted); background: var(--surface); font: 700 8px 'DM Sans',sans-serif; text-decoration: none; cursor: pointer; }
+.company-profile-link:hover { border-color: #c9b8ee; color: #7041b8; }
+.company-profile-link.saved { border-color: #b7ebc7; color: #15803d; background: #f0fff4; }
+.dark .company-profile-link.saved { border-color: #284335; color: #86efac; background: #14251c; }
+.company-directory .company-alphabet { margin-top: 21px; }
+@media(max-width:900px) { .company-directory .job-site-grid { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+@media(max-width:600px) {
+  .company-directory .job-directory-heading { align-items: flex-start; }
+  .company-directory .job-directory-heading h2 { font-size: 20px; }
+  .company-directory .job-directory-heading p { max-width: 290px; font-size: 10px; }
+  .company-directory .directory-total { min-width: unset; padding: 8px; gap: 6px; }
+  .company-directory .directory-total>svg { width: 15px; }
+  .company-directory .directory-total b { font-size: 13px; }
+  .company-directory .directory-total small { font-size: 7px; }
+  .company-directory .job-directory-search { height: 42px; gap: 7px; }
+  .company-directory .job-directory-search input { font-size: 10px; }
+  .company-directory .directory-count { padding-left: 7px; font-size: 8px; }
+  .company-directory .job-site-group-heading h3 { font-size: 12px; }
+  .company-directory .job-site-group-heading p { max-width: 280px; }
+  .company-directory .job-site-grid { grid-template-columns: 1fr; gap: 6px; }
+  .company-directory .company-site-card { min-height: 61px; flex-wrap: nowrap; gap: 7px; }
+  .company-directory .apply-here { min-height: 30px; padding-inline: 8px; font-size: 8px; }
+  .company-profile-link { min-height: 30px; padding-inline: 7px; }
+  .company-alphabet { align-items: flex-start; flex-direction: column; }
+  .company-alphabet>div { justify-content: flex-start; }
+  .company-alphabet a,.company-alphabet .company-letter-disabled { width: 28px; height: 28px; }
+}

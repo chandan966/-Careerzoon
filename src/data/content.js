@@ -1,3 +1,9 @@
+import { companySlotOne } from './companySlotOne.js';
+import { companySlotTwo } from './companySlotTwo.js';
+import { companySlotThree } from './companySlotThree.js';
+import { companySlotFour } from './companySlotFour.js';
+import { companySlotFive } from './companySlotFive.js';
+
 export const careers = [
   { title: 'Frontend Developer', category: 'Development', icon: 'Code2', color: 'violet', description: 'Build the accessible, responsive interfaces people use every day.', skills: ['HTML & CSS', 'JavaScript', 'React', 'Accessibility'], salary: '₹3.5L – ₹12L / year', duration: '6–9 months' },
   { title: 'Backend Developer', category: 'Development', icon: 'Server', color: 'blue', description: 'Design APIs, business logic and the reliable systems behind products.', skills: ['Programming', 'APIs', 'Databases', 'System design'], salary: '₹4L – ₹16L / year', duration: '8–12 months' },
@@ -89,7 +95,7 @@ export const skills = [
   { title: 'Software Engineering', category: 'Foundations', level: 'Beginner', description: 'Practices for designing, building, testing and maintaining software collaboratively.', time: 'Ongoing', prerequisite: 'None', careers: 'All software development roles' },
 ];
 
-export const companies = [
+const baseCompanies = [
   { name: 'TCS', sector: 'IT services', initials: 'T', color: '#3155a6', url: 'https://www.tcs.com/careers', detail: 'Technology services and consulting with early-career opportunities across engineering, cloud, data and enterprise platforms.' },
   { name: 'Infosys', sector: 'IT services', initials: 'I', color: '#1674bd', url: 'https://www.infosys.com/careers/', detail: 'Digital services and consulting, with graduate programs and roles across software, data and business technology.' },
   { name: 'Microsoft', sector: 'Software & cloud', initials: 'M', color: '#2563eb', url: 'https://careers.microsoft.com/', detail: 'Global technology company spanning cloud, developer tools, productivity software and AI.' },
@@ -107,6 +113,14 @@ export const companies = [
   { name: 'Deloitte', sector: 'Consulting & technology', initials: 'D', color: '#247a45', url: 'https://www2.deloitte.com/global/en/careers.html', detail: 'Professional services and technology consulting across engineering, cloud, data and cybersecurity.' },
   { name: 'Freshworks', sector: 'Business software', initials: 'F', color: '#138f91', url: 'https://www.freshworks.com/company/careers/', detail: 'Software products for customer and employee experience, with product, engineering and design teams.' },
 ];
+
+const seenCompanyNames = new Set();
+export const companies = [...baseCompanies, ...companySlotOne, ...companySlotTwo, ...companySlotThree, ...companySlotFour, ...companySlotFive].filter((company) => {
+  const key = company.name.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+  if (seenCompanyNames.has(key)) return false;
+  seenCompanyNames.add(key);
+  return true;
+});
 
 export const officialBoards = [
   { name: 'LinkedIn Jobs', url: 'https://www.linkedin.com/jobs/', icon: 'BriefcaseBusiness', detail: 'Search current roles and internships; verify each opening on the employer’s official site.' },

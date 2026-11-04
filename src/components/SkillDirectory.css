@@ -1,0 +1,59 @@
+.skill-directory { margin-bottom: 24px; }
+.skill-group .job-site-grid { align-items: stretch; }
+.skill-card { min-height: 126px; align-items: flex-start; }
+.skill-logo { width: 35px; height: 35px; flex: 0 0 auto; display: grid; place-items: center; overflow: hidden; border: 1px solid var(--border); border-radius: 9px; color: #fff; background: var(--skill-logo-color); font: 800 9px 'Manrope',sans-serif; letter-spacing: -.3px; }
+.skill-logo img { width: 22px; height: 22px; object-fit: contain; }
+.skill-logo.has-brand-logo { background: #fff; }
+.dark .skill-logo.has-brand-logo { background: #fff; }
+.skill-card .job-site-copy { align-self: stretch; padding: 2px 0; }
+.skill-card .job-site-copy h4 { white-space: normal; }
+.skill-card .job-site-copy>span { line-height: 1.5; }
+.skill-card .job-site-copy p { margin: 2px 0 0; color: var(--muted); font-size: 9px; line-height: 1.55; }
+.skill-card-actions { flex: 0 0 auto; display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+.skill-card-actions .apply-here { min-height: 26px; }
+.skill-details { cursor: pointer; font-family: 'DM Sans',sans-serif; }
+.skill-guide-section { margin-top: 30px; }
+.skill-section-heading { margin-bottom: 13px; display: flex; align-items: center; gap: 9px; }
+.skill-section-heading h2 { margin: 0; color: var(--text); font: 750 16px 'Manrope',sans-serif; }
+.skill-section-heading p { margin: 4px 0 0; color: var(--muted); font-size: 9px; line-height: 1.6; }
+.skill-platform-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; }
+.skill-platform-card { min-width: 0; min-height: 54px; padding: 8px 10px; display: flex; align-items: center; gap: 9px; border: 1px solid var(--border); border-radius: 9px; color: var(--text); background: var(--surface); text-decoration: none; transition: transform .16s,border-color .16s; }
+.skill-platform-card:hover { transform: translateY(-2px); border-color: #c9b8ee; }
+.skill-platform-card>span:nth-child(2) { min-width: 0; flex: 1; display: grid; gap: 4px; }
+.skill-platform-card b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 700 9px 'Manrope',sans-serif; }
+.skill-platform-card small { overflow: hidden; color: var(--muted); text-overflow: ellipsis; white-space: nowrap; font-size: 8px; }
+.skill-platform-card>svg { flex: 0 0 auto; color: var(--muted); }
+.skill-advice-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; }
+.skill-advice-card { min-width: 0; padding: 11px 12px; border: 1px solid var(--border); border-radius: 9px; background: var(--surface); }
+.skill-advice-card>span { display: inline-flex; padding: 4px 6px; border-radius: 5px; color: #6941ac; background: #f5f0ff; font-size: 7px; font-weight: 700; }
+.dark .skill-advice-card>span { color: #d7c6ff; background: #302446; }
+.skill-advice-card h3 { margin: 7px 0 4px; color: var(--text); font: 700 10px 'Manrope',sans-serif; }
+.skill-advice-card p { margin: 0; color: var(--muted); font-size: 8px; line-height: 1.55; }
+.skill-plan-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 7px; }
+.skill-plan-card { min-width: 0; padding: 9px 10px; display: flex; align-items: center; gap: 9px; border: 1px solid var(--border); border-radius: 9px; background: var(--surface); }
+.skill-plan-card>span { color: #8b5cf6; font: 800 12px 'Manrope',sans-serif; }
+.skill-plan-card>div { min-width: 0; flex: 1; }
+.skill-plan-card h3 { margin: 0; color: var(--text); font: 700 9px 'Manrope',sans-serif; }
+.skill-plan-card p { margin: 3px 0 0; color: var(--muted); font-size: 8px; }
+.skill-plan-card>small { flex: 0 0 auto; color: var(--muted); font-size: 8px; }
+.skill-certificate-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 7px; }
+.skill-certificate-card { min-width: 0; padding: 9px 10px; display: flex; align-items: center; gap: 8px; border: 1px solid var(--border); border-radius: 9px; color: #7c3aed; background: var(--surface); }
+.skill-certificate-card>div { min-width: 0; flex: 1; }
+.skill-certificate-card h3 { margin: 0; color: var(--text); font: 700 9px 'Manrope',sans-serif; }
+.skill-certificate-card p { margin: 3px 0 0; color: var(--muted); font-size: 8px; }
+.skill-certificate-card>span { flex: 0 0 auto; color: var(--muted); font-size: 8px; text-align: right; }
+.skill-career-note { margin-top: 23px; }
+.skill-directory-footer { margin-top: 13px; display: flex; align-items: flex-start; gap: 7px; color: var(--muted); font-size: 9px; line-height: 1.6; }
+.skill-directory-footer svg { flex: 0 0 auto; margin-top: 1px; color: #7c3aed; }
+@media(max-width:900px) { .skill-platform-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }.skill-advice-grid { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+@media(max-width:600px) {
+  .skill-card { min-height: 0; padding: 8px; gap: 7px; }
+  .skill-logo { width: 30px; height: 30px; border-radius: 8px; }
+  .skill-logo img { width: 19px; height: 19px; }
+  .skill-card .job-site-copy h4 { font-size: 9px; }
+  .skill-card .job-site-copy p { font-size: 8px; }
+  .skill-card-actions { gap: 4px; }
+  .skill-card-actions .apply-here { min-height: 24px; padding-inline: 5px; font-size: 7px; }
+  .skill-section-heading h2 { font-size: 14px; }
+  .skill-platform-grid,.skill-advice-grid,.skill-plan-grid,.skill-certificate-grid { grid-template-columns: 1fr; }
+}
