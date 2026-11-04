@@ -44,7 +44,7 @@ export default function App() {
     if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
     else window.scrollTo({ top: 0, behavior: 'auto' });
     const title = pageTitles[location.pathname] || 'Careerzoon';
-    document.title = `${title} | Careerzoon`;
+    document.title = `${title} | Careerzoon — Discover Skills. Explore Careers. Get Hired.`;
   }, [location.pathname, location.hash]);
 
   return <div className="app-shell"><Navbar darkMode={darkMode} onToggleTheme={() => setDarkMode((value) => !value)} /><Routes>
