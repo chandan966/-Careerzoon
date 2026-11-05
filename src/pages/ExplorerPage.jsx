@@ -49,7 +49,6 @@ const pageConfig = {
   roadmaps: { eyebrow: 'LEARN WITH A PLAN', title: 'A clear path from curious to capable.', intro: 'Choose a learning path, work through practical topics and keep your progress saved in this browser.', data: roadmaps, kind: 'roadmap', filters: ['All roadmaps', 'Beginner friendly', 'Intermediate'] },
   skills: { eyebrow: 'SKILLS DEVELOPMENT CENTER', title: 'Build skills. Build confidence.', intro: 'Explore the technical foundations and tools used across today’s technology careers.', data: skillDirectoryData, kind: 'skill', filters: ['All skills', ...skillCategories] },
   companies: { eyebrow: 'COMPANY DIRECTORY', title: 'Get to know the teams hiring in tech.', intro: 'Explore company profiles and follow the official careers link to check current roles and opportunities.', data: companies, kind: 'company', filters: ['All companies', ...new Set(companies.map((company) => company.sector))] },
-  resources: { eyebrow: 'LEARNING RESOURCE LIBRARY', title: 'Good resources. No paywall required.', intro: 'A curated collection of free, legitimate learning resources from trusted providers and official documentation.', data: resources, kind: 'resource', filters: ['All resources', 'Documentation', 'Free courses', 'Practice', 'Coding practice', 'Cloud learning', 'Design learning', 'Web development'] },
 };
 
 const guidance = [

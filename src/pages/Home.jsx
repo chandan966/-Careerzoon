@@ -19,7 +19,7 @@ export default function Home() {
       <Hero />
       <main>
         <section className="home-search-strip">
-          <div className="strip-icon"><Compass size={21} /></div><div><b>Not sure where to start?</b><span>Find a path that fits your interests, one step at a time.</span></div><Link to="/tools">Try the Career Finder <ArrowRight size={15} /></Link>
+          <div className="strip-icon"><Compass size={21} /></div><div><b>Not sure where to start?</b><span>Find a path that fits your interests, one step at a time.</span></div><Link to="/careers">Explore careers <ArrowRight size={15} /></Link>
         </section>
         <section className="content-section">
           <SectionTitle eyebrow="FIND YOUR DIRECTION" title="Careers worth exploring" description="Get to know the roles shaping technology—and find one that feels right for you." action={<Link className="text-link" to="/careers">Explore all careers <ArrowRight size={15} /></Link>} />
@@ -43,7 +43,7 @@ export default function Home() {
           <div className="promo-card interview-promo"><div className="promo-icon"><Play size={22} /></div><span className="eyebrow">PRACTICE MAKES PROGRESS</span><h2>Walk into your next<br />interview prepared.</h2><p>Work through topic-based questions, get explanations and track your score.</p><Link to="/interview" className="button-outline-light">Start practicing <ArrowRight size={15} /></Link><div className="interview-score"><TrendingUp size={18} /><span><b>Practice at your pace</b><small>Learn from every answer</small></span></div></div>
         </section>
         <section className="content-section resources-section">
-          <SectionTitle eyebrow="KEEP LEARNING" title="Good learning starts here" description="A hand-picked library of free, legitimate resources to help you keep moving." action={<Link className="text-link" to="/resources">Visit resource library <ArrowRight size={15} /></Link>} />
+          <SectionTitle eyebrow="KEEP LEARNING" title="Good learning starts here" description="A hand-picked library of free, legitimate resources to help you keep moving." />
           <div className="resource-grid">{resources.slice(0, 4).map((resource) => <a key={resource.title} href={resource.url} className="resource-link-card" target="_blank" rel="noreferrer"><span className="resource-icon"><BookOpen size={17} /></span><span><small>{resource.type}</small><b>{resource.title}</b><span>{resource.description}</span></span><ArrowUpRight size={15} /></a>)}</div>
         </section>
         <section className="faq-section" id="faq"><SectionTitle eyebrow="A FEW QUICK ANSWERS" title="Questions students ask" /><div className="faq-grid">{faq.map(([question, answer]) => <details className="faq-item" key={question}><summary>{question}<span>+</span></summary><p>{answer}</p></details>)}</div></section>

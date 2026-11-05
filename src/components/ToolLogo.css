@@ -1,0 +1,5 @@
+.tool-logo { width: 40px; height: 40px; flex: 0 0 40px; display: grid; place-items: center; overflow: hidden; border: 1px solid color-mix(in srgb,var(--tool-color) 24%,transparent); border-radius: 11px; color: var(--tool-color); background: color-mix(in srgb,var(--tool-color) 10%,white); }
+.tool-logo img { width: 24px; height: 24px; object-fit: contain; }
+.tool-logo>span { font: 800 10px 'Manrope',sans-serif; }
+.tool-logo.is-branded { background: #fff; }
+.dark .tool-logo.is-branded { background: #fff; }

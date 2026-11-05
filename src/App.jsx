@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar.jsx';
 import Footer from './components/Footer.jsx';
@@ -8,6 +8,7 @@ import ResumeBuilder from './pages/ResumeBuilder.jsx';
 import InterviewPage from './pages/InterviewPage.jsx';
 import ToolsPage from './pages/ToolsPage.jsx';
 import InfoPage from './pages/InfoPage.jsx';
+const ToolDetailPage = lazy(() => import('./pages/ToolDetailPage.jsx'));
 
 const pageTitles = {
   '/': 'Home',
@@ -19,7 +20,6 @@ const pageTitles = {
   '/companies': 'Company Directory',
   '/resume-builder': 'Resume Builder',
   '/interview': 'Interview Preparation',
-  '/resources': 'Learning Resources',
   '/tools': 'Student Tools',
   '/guidance': 'Career Guidance',
   '/about': 'About Careerzoon',
@@ -28,9 +28,38 @@ const pageTitles = {
   '/disclaimer': 'Disclaimer',
 };
 
+const pageDescriptions = {
+  '/': 'Discover IT careers, build in-demand skills, explore learning roadmaps and prepare for your next opportunity with Careerzoon.',
+  '/jobs': 'Explore trusted job-search platforms and official company career sites for technology opportunities.',
+  '/internships': 'Find trusted internship search platforms and official employer career pages for technology internships.',
+  '/careers': 'Explore technology careers, the skills they use and practical next steps for getting started.',
+  '/roadmaps': 'Follow step-by-step technology learning roadmaps with skills, projects and resources.',
+  '/skills': 'Explore technical skills and trusted learning resources for your technology career.',
+  '/companies': 'Learn about technology companies, their work and official career pages.',
+  '/resume-builder': 'Create and download a professional resume with Careerzoon’s private, browser-based resume builder.',
+  '/interview': 'Prepare for technology interviews with topic-based practice questions and explanations.',
+  '/tools': 'Discover software tools, official downloads, setup instructions and practical learning guides.',
+  '/guidance': 'Explore practical career guidance for students and early-career technology professionals.',
+  '/about': 'Learn about Careerzoon and its mission to help learners explore technology careers.',
+  '/contact': 'Contact Careerzoon by email.',
+  '/privacy': 'Read how Careerzoon handles browser-local data and external links.',
+  '/disclaimer': 'Understand the scope and limitations of Careerzoon’s educational career information.',
+};
+
+function updateMeta(selector, attribute, value) {
+  let element = document.head.querySelector(selector);
+  if (!element) {
+    element = document.createElement('meta');
+    const [key, content] = attribute;
+    element.setAttribute(key, content);
+    document.head.append(element);
+  }
+  element.setAttribute('content', value);
+}
+
 function StaticPolicy({ kind }) {
   const privacy = kind === 'privacy';
-  return <main className="policy-page"><div className="page-hero"><div className="page-hero-inner"><span className="eyebrow">CAREERZOON</span><h1>{privacy ? 'Your privacy, in plain language.' : 'A note about Careerzoon.'}</h1><p>{privacy ? 'Careerzoon is a frontend-only learning and discovery resource.' : 'Helpful career guidance, not a guarantee of employment.'}</p></div></div><article className="policy-content"><h2>{privacy ? 'Data stays in your browser' : 'Information is for educational purposes'}</h2><p>{privacy ? 'Careerzoon does not require an account and does not send resume details, bookmarks, roadmap progress, application tracker entries or checklist progress to a server. These features may use your browser’s local storage. You can clear this data through your browser settings at any time.' : 'Career information, salary context, learning plans and external listings are general educational information. We do not promise employment, verify third-party vacancies, or guarantee that salary estimates reflect a specific offer. Always verify current details with the official employer or provider.'}</p><h2>{privacy ? 'External links' : 'Third-party services'}</h2><p>{privacy ? 'Links to company career pages, learning resources and job platforms lead to third-party sites with their own privacy practices and terms.' : 'Third-party websites and job boards are independent of Careerzoon. Check URLs carefully and never pay a fee to apply for a job unless you have independently verified the process.'}</p><h2>Contact</h2><p>Visit the <a href="/contact">Contact page</a> to prepare a message locally. Messages are not transmitted to a server.</p></article></main>;
+  return <main className="policy-page"><div className="page-hero"><div className="page-hero-inner"><span className="eyebrow">CAREERZOON</span><h1>{privacy ? 'Your privacy, in plain language.' : 'A note about Careerzoon.'}</h1><p>{privacy ? 'Careerzoon is a frontend-only learning and discovery resource.' : 'Helpful career guidance, not a guarantee of employment.'}</p></div></div><article className="policy-content"><h2>{privacy ? 'Data stays in your browser' : 'Information is for educational purposes'}</h2><p>{privacy ? 'Careerzoon does not require an account and does not send resume details, bookmarks, roadmap progress, application tracker entries or checklist progress to a server. These features may use your browser’s local storage. You can clear this data through your browser settings at any time.' : 'Career information, salary context, learning plans and external listings are general educational information. We do not promise employment, verify third-party vacancies, or guarantee that salary estimates reflect a specific offer. Always verify current details with the official employer or provider.'}</p><h2>{privacy ? 'External links' : 'Third-party services'}</h2><p>{privacy ? 'Links to company career pages, learning resources and job platforms lead to third-party sites with their own privacy practices and terms.' : 'Third-party websites and job boards are independent of Careerzoon. Check URLs carefully and never pay a fee to apply for a job unless you have independently verified the process.'}</p><h2>Contact</h2><p>Email <a href="mailto:contactchandan011@gmail.com">contactchandan011@gmail.com</a>.</p></article></main>;
 }
 
 export default function App() {
@@ -43,8 +72,25 @@ export default function App() {
   useEffect(() => {
     if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
     else window.scrollTo({ top: 0, behavior: 'auto' });
-    const title = pageTitles[location.pathname] || 'Careerzoon';
-    document.title = `${title} | Careerzoon — Discover Skills. Explore Careers. Get Hired.`;
+    const isToolGuide = location.pathname.startsWith('/tools/');
+    const title = isToolGuide ? 'Software Tool Guide' : pageTitles[location.pathname] || 'Careerzoon';
+    const fullTitle = `${title} | Careerzoon — Discover Skills. Explore Careers. Get Hired.`;
+    const description = isToolGuide
+      ? `Learn how to download, set up and use ${location.pathname.split('/').pop().replace(/-/g, ' ')} with Careerzoon’s practical software guide.`
+      : pageDescriptions[location.pathname] || pageDescriptions['/'];
+    document.title = fullTitle;
+    updateMeta('meta[name="description"]', ['name', 'description'], description);
+    updateMeta('meta[property="og:title"]', ['property', 'og:title'], fullTitle);
+    updateMeta('meta[property="og:description"]', ['property', 'og:description'], description);
+    updateMeta('meta[name="twitter:card"]', ['name', 'twitter:card'], 'summary');
+    let canonical = document.head.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.rel = 'canonical';
+      document.head.append(canonical);
+    }
+    canonical.href = new URL(location.pathname, window.location.origin).href;
+    updateMeta('meta[property="og:url"]', ['property', 'og:url'], canonical.href);
   }, [location.pathname, location.hash]);
 
   return <div className="app-shell"><Navbar darkMode={darkMode} onToggleTheme={() => setDarkMode((value) => !value)} /><Routes>
@@ -57,8 +103,8 @@ export default function App() {
     <Route path="/companies" element={<ExplorerPage key="companies" page="companies" />} />
     <Route path="/resume-builder" element={<ResumeBuilder />} />
     <Route path="/interview" element={<InterviewPage />} />
-    <Route path="/resources" element={<ExplorerPage key="resources" page="resources" />} />
     <Route path="/tools" element={<ToolsPage />} />
+    <Route path="/tools/:toolSlug" element={<Suspense fallback={<main className="tool-detail-not-found">Loading tool guide…</main>}><ToolDetailPage /></Suspense>} />
     <Route path="/guidance" element={<ExplorerPage key="guidance" page="guidance" />} />
     <Route path="/about" element={<InfoPage page="about" />} />
     <Route path="/contact" element={<InfoPage page="contact" />} />

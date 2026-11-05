@@ -171,7 +171,6 @@ export const navigation = [
   { label: 'Companies', path: '/companies' },
   { label: 'Resume Builder', path: '/resume-builder' },
   { label: 'Interview Prep', path: '/interview' },
-  { label: 'Resources', path: '/resources' },
   { label: 'Tools', path: '/tools' },
 ];
 
@@ -260,7 +259,6 @@ export const searchItems = [
   ...roadmaps.map((item) => ({ title: item.title, type: 'Roadmap', path: '/roadmaps', description: `${item.time} guided learning plan` })),
   ...skills.map((item) => ({ title: item.title, type: 'Skill', path: '/skills', description: item.description })),
   ...companies.map((item) => ({ title: item.name, type: 'Company', path: '/companies', description: item.sector })),
-  ...resources.map((item) => ({ title: item.title, type: 'Resource', path: '/resources', description: item.description })),
   { title: 'Fresher jobs', type: 'Jobs', path: '/jobs', description: 'Find official job search sources' },
   { title: 'Internships', type: 'Internships', path: '/internships', description: 'Explore internship search resources' },
 ];
