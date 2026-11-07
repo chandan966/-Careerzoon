@@ -37,11 +37,11 @@ Careerzoon uses client-side routes, so configure the hosting provider to serve `
 - **Jobs:** Browse trusted job-search sources and company career pages. Careerzoon does not claim that linked positions are verified live vacancies.
 - **Internships:** Explore internship search sources and employer pages; confirm eligibility and current openings with the provider.
 - **Explore Careers:** Browse technology roles, career information, recommended skills, and related learning.
-- **Roadmaps:** Follow structured, project-oriented learning paths with steps, tools, and resources. Save progress in the browser where available.
+- **Roadmaps:** Explore 25 detailed CS and IT career paths with step-by-step topics, suggested timelines, tools, projects, and learning resources. Download the career roadmaps and companion guide together as a PDF.
 - **Skills:** Browse technical skills and learning resources.
 - **Companies:** Explore company information and links to official career pages.
 - **Resume Builder:** Create and preview a resume in the browser, then print or save it as a PDF.
-- **Interview Preparation:** Practice topic-based questions and review answers and explanations.
+- **Placement Preparation:** Follow a 10-area placement roadmap covering DSA, one programming language, OOP, DBMS and SQL, networking, operating systems, aptitude, projects, Git/GitHub, and communication/HR interviews. Expand the detailed study guide for recommended resources, practice routines, project ideas, and a six-month schedule.
 - **Tools:** Search and filter a software-tools directory, bookmark and compare tools, revisit recently viewed tools, and open individual guides with official links, setup instructions, projects, features, documentation, pricing information, alternatives, and FAQs. CSS is included in the directory.
 - **Career Guidance:** Browse career guidance content.
 - **Global navigation and search:** Responsive site navigation, search, active-page indicators, and light/dark theme selection.
