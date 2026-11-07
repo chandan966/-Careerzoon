@@ -8,6 +8,7 @@ import ResumeBuilder from './pages/ResumeBuilder.jsx';
 import InterviewPage from './pages/InterviewPage.jsx';
 import ToolsPage from './pages/ToolsPage.jsx';
 import InfoPage from './pages/InfoPage.jsx';
+import DiwaliGreeting from './components/DiwaliGreeting.jsx';
 const ToolDetailPage = lazy(() => import('./pages/ToolDetailPage.jsx'));
 
 const pageTitles = {
@@ -19,7 +20,7 @@ const pageTitles = {
   '/skills': 'Skills Development',
   '/companies': 'Company Directory',
   '/resume-builder': 'Resume Builder',
-  '/interview': 'Interview Preparation',
+  '/interview': 'Placement Preparation',
   '/tools': 'Student Tools',
   '/guidance': 'Career Guidance',
   '/about': 'About Careerzoon',
@@ -37,7 +38,7 @@ const pageDescriptions = {
   '/skills': 'Explore technical skills and trusted learning resources for your technology career.',
   '/companies': 'Learn about technology companies, their work and official career pages.',
   '/resume-builder': 'Create and download a professional resume with Careerzoon’s private, browser-based resume builder.',
-  '/interview': 'Prepare for technology interviews with topic-based practice questions and explanations.',
+  '/interview': 'Prepare for technology placements with topic-based practice questions and explanations.',
   '/tools': 'Discover software tools, official downloads, setup instructions and practical learning guides.',
   '/guidance': 'Explore practical career guidance for students and early-career technology professionals.',
   '/about': 'Learn about Careerzoon and its mission to help learners explore technology careers.',
@@ -93,7 +94,7 @@ export default function App() {
     updateMeta('meta[property="og:url"]', ['property', 'og:url'], canonical.href);
   }, [location.pathname, location.hash]);
 
-  return <div className="app-shell"><Navbar darkMode={darkMode} onToggleTheme={() => setDarkMode((value) => !value)} /><Routes>
+  return <div className="app-shell"><Navbar darkMode={darkMode} onToggleTheme={() => setDarkMode((value) => !value)} /><DiwaliGreeting /><Routes>
     <Route path="/" element={<Home />} />
     <Route path="/jobs" element={<ExplorerPage key="jobs" page="jobs" />} />
     <Route path="/internships" element={<ExplorerPage key="internships" page="internships" />} />

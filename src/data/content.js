@@ -170,7 +170,7 @@ export const navigation = [
   { label: 'Skills', path: '/skills' },
   { label: 'Companies', path: '/companies' },
   { label: 'Resume Builder', path: '/resume-builder' },
-  { label: 'Interview Prep', path: '/interview' },
+  { label: 'Placement', path: '/interview' },
   { label: 'Tools', path: '/tools' },
 ];
 

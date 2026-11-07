@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { ArrowRight, BookOpen, Check, Clock3, ExternalLink, GraduationCap, Search, Sparkles, X } from 'lucide-react';
+import { ArrowRight, BookOpen, Check, Clock3, Download, ExternalLink, GraduationCap, Search, Sparkles, X } from 'lucide-react';
 import SkillLogo from './SkillLogo.jsx';
 import { roadmapCareerPaths } from '../data/roadmapCareerPaths.js';
 import {
@@ -52,6 +52,7 @@ const roadmapCategoryCount = new Set(allRoadmapSkills.map((item) => item.categor
 export default function Roadmap2026() {
   const [query, setQuery] = useState('');
   const [selectedPath, setSelectedPath] = useState(null);
+  const [downloadError, setDownloadError] = useState('');
   const { matchingCareerPaths, groups } = useMemo(() => {
     const term = query.trim().toLowerCase();
     const matches = ({ skill, category, roadmap, description = '' }) => `${skill} ${category} ${roadmap} ${description}`.toLowerCase().includes(term);
@@ -65,6 +66,128 @@ export default function Roadmap2026() {
     return { matchingCareerPaths, groups: [...grouped.entries()] };
   }, [query]);
   const visibleCount = matchingCareerPaths.length + groups.reduce((count, [, entries]) => count + entries.length, 0);
+
+  async function downloadCareerRoadmaps() {
+    setDownloadError('');
+    try {
+      const [{ jsPDF }, { default: guide }] = await Promise.all([
+        import('jspdf'),
+        import('../data/career-roadmap-guide.md?raw'),
+      ]);
+      const pdf = new jsPDF();
+      const margin = 16;
+      const maxWidth = 178;
+      const pageBottom = 280;
+      let y = 20;
+
+      const addText = (text, size = 9, bold = false, color = [47, 55, 75], indent = 0) => {
+        pdf.setFont('helvetica', bold ? 'bold' : 'normal');
+        pdf.setFontSize(size);
+        pdf.setTextColor(...color);
+        const lines = pdf.splitTextToSize(String(text || ' '), maxWidth - indent);
+        const lineHeight = size * 0.5;
+        if (y + lines.length * lineHeight > pageBottom) {
+          pdf.addPage();
+          y = 18;
+        }
+        pdf.text(lines, margin + indent, y);
+        y += lines.length * lineHeight + 2;
+      };
+      const formatMarkdown = (text) => text
+        .replace(/!\[([^\]]*)\]\([^)]+\)/g, '$1')
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '$1 ($2)')
+        .replace(/\*\*(.*?)\*\*|__(.*?)__/g, '$1$2')
+        .replace(/\*(.*?)\*|_(.*?)_/g, '$1$2')
+        .replace(/~~(.*?)~~|`([^`]+)`/g, '$1$2')
+        .replace(/[–—]/g, '-')
+        .replace(/→/g, '->')
+        .replace(/↓/g, 'v')
+        .replace(/•/g, '-')
+        .replace(/[^\u0000-\u00ff]/g, '');
+
+      addText('Careerzoon: 25 Complete CS & IT Career Roadmaps', 18, true, [111, 63, 189]);
+      addText('A step-by-step guide with suggested timelines, tools, projects, and learning resources.', 9, false, [95, 105, 120]);
+      y += 3;
+
+      roadmapCareerPaths.forEach((path, pathIndex) => {
+        addText(`${String(pathIndex + 1).padStart(2, '0')}. ${path.skill}`, 13, true, [47, 55, 75]);
+        addText(path.category, 9, true, [111, 63, 189]);
+        addText(path.description);
+        addText(`Career direction: ${path.career}  |  Duration: ${path.duration}  |  Level: ${path.difficulty}`);
+        addText('Learning steps', 10, true, [111, 63, 189]);
+        path.topics.forEach(([topic, duration, detail], topicIndex) => {
+          addText(`${topicIndex + 1}. ${topic} (${duration})`, 9, true, [47, 55, 75], 3);
+          addText(detail, 8, false, [75, 85, 100], 6);
+        });
+        addText(`Recommended tools: ${path.tools.join(', ')}`, 8);
+        addText(`Practical projects: ${path.projects.join('; ')}`, 8);
+        addText(`Learning resources: ${path.resources.map(([name, url]) => `${name} - ${url}`).join('; ')}`, 8);
+        y += 5;
+      });
+
+      pdf.addPage();
+      y = 20;
+      addText('Complete 25-Skill Learning Guide', 18, true, [111, 63, 189]);
+      addText('Full guide provided by the user, with its learning order, timelines, skill paths, projects, and recommendations.', 9, false, [95, 105, 120]);
+      y += 3;
+
+      let inCodeBlock = false;
+      guide.split(/\r?\n/).forEach((line) => {
+        const trimmed = line.trim();
+        if (trimmed.startsWith('```')) {
+          inCodeBlock = !inCodeBlock;
+          return;
+        }
+        if (!trimmed) {
+          y += 2;
+          return;
+        }
+        if (/^[-*_]{3,}$/.test(trimmed)) {
+          y += 2;
+          return;
+        }
+        const heading = trimmed.match(/^(#{1,6})\s+(.+)$/);
+        if (heading) {
+          const level = heading[1].length;
+          addText(formatMarkdown(heading[2]), level === 1 ? 14 : level === 2 ? 11 : 9, true, [111, 63, 189]);
+          y += 2;
+          return;
+        }
+        if (trimmed.startsWith('|')) {
+          if (/^\|?\s*:?-{3,}/.test(trimmed)) return;
+          addText(formatMarkdown(trimmed.split('|').filter(Boolean).join('  |  ')), 8, false, [47, 55, 75], 3);
+          return;
+        }
+        const listItem = line.match(/^(\s*)([-*+]|\d+[.)])\s+(.+)$/);
+        if (listItem) {
+          const indent = 4 + Math.min(listItem[1].length, 8) * 2;
+          const marker = /^\d/.test(listItem[2]) ? `${listItem[2]} ` : '- ';
+          addText(`${marker}${formatMarkdown(listItem[3])}`, inCodeBlock ? 8 : 9, false, [47, 55, 75], indent);
+          return;
+        }
+        const quote = trimmed.match(/^>\s?(.*)$/);
+        if (quote) {
+          addText(formatMarkdown(quote[1]), 8, false, [95, 105, 120], 5);
+          return;
+        }
+        addText(formatMarkdown(trimmed), inCodeBlock ? 8 : 9, false, inCodeBlock ? [95, 105, 120] : [47, 55, 75], inCodeBlock ? 5 : 0);
+      });
+
+      const pageCount = pdf.getNumberOfPages();
+      for (let page = 1; page <= pageCount; page += 1) {
+        pdf.setPage(page);
+        pdf.setFont('helvetica', 'normal');
+        pdf.setFontSize(8);
+        pdf.setTextColor(125, 130, 140);
+        pdf.text(`Careerzoon | ${page} of ${pageCount}`, 194, 289, { align: 'right' });
+      }
+
+      pdf.save('careerzoon-25-career-roadmaps.pdf');
+    } catch (error) {
+      console.error('Unable to generate the career roadmap PDF.', error);
+      setDownloadError('The PDF could not be created. Please try again.');
+    }
+  }
 
   const renderSkillCard = (item) => (
     <article className={`roadmap-2026-skill-card${item.details ? ' has-roadmap-details' : ''}`} key={`${item.number}-${item.skill}`}>
@@ -92,6 +215,8 @@ export default function Roadmap2026() {
       {matchingCareerPaths.length > 0 && <section className="roadmap-2026-group roadmap-2026-career-paths">
         <div className="roadmap-2026-group-heading"><span>01</span><h3>25 complete CS &amp; IT career roadmaps</h3><small>{matchingCareerPaths.length} paths</small></div>
         <div className="roadmap-2026-skill-grid">{matchingCareerPaths.map(renderSkillCard)}</div>
+        <button className="roadmap-2026-download" type="button" onClick={downloadCareerRoadmaps}><Download size={15} /> Download 25 roadmaps + full guide (PDF)</button>
+        {downloadError && <p className="roadmap-2026-download-error" role="alert">{downloadError}</p>}
       </section>}
 
       {groups.length ? groups.map(([category, entries], categoryIndex) => (

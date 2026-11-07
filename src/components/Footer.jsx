@@ -4,7 +4,7 @@ import './Footer.css';
 
 const footerLinks = [
   { title: 'Explore', links: [['Jobs', '/jobs'], ['Internships', '/internships'], ['Careers', '/careers'], ['Roadmaps', '/roadmaps'], ['Skills', '/skills']] },
-  { title: 'Career resources', links: [['Resume builder', '/resume-builder'], ['Interview preparation', '/interview'], ['Career guidance', '/guidance']] },
+  { title: 'Career resources', links: [['Resume builder', '/resume-builder'], ['Placement', '/interview'], ['Career guidance', '/guidance']] },
   { title: 'Your toolkit', links: [['Student tools', '/tools'], ['Companies', '/companies'], ['About us', '/about'], ['FAQs', '/#faq'], ['Privacy', '/privacy'], ['Disclaimer', '/disclaimer']] },
 ];
 

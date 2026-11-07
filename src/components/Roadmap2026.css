@@ -39,6 +39,10 @@
 .roadmap-2026-detail-button { margin-top: 8px; padding: 5px 7px; display: inline-flex; align-items: center; gap: 5px; border: 1px solid #e4d9fa; border-radius: 6px; color: #7041b8; background: #fbf9ff; font: 700 8px 'DM Sans',sans-serif; cursor: pointer; }
 .dark .roadmap-2026-detail-button { border-color: #453263; color: #d0bcff; background: #262038; }
 .roadmap-2026-skill-card>a { width: 24px; height: 24px; flex: 0 0 auto; display: grid; place-items: center; border: 1px solid var(--border); border-radius: 7px; color: var(--r26-accent); background: var(--surface); }
+.roadmap-2026-download { margin-top: 12px; padding: 9px 12px; display: inline-flex; align-items: center; justify-content: center; gap: 7px; border: 1px solid var(--r26-accent); border-radius: 8px; color: #fff; background: var(--r26-accent); font: 700 10px 'DM Sans',sans-serif; cursor: pointer; transition: background .16s,border-color .16s; }
+.roadmap-2026-download:hover { border-color: #6530c4; background: #6530c4; }
+.roadmap-2026-download:focus-visible { outline: 2px solid var(--r26-accent); outline-offset: 3px; }
+.roadmap-2026-download-error { margin: 8px 0 0; color: #b42318; font-size: 9px; }
 .roadmap-2026-modal-backdrop { position: fixed; inset: 0; z-index: 80; padding: 20px; display: grid; place-items: center; background: rgba(15,23,42,.62); backdrop-filter: blur(4px); }
 .roadmap-2026-modal { position: relative; width: min(660px,100%); max-height: min(88vh,820px); padding: 25px; overflow: auto; border: 1px solid var(--border); border-radius: 15px; color: var(--text); background: var(--surface); box-shadow: 0 25px 80px rgba(0,0,0,.25); }
 .roadmap-2026-modal-close { position: absolute; top: 15px; right: 15px; width: 29px; height: 29px; display: grid; place-items: center; border: 1px solid var(--border); border-radius: 8px; color: var(--muted); background: var(--surface); cursor: pointer; }

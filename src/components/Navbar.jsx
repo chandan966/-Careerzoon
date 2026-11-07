@@ -78,6 +78,9 @@ export default function Navbar({ darkMode, onToggleTheme }) {
             </div>
           </div>
         </div>
+
+
+
       )}
     </header>
   );
