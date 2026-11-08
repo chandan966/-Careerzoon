@@ -106,7 +106,8 @@ index.html         Application entry and document metadata
 - Browser features that save data use local storage on that device; clearing browser storage removes it.
 - Do not place private credentials or API keys in client-side source code.
 - External job, internship, company, software-download, and learning links are provided by third parties. Verify important details on their official websites.
-- Configure HTTPS and any deployment security headers at the hosting provider.
+- Vercel deployments receive HTTPS, MIME-sniffing, clickjacking, referrer, and browser-permission protections from `vercel.json`. Netlify deployments receive the same headers from `public/_headers`.
+- A Content Security Policy is not set because the site loads third-party resources, including AdSense; configure and test a policy against the services you enable before adding one.
 
 ## Search engine and sharing metadata
 
