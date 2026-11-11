@@ -42,7 +42,14 @@ export default function ToolsPage() {
 
   function setInterest(value) { setInterests((old) => old.includes(value) ? old.filter((item) => item !== value) : [...old, value]); }
   function setSkill(value) { setKnownSkills((old) => old.includes(value) ? old.filter((item) => item !== value) : [...old, value]); }
-  function saveApplications(next) { setApplications(next); localStorage.setItem('careerzoon-applications', JSON.stringify(next)); }
+  function saveApplications(next) {
+    setApplications(next);
+    try {
+      localStorage.setItem('careerzoon-applications', JSON.stringify(next));
+    } catch {
+      // Storage unavailable
+    }
+  }
   function addApplication(event) {
     event.preventDefault();
     if (!newApplication.role.trim() || !newApplication.company.trim()) return;
@@ -51,7 +58,15 @@ export default function ToolsPage() {
   }
   function updateApplication(id, status) { saveApplications(applications.map((item) => item.id === id ? { ...item, status } : item)); }
   function toggleCheck(key, item, setState, storageKey) {
-    setState((old) => { const next = { ...old, [item]: !old[item] }; localStorage.setItem(storageKey, JSON.stringify(next)); return next; });
+    setState((old) => {
+      const next = { ...old, [item]: !old[item] };
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(next));
+      } catch {
+        // Storage unavailable
+      }
+      return next;
+    });
   }
   function generateLetter(event) {
     event.preventDefault();

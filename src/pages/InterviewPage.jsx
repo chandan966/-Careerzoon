@@ -12,7 +12,7 @@ function formatInlineMarkdown(text) {
     if (position > 0) parts.push(remaining.slice(0, position));
     const link = token.match(/^\[([^\]]+)\]\((https?:\/\/[^)]+)\)$/);
     if (link) {
-      parts.push(<a href={link[2]} target="_blank" rel="noreferrer" key={`link-${index}`}>{link[1]}</a>);
+      parts.push(<a href={link[2]} target="_blank" rel="noopener noreferrer" key={`link-${index}`}>{link[1]}</a>);
     } else if (token.startsWith('**') || token.startsWith('__')) {
       parts.push(<strong key={`strong-${index}`}>{token.slice(2, -2)}</strong>);
     } else if (token.startsWith('`')) {

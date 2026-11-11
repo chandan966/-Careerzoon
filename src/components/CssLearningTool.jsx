@@ -72,6 +72,6 @@ export default function CssLearningTool() {
       </div>
     </section>
 
-    <div className="css-learning-actions"><p>CSS works directly in your browser—no separate installation required.</p><div><a href="https://developer.mozilla.org/en-US/docs/Web/CSS" target="_blank" rel="noreferrer">MDN CSS reference <ExternalLink size={13} /></a><Link to="/tools/css">Open complete CSS tool guide <ArrowRight size={14} /></Link></div></div>
+    <div className="css-learning-actions"><p>CSS works directly in your browser—no separate installation required.</p><div><a href="https://developer.mozilla.org/en-US/docs/Web/CSS" target="_blank" rel="noopener noreferrer">MDN CSS reference <ExternalLink size={13} /></a><Link to="/tools/css">Open complete CSS tool guide <ArrowRight size={14} /></Link></div></div>
   </div>;
 }

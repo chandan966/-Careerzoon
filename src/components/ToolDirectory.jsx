@@ -54,7 +54,11 @@ export default function ToolDirectory() {
   function toggleBookmark(slug) {
     const next = bookmarks.includes(slug) ? bookmarks.filter((item) => item !== slug) : [...bookmarks, slug];
     setBookmarks(next);
-    localStorage.setItem('careerzoon-tool-bookmarks', JSON.stringify(next));
+    try {
+      localStorage.setItem('careerzoon-tool-bookmarks', JSON.stringify(next));
+    } catch {
+      // Storage unavailable
+    }
   }
   function toggleCompare(slug) {
     setCompareSlugs((current) => current.includes(slug)

@@ -44,7 +44,7 @@ export default function Home() {
         </section>
         <section className="content-section resources-section">
           <SectionTitle eyebrow="KEEP LEARNING" title="Good learning starts here" description="A hand-picked library of free, legitimate resources to help you keep moving." />
-          <div className="resource-grid">{resources.slice(0, 4).map((resource) => <a key={resource.title} href={resource.url} className="resource-link-card" target="_blank" rel="noreferrer"><span className="resource-icon"><BookOpen size={17} /></span><span><small>{resource.type}</small><b>{resource.title}</b><span>{resource.description}</span></span><ArrowUpRight size={15} /></a>)}</div>
+          <div className="resource-grid">{resources.slice(0, 4).map((resource) => <a key={resource.title} href={resource.url} className="resource-link-card" target="_blank" rel="noopener noreferrer"><span className="resource-icon"><BookOpen size={17} /></span><span><small>{resource.type}</small><b>{resource.title}</b><span>{resource.description}</span></span><ArrowUpRight size={15} /></a>)}</div>
         </section>
         <section className="faq-section" id="faq"><SectionTitle eyebrow="A FEW QUICK ANSWERS" title="Questions students ask" /><div className="faq-grid">{faq.map(([question, answer]) => <details className="faq-item" key={question}><summary>{question}<span>+</span></summary><p>{answer}</p></details>)}</div></section>
         <section className="closing-cta"><div><span className="eyebrow">YOUR FUTURE IS BUILT, NOT FOUND</span><h2>Start where you are.<br /><span>Grow from there.</span></h2><p>Pick one skill. Follow one roadmap. Take one step today.</p></div><Link to="/roadmaps" className="button-light">Choose your roadmap <ArrowRight size={16} /></Link></section>

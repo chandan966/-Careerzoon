@@ -56,7 +56,7 @@ export default function InternshipDirectory({ initialQuery = '' }) {
             const site = internshipSiteGroups.flatMap((group) => group.sites).find(([siteName]) => siteName === name);
             if (!site) return null;
             const [siteName, url] = site;
-            return <a className="internship-priority-card" key={name} href={url} target="_blank" rel="noreferrer">
+            return <a className="internship-priority-card" key={name} href={url} target="_blank" rel="noopener noreferrer">
               <span className="job-site-number">{String(index + 1).padStart(2, '0')}</span>
               <DirectoryLogo name={siteName} url={url} />
               <span className="internship-priority-copy"><b>{siteName}</b><small>{target}</small></span>
@@ -72,7 +72,7 @@ export default function InternshipDirectory({ initialQuery = '' }) {
           <span className="job-site-number">{String(internshipSiteGroups.flatMap((item) => item.sites).findIndex((site) => site[0] === name) + 1).padStart(2, '0')}</span>
           <DirectoryLogo name={name} url={url} />
           <div className="job-site-copy"><h4>{name}</h4><span>{bestFor}</span></div>
-          <a className="apply-here" href={url} target="_blank" rel="noreferrer">Visit site <ExternalLink size={13} /></a>
+          <a className="apply-here" href={url} target="_blank" rel="noopener noreferrer">Visit site <ExternalLink size={13} /></a>
         </article>)}</div>
       </section>) : <div className="directory-empty"><Search size={25} /><h3>No internship platforms found</h3><p>Try a different search or browse all platforms.</p><button type="button" onClick={resetFilters}>Show all platforms <ArrowRight size={14} /></button></div>}
 

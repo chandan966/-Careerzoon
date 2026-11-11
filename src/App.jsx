@@ -65,10 +65,20 @@ function StaticPolicy({ kind }) {
 
 export default function App() {
   const location = useLocation();
-  const [darkMode, setDarkMode] = useState(() => localStorage.getItem('careerzoon-theme') === 'dark');
+  const [darkMode, setDarkMode] = useState(() => {
+    try {
+      return localStorage.getItem('careerzoon-theme') === 'dark';
+    } catch {
+      return false;
+    }
+  });
   useEffect(() => {
     document.documentElement.classList.toggle('dark', darkMode);
-    localStorage.setItem('careerzoon-theme', darkMode ? 'dark' : 'light');
+    try {
+      localStorage.setItem('careerzoon-theme', darkMode ? 'dark' : 'light');
+    } catch {
+      // Storage unavailable
+    }
   }, [darkMode]);
   useEffect(() => {
     if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();

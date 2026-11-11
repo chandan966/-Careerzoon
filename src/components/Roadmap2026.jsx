@@ -193,7 +193,7 @@ export default function Roadmap2026() {
     <article className={`roadmap-2026-skill-card${item.details ? ' has-roadmap-details' : ''}`} key={`${item.number}-${item.skill}`}>
       <span className="roadmap-2026-card-mark"><SkillLogo name={item.skill} index={item.number} /><span className="roadmap-2026-number">{String(item.number).padStart(2, '0')}</span></span>
       <div><h4>{item.skill}</h4>{item.details && <p className="roadmap-2026-description">{item.description}</p>}<p className="roadmap-2026-path">{item.roadmap}</p>{item.details && <button className="roadmap-2026-detail-button" type="button" onClick={() => setSelectedPath(item)}>Explore full roadmap <ArrowRight size={13} /></button>}</div>
-      <a href={item.url} target="_blank" rel="noreferrer" aria-label={`Learn ${item.skill}`} title={`Open ${item.skill} learning resource`}><ExternalLink size={15} /></a>
+      <a href={item.url} target="_blank" rel="noopener noreferrer" aria-label={`Learn ${item.skill}`} title={`Open ${item.skill} learning resource`}><ExternalLink size={15} /></a>
     </article>
   );
 
@@ -239,7 +239,7 @@ export default function Roadmap2026() {
           <h3>Practical projects</h3>
           <ul className="roadmap-2026-project-list">{selectedPath.projects.map((project) => <li key={project}>{project}</li>)}</ul>
           <h3>Learning resources</h3>
-          <div className="roadmap-2026-resource-list">{selectedPath.resources.map(([name, url]) => <a key={name} href={url} target="_blank" rel="noreferrer">{name}<ExternalLink size={13} /></a>)}</div>
+          <div className="roadmap-2026-resource-list">{selectedPath.resources.map(([name, url]) => <a key={name} href={url} target="_blank" rel="noopener noreferrer">{name}<ExternalLink size={13} /></a>)}</div>
         </section>
       </div>}
 
@@ -256,12 +256,12 @@ export default function Roadmap2026() {
 
       <section className="roadmap-2026-section">
         <div className="roadmap-2026-section-heading"><span><BookOpen size={16} /></span><div><h3>Practice platforms</h3><p>Use a platform that matches the kind of practice you want to do.</p></div></div>
-        <div className="roadmap-2026-platforms">{roadmap2026PracticePlatforms.map(([name, purpose, url]) => <a className="roadmap-2026-platform" href={url} target="_blank" rel="noreferrer" key={name}><span><b>{name}</b><small>{purpose}</small></span><ExternalLink size={14} /></a>)}</div>
+        <div className="roadmap-2026-platforms">{roadmap2026PracticePlatforms.map(([name, purpose, url]) => <a className="roadmap-2026-platform" href={url} target="_blank" rel="noopener noreferrer" key={name}><span><b>{name}</b><small>{purpose}</small></span><ExternalLink size={14} /></a>)}</div>
       </section>
 
       <section className="roadmap-2026-section">
         <div className="roadmap-2026-section-heading"><span><BookOpen size={16} /></span><div><h3>Free roadmap and learning websites</h3><p>Structured learning paths and courses across technology areas.</p></div></div>
-        <div className="roadmap-2026-platforms">{roadmap2026AdditionalPlatforms.map(([name, purpose, url]) => <a className="roadmap-2026-platform" href={url} target="_blank" rel="noreferrer" key={name}><span><b>{name}</b><small>{purpose}</small></span><ExternalLink size={14} /></a>)}</div>
+        <div className="roadmap-2026-platforms">{roadmap2026AdditionalPlatforms.map(([name, purpose, url]) => <a className="roadmap-2026-platform" href={url} target="_blank" rel="noopener noreferrer" key={name}><span><b>{name}</b><small>{purpose}</small></span><ExternalLink size={14} /></a>)}</div>
       </section>
 
       <section className="roadmap-2026-section">

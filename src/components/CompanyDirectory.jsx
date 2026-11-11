@@ -74,7 +74,7 @@ export default function CompanyDirectory({
                     <div className="job-site-copy"><h4>{company.name}</h4><span>{company.sector}</span></div>
                     <div className="company-site-actions">
                       <button type="button" className="company-profile-link" onClick={() => onOpen(company)}>Profile</button>
-                      <a className="apply-here" href={company.url} target="_blank" rel="noreferrer">
+                      <a className="apply-here" href={company.url} target="_blank" rel="noopener noreferrer">
                         {company.hasCareerPortal === false ? 'Website' : 'Careers'} <ExternalLink size={13} />
                       </a>
                     </div>

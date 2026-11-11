@@ -22,7 +22,13 @@ export default function ResumeBuilder() {
   const [resume, setResume] = useState(getResume);
   const [template, setTemplate] = useState('classic');
   const [notice, setNotice] = useState('');
-  useEffect(() => localStorage.setItem('careerzoon-resume', JSON.stringify(resume)), [resume]);
+  useEffect(() => {
+    try {
+      localStorage.setItem('careerzoon-resume', JSON.stringify(resume));
+    } catch {
+      // Ignore storage errors if private mode or quota is restricted
+    }
+  }, [resume]);
 
   const skills = useMemo(() => resume.skills.split(',').map((skill) => skill.trim()).filter(Boolean), [resume.skills]);
   function update(field, value) { setResume((current) => ({ ...current, [field]: value })); }
@@ -67,7 +73,8 @@ export default function ResumeBuilder() {
     section('Certifications', resume.certifications);
     section('Achievements', resume.achievements);
     section('Languages', resume.languages);
-    pdf.save(`${resume.name.trim().replace(/[^a-z0-9]+/gi, '-').toLowerCase()}-resume.pdf`);
+    const safeFilename = resume.name.trim().replace(/[^a-z0-9]+/gi, '-').replace(/^-+|-+$/g, '').toLowerCase() || 'careerzoon';
+    pdf.save(`${safeFilename}-resume.pdf`);
     setNotice('Your PDF resume is ready to download.');
   }
 

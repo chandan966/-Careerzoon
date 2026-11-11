@@ -69,7 +69,7 @@ export default function SkillDirectory({
                 </div>
                 <div className="skill-card-actions">
                   <button type="button" className="apply-here skill-details" onClick={() => onOpen(skill)}>Details <ArrowRight size={13} /></button>
-                  <a className="apply-here" href={skill.resourceUrl} target="_blank" rel="noreferrer">Open resource <ExternalLink size={13} /></a>
+                  <a className="apply-here" href={skill.resourceUrl} target="_blank" rel="noopener noreferrer">Open resource <ExternalLink size={13} /></a>
                 </div>
               </article>
             ))}
@@ -79,7 +79,7 @@ export default function SkillDirectory({
 
       <section className="skill-guide-section">
         <div className="skill-section-heading"><span className="priority-spark"><Sparkles size={16} /></span><div><h2>Free learning platforms</h2><p>Explore trusted resources for building technical foundations and practical projects.</p></div></div>
-        <div className="skill-platform-grid">{learningPlatforms.map(([name, focus, url]) => <a className="skill-platform-card" key={name} href={url} target="_blank" rel="noreferrer"><DirectoryLogo name={name} url={url} /><span><b>{name}</b><small>{focus}</small></span><ExternalLink size={13} /></a>)}</div>
+        <div className="skill-platform-grid">{learningPlatforms.map(([name, focus, url]) => <a className="skill-platform-card" key={name} href={url} target="_blank" rel="noopener noreferrer"><DirectoryLogo name={name} url={url} /><span><b>{name}</b><small>{focus}</small></span><ExternalLink size={13} /></a>)}</div>
       </section>
 
       <section className="skill-guide-section">

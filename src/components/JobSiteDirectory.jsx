@@ -76,12 +76,12 @@ export default function JobSiteDirectory({ initialQuery = '' }) {
 
       {!term && category === 'all' && <section className="priority-panel">
         <div className="priority-heading"><span className="priority-spark"><Sparkles size={16} /></span><div><h3>Start with these 15</h3><p>A practical shortlist across internships, job boards and company career pages.</p></div></div>
-        <div className="priority-grid">{prioritySites.map((site) => <a className="priority-site" key={`${site.groupId}-${site.name}`} href={site.url} target="_blank" rel="noreferrer"><DirectoryLogo name={site.name} url={site.url} /><span>{site.name}</span><ExternalLink size={12} /></a>)}</div>
+        <div className="priority-grid">{prioritySites.map((site) => <a className="priority-site" key={`${site.groupId}-${site.name}`} href={site.url} target="_blank" rel="noopener noreferrer"><DirectoryLogo name={site.name} url={site.url} /><span>{site.name}</span><ExternalLink size={12} /></a>)}</div>
       </section>}
 
       {matchingRole && <section className="role-search-panel">
         <div><span className="eyebrow">SEARCHING FOR {matchingRole.toUpperCase()}</span><h3>See current results on job platforms</h3><p>These links search the selected role directly. Openings change frequently; confirm each listing with the employer before applying.</p></div>
-        <div className="role-search-links">{roleSearches.map((site) => <a key={site.name} href={site.url} target="_blank" rel="noreferrer"><DirectoryLogo name={site.name} url={site.url} /><span>{site.name}</span><ExternalLink size={14} /></a>)}</div>
+        <div className="role-search-links">{roleSearches.map((site) => <a key={site.name} href={site.url} target="_blank" rel="noopener noreferrer"><DirectoryLogo name={site.name} url={site.url} /><span>{site.name}</span><ExternalLink size={14} /></a>)}</div>
       </section>}
 
       {visibleGroups.length ? visibleGroups.map((group) => <section className="job-site-group" key={group.id}>
@@ -90,7 +90,7 @@ export default function JobSiteDirectory({ initialQuery = '' }) {
           <span className="job-site-number">{String(siteNumber.get(`${group.id}:${name}`)).padStart(2, '0')}</span>
           <DirectoryLogo name={name} url={url} />
           <div className="job-site-copy"><h4>{name}</h4><span>{type}</span></div>
-          <a className="apply-here" href={url} target="_blank" rel="noreferrer">Apply here <ExternalLink size={13} /></a>
+          <a className="apply-here" href={url} target="_blank" rel="noopener noreferrer">Apply here <ExternalLink size={13} /></a>
         </article>)}</div>
       </section>) : !matchingRole && <div className="directory-empty"><Search size={25} /><h3>No websites found</h3><p>Try another search or choose a different category.</p><button onClick={() => { setQuery(''); setCategory('all'); }}>Show all websites <ArrowRight size={14} /></button></div>}
 

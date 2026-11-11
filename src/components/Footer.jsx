@@ -19,7 +19,7 @@ export default function Footer() {
         </div>
         {footerLinks.map((group) => <div className="footer-column" key={group.title}><h3>{group.title}</h3>{group.links.map(([label, path]) => <Link key={label} to={path}>{label}</Link>)}</div>)}
       </div>
-      <div className="footer-bottom"><span>© 2026 Careerzoon. All rights reserved.</span><a className="footer-note" href="https://www.instagram.com/trigger_toofan?vrfl=N3JjMTFrZjVwempj" target="_blank" rel="noreferrer">webdevchandan</a></div>
+      <div className="footer-bottom"><span>© 2026 Careerzoon. All rights reserved.</span><a className="footer-note" href="https://www.instagram.com/trigger_toofan?vrfl=N3JjMTFrZjVwempj" target="_blank" rel="noopener noreferrer">webdevchandan</a></div>
     </footer>
   );
 }

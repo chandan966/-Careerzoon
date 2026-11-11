@@ -23,7 +23,7 @@ export default function FeatureCard({ item, type, saved, onBookmark, onOpen }) {
       {item.time && !item.topics && <div className="card-meta"><span><Clock3 size={14} />{item.time}</span></div>}
       {item.salary && <div className="salary-line">Indicative India range <strong>{item.salary}</strong></div>}
       <div className="card-bottom">
-        {item.url ? <div className="card-actions">{type === 'company' && onOpen && <button className="card-link" onClick={() => onOpen(item)}>Company profile <ArrowRight size={14} /></button>}<a href={item.url} target="_blank" rel="noreferrer" className="card-link">{item.hasCareerPortal === false ? 'Official website' : type === 'company' ? 'Careers portal' : 'Visit official site'} <ExternalLink size={14} /></a></div> : <button className="card-link" onClick={() => onOpen?.(item)}>{type === 'roadmap' ? 'Start this roadmap' : type === 'skill' ? 'Explore skill' : 'Explore career'} <ArrowRight size={14} /></button>}
+        {item.url ? <div className="card-actions">{type === 'company' && onOpen && <button className="card-link" onClick={() => onOpen(item)}>Company profile <ArrowRight size={14} /></button>}<a href={item.url} target="_blank" rel="noopener noreferrer" className="card-link">{item.hasCareerPortal === false ? 'Official website' : type === 'company' ? 'Careers portal' : 'Visit official site'} <ExternalLink size={14} /></a></div> : <button className="card-link" onClick={() => onOpen?.(item)}>{type === 'roadmap' ? 'Start this roadmap' : type === 'skill' ? 'Explore skill' : 'Explore career'} <ArrowRight size={14} /></button>}
       </div>
     </article>
   );
