@@ -8,6 +8,8 @@ import ResumeBuilder from './pages/ResumeBuilder.jsx';
 import InterviewPage from './pages/InterviewPage.jsx';
 import ToolsPage from './pages/ToolsPage.jsx';
 import InfoPage from './pages/InfoPage.jsx';
+import StaticPolicy from './pages/StaticPolicy.jsx';
+import CookieConsent from './components/CookieConsent.jsx';
 import DiwaliGreeting from './components/DiwaliGreeting.jsx';
 const ToolDetailPage = lazy(() => import('./pages/ToolDetailPage.jsx'));
 
@@ -25,7 +27,8 @@ const pageTitles = {
   '/guidance': 'Career Guidance',
   '/about': 'About Careerzoon',
   '/contact': 'Contact',
-  '/privacy': 'Privacy',
+  '/privacy': 'Privacy Policy',
+  '/terms': 'Terms and Conditions',
   '/disclaimer': 'Disclaimer',
 };
 
@@ -43,8 +46,9 @@ const pageDescriptions = {
   '/guidance': 'Explore practical career guidance for students and early-career technology professionals.',
   '/about': 'Learn about Careerzoon and its mission to help learners explore technology careers.',
   '/contact': 'Contact Careerzoon by email.',
-  '/privacy': 'Read how Careerzoon handles browser-local data and external links.',
-  '/disclaimer': 'Understand the scope and limitations of Careerzoon’s educational career information.',
+  '/privacy': 'Read Careerzoon’s privacy policy, including Google AdSense advertising cookies, browser local storage, and user privacy choices.',
+  '/terms': 'Review the terms and conditions for using Careerzoon’s educational roadmaps, tools, and career exploration platform.',
+  '/disclaimer': 'Understand the scope, limitations, and educational nature of Careerzoon’s career guides and external opportunity links.',
 };
 
 function updateMeta(selector, attribute, value) {
@@ -56,11 +60,6 @@ function updateMeta(selector, attribute, value) {
     document.head.append(element);
   }
   element.setAttribute('content', value);
-}
-
-function StaticPolicy({ kind }) {
-  const privacy = kind === 'privacy';
-  return <main className="policy-page"><div className="page-hero"><div className="page-hero-inner"><span className="eyebrow">CAREERZOON</span><h1>{privacy ? 'Your privacy, in plain language.' : 'A note about Careerzoon.'}</h1><p>{privacy ? 'Careerzoon is a frontend-only learning and discovery resource.' : 'Helpful career guidance, not a guarantee of employment.'}</p></div></div><article className="policy-content"><h2>{privacy ? 'Data stays in your browser' : 'Information is for educational purposes'}</h2><p>{privacy ? 'Careerzoon does not require an account and does not send resume details, bookmarks, roadmap progress, application tracker entries or checklist progress to a server. These features may use your browser’s local storage. You can clear this data through your browser settings at any time.' : 'Career information, salary context, learning plans and external listings are general educational information. We do not promise employment, verify third-party vacancies, or guarantee that salary estimates reflect a specific offer. Always verify current details with the official employer or provider.'}</p><h2>{privacy ? 'External links' : 'Third-party services'}</h2><p>{privacy ? 'Links to company career pages, learning resources and job platforms lead to third-party sites with their own privacy practices and terms.' : 'Third-party websites and job boards are independent of Careerzoon. Check URLs carefully and never pay a fee to apply for a job unless you have independently verified the process.'}</p><h2>Contact</h2><p>Email <a href="mailto:contactchandan011@gmail.com">contactchandan011@gmail.com</a>.</p></article></main>;
 }
 
 export default function App() {
@@ -120,7 +119,8 @@ export default function App() {
     <Route path="/about" element={<InfoPage page="about" />} />
     <Route path="/contact" element={<InfoPage page="contact" />} />
     <Route path="/privacy" element={<StaticPolicy kind="privacy" />} />
+    <Route path="/terms" element={<StaticPolicy kind="terms" />} />
     <Route path="/disclaimer" element={<StaticPolicy kind="disclaimer" />} />
     <Route path="*" element={<main className="not-found"><h1>Page not found</h1><p>Let’s help you find your next step.</p><a href="/">Back to Careerzoon home</a></main>} />
-  </Routes><Footer /></div>;
+  </Routes><CookieConsent /><Footer /></div>;
 }
