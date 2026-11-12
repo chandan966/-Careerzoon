@@ -306,21 +306,22 @@ export default function ResumeBuilder() {
     const pdf = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',
-      format: [210, 297], // Exact A4 Dimensions: 210 x 297 mm (8.27 x 11.69 in)
+      format: [210, 260], // Exact Dimensions: 210 x 260 mm
     });
 
     const isBig = fontSize === 'big';
     const isCompact = fontSize === 'compact';
-    const margin = isBig ? 15 : isCompact ? 12 : 14;
+    const margin = isBig ? 14 : isCompact ? 11 : 13;
     const pageWidth = 210;
+    const pageHeight = 260;
     const maxWidth = pageWidth - margin * 2;
-    let y = isBig ? 16 : isCompact ? 13 : 15;
+    let y = isBig ? 15 : isCompact ? 12 : 14;
 
     const fontChoice = fontFamily === 'serif' ? 'times' : 'helvetica';
     const isCenter = template === 'ivy-center';
 
     const checkPage = (neededHeight = 10) => {
-      if (y + neededHeight > 282) {
+      if (y + neededHeight > pageHeight - margin) {
         pdf.addPage();
         y = margin;
       }
@@ -639,8 +640,8 @@ export default function ResumeBuilder() {
         .replace(/[^a-z0-9]+/gi, '-')
         .replace(/^-+|-+$/g, '')
         .toLowerCase() || 'resume';
-    pdf.save(`${safeFilename}-A4-CV.pdf`);
-    setNotice('Your professional A4 CV (210 × 297 mm) has been downloaded successfully!');
+    pdf.save(`${safeFilename}-CV-210x260.pdf`);
+    setNotice('Your professional CV (210 × 260 mm) has been downloaded successfully!');
     setTimeout(() => setNotice(''), 4000);
   }
 
@@ -648,11 +649,11 @@ export default function ResumeBuilder() {
     <main className="resume-page">
       <div className="page-hero">
         <div className="page-hero-inner">
-          <span className="eyebrow">PROFESSIONAL ATS A4 CV BUILDER</span>
+          <span className="eyebrow">PROFESSIONAL ATS CV BUILDER</span>
           <h1>Single-Column, 100% ATS-Compliant Professional CV</h1>
-          <p>Strictly adheres to top hiring rubrics: ISO A4 standard (210 × 297 mm), single-column linear layout, no distracting graphics, and optimal parsing for Workday, Greenhouse, and human recruiters.</p>
+          <p>Strictly adheres to top hiring rubrics: custom 210 × 260 mm format, single-column linear layout, no distracting graphics, and optimal parsing for Workday, Greenhouse, and human recruiters.</p>
           <div className="page-hero-meta">
-            <span>✓ Exact A4 (210 × 297 mm)</span>
+            <span>✓ Exact Dimensions (210 × 260 mm)</span>
             <span>✓ Single-Column ATS Layout</span>
             <span>✓ Big Font Size Option</span>
             <span>✓ 100% Private &amp; Free</span>
@@ -949,7 +950,7 @@ export default function ResumeBuilder() {
           {/* Action Buttons */}
           <div className="resume-actions">
             <button type="button" className="button-primary download-btn" onClick={downloadPdf}>
-              <Download size={15} /> Download A4 PDF (210 × 297 mm)
+              <Download size={15} /> Download PDF (210 × 260 mm)
             </button>
             <button type="button" className="resume-print" onClick={() => window.print()}>
               <Printer size={15} /> Print
@@ -967,13 +968,13 @@ export default function ResumeBuilder() {
           </div>
         </section>
 
-        {/* Live A4 Preview Column */}
+        {/* Live Preview Column */}
         <aside className="resume-preview-panel">
           <div className="preview-head">
             <div>
               <div className="preview-eyebrow-row">
-                <span className="eyebrow">A4 CV DOCUMENT</span>
-                <span className="a4-size-indicator">210 × 297 mm · Single Column</span>
+                <span className="eyebrow">CV DOCUMENT</span>
+                <span className="a4-size-indicator">210 × 260 mm · Single Column</span>
               </div>
               <h2>{templateOptions.find((t) => t.id === template)?.name}</h2>
             </div>
@@ -1231,9 +1232,9 @@ export default function ResumeBuilder() {
                   </section>
                 )}
 
-                {/* ISO A4 Sheet Verification Marker */}
+                {/* Sheet Verification Marker */}
                 <footer className="paper-footer-tag">
-                  <span>Standard A4 · 210 × 297 mm · Single Column ATS</span>
+                  <span>Professional Format · 210 × 260 mm · Single Column ATS</span>
                   <span>Page 1 of 1</span>
                 </footer>
               </article>

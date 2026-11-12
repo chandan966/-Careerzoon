@@ -671,7 +671,7 @@
 }
 
 /* ========================================================
-   AUTHENTIC A4 PAPER CANVAS (210 × 297 mm)
+   AUTHENTIC PAPER CANVAS (210 × 260 mm)
    STRICT SINGLE-COLUMN ATS DESIGN
    ======================================================== */
 
@@ -679,10 +679,10 @@
   position: relative;
   width: 100%;
   max-width: 720px;
-  min-height: 1018px;
-  aspect-ratio: 210 / 297;
+  min-height: 891px;
+  aspect-ratio: 210 / 260;
   margin: 0 auto;
-  padding: 38px 42px;
+  padding: 34px 40px;
   border-radius: 2px;
   color: #0f172a;
   background: #ffffff !important;
@@ -702,8 +702,8 @@
 
 .resume-paper-document.compact,
 .resume-paper-document.font-compact {
-  padding: 26px 32px;
-  min-height: 960px;
+  padding: 24px 30px;
+  min-height: 840px;
 }
 
 /* Header */
@@ -1118,8 +1118,8 @@
 
 @media print {
   @page {
-    size: A4 portrait;
-    margin: 12mm;
+    size: 210mm 260mm portrait;
+    margin: 10mm;
   }
   .site-header,
   .site-footer,
