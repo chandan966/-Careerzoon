@@ -1,5 +1,6 @@
 /* ========================================================
    CAREERZOON PROFESSIONAL SINGLE-COLUMN ATS A4 CV
+   ISO STANDARD A4: 210 × 297 mm
    ======================================================== */
 
 .resume-workspace {
@@ -149,151 +150,164 @@
 }
 
 .template-card-btn:hover {
-  border-color: var(--purple);
-  background: var(--surface);
+  border-color: #9c7ce7;
+  transform: translateY(-1px);
 }
 
 .template-card-btn.active {
-  border-color: var(--purple);
-  background: var(--surface);
-  box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.22);
+  border-color: #7c3aed;
+  background: #fbf9ff;
+  box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.15);
+}
+
+.dark .template-card-btn.active {
+  background: #221a36;
+  border-color: #a78bfa;
 }
 
 .template-card-texts {
-  display: grid;
-  gap: 1px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .template-card-name {
   color: var(--text);
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 750;
 }
 
 .template-card-desc {
   color: var(--muted);
-  font-size: 9.5px;
+  font-size: 10px;
 }
 
 .font-picker-row {
   margin-top: 12px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: space-between;
+  gap: 12px;
 }
 
 .font-label {
+  color: var(--muted);
   font-size: 10.5px;
-  font-weight: 700;
-  color: var(--text);
+  font-weight: 750;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
 }
 
 .font-toggle {
   display: flex;
-  gap: 6px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  overflow: hidden;
+  background: var(--soft);
 }
 
 .font-btn {
-  padding: 5px 10px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: var(--soft);
-  color: var(--muted);
-  font-size: 10px;
+  padding: 5px 11px;
+  font-size: 11px;
   font-weight: 600;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
   cursor: pointer;
   transition: all 0.15s ease;
+}
+
+.font-btn:hover {
+  color: var(--text);
 }
 
 .font-btn.active {
   background: #7c3aed;
   color: #fff;
-  border-color: #7c3aed;
+  font-weight: 700;
 }
 
-/* ATS Score Meter */
+/* ATS Score Card */
 .ats-score-box {
-  margin: 16px 0 6px;
+  margin-top: 16px;
   padding: 13px 15px;
-  border: 1px solid var(--border);
   border-radius: 10px;
   background: var(--soft);
+  border: 1px solid var(--border);
 }
 
 .ats-score-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 8px;
+  gap: 8px;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--text);
 }
 
-.ats-score-header svg {
-  color: #7c3aed;
-  margin-right: 4px;
-}
-
 .ats-score-badge {
-  padding: 3px 8px;
-  border-radius: 5px;
+  padding: 2px 8px;
+  border-radius: 999px;
   font-size: 10px;
   font-weight: 750;
 }
 
 .ats-score-badge.strong {
-  background: #dcfce7;
-  color: #15803d;
+  background: #d1fae5;
+  color: #065f46;
 }
 
 .ats-score-badge.good {
   background: #fef3c7;
-  color: #b45309;
+  color: #92400e;
 }
 
 .ats-score-badge.warning {
   background: #fee2e2;
-  color: #b91c1c;
+  color: #991b1b;
 }
 
 .ats-score-bar {
+  margin-top: 7px;
   height: 6px;
-  width: 100%;
-  background: var(--border);
-  border-radius: 9999px;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.25);
   overflow: hidden;
 }
 
 .ats-score-fill {
   height: 100%;
+  border-radius: 999px;
   transition: width 0.3s ease;
 }
 
 .ats-score-tip {
-  margin: 7px 0 0;
-  color: var(--muted);
+  margin: 6px 0 0;
   font-size: 10px;
-  line-height: 1.45;
+  color: var(--muted);
+  line-height: 1.4;
 }
 
-/* Form Styles */
+/* Resume Form Sections */
 .resume-form {
+  margin-top: 18px;
   display: grid;
-  gap: 4px;
+  gap: 16px;
 }
 
 .resume-section {
-  padding: 18px 0;
-  border-bottom: 1px solid var(--border);
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
 }
 
 .resume-section-title {
+  margin-bottom: 12px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 13px;
 }
 
 .resume-section-title h3 {
@@ -413,6 +427,46 @@
   gap: 10px;
 }
 
+/* Field Validation Hints */
+.input-has-error {
+  border-color: #ef4444 !important;
+}
+
+.field-error-hint {
+  color: #dc2626;
+  font-size: 9.5px;
+  font-weight: 600;
+}
+
+/* Auto summary button */
+.summary-helper-row {
+  margin-bottom: 8px;
+}
+
+.auto-summary-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  border: 1px solid #c4b5fd;
+  border-radius: 6px;
+  background: #ede9fe;
+  color: #6d28d9;
+  font: 650 11px 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.auto-summary-btn:hover {
+  background: #ddd6fe;
+}
+
+.dark .auto-summary-btn {
+  background: #2e2445;
+  border-color: #553e7d;
+  color: #d8b4fe;
+}
+
 /* Action Verb Chips */
 .bullet-helper-bar {
   margin-bottom: 11px;
@@ -453,96 +507,120 @@
 
 .verb-chip:hover {
   background: #ede9fe;
-  border-color: #c4b5fd;
-}
-
-.dark .verb-chip {
-  color: #c4b5fd;
 }
 
 .resume-notice {
-  margin: 14px 0 0;
+  margin-top: 14px;
   padding: 10px 14px;
   border-radius: 8px;
-  background: #f0fdf4;
-  border: 1px solid #bbf7d0;
-  color: #15803d;
-  font-size: 11px;
+  background: #ede9fe;
+  color: #6d28d9;
+  font-size: 11.5px;
   font-weight: 600;
+  border: 1px solid #c4b5fd;
+  animation: fadeIn 0.2s ease;
+}
+
+.dark .resume-notice {
+  background: #2e2445;
+  border-color: #553e7d;
+  color: #d8b4fe;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Actions Footer */
 .resume-actions {
+  margin-top: 20px;
   padding-top: 18px;
+  border-top: 1px solid var(--border);
   display: flex;
-  align-items: center;
   flex-wrap: wrap;
-  gap: 9px;
+  align-items: center;
+  gap: 10px;
 }
 
-.resume-actions .download-btn {
-  min-height: 38px;
-  padding: 0 16px;
-  font-weight: 750;
-  font-size: 12px;
-}
-
-.resume-print {
-  min-height: 38px;
-  padding: 0 13px;
+.download-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  border: 1px solid var(--border);
+  gap: 7px;
+  padding: 9px 18px;
   border-radius: 8px;
-  color: var(--text);
-  background: var(--surface);
-  font: 600 11px 'DM Sans', sans-serif;
+  font: 750 12px 'DM Sans', sans-serif;
+  background: #7c3aed;
+  color: #fff;
+  border: 0;
   cursor: pointer;
+  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3);
   transition: all 0.16s ease;
 }
 
+.download-btn:hover {
+  background: #6d28d9;
+  transform: translateY(-1px);
+}
+
+.resume-print {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  font: 700 12px 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
 .resume-print:hover {
-  border-color: var(--purple);
   background: var(--soft);
 }
 
 .resume-backup-buttons {
   display: flex;
-  align-items: center;
   gap: 6px;
 }
 
 .resume-backup-btn {
-  padding: 8px 11px;
+  padding: 8px 12px;
   border: 1px solid var(--border);
   border-radius: 7px;
   background: var(--soft);
-  color: var(--text);
+  color: var(--muted);
   font: 600 11px 'DM Sans', sans-serif;
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
 .resume-backup-btn:hover {
-  background: var(--border);
+  color: var(--text);
+  border-color: #9c7ce7;
 }
 
 .privacy-badge {
   margin-left: auto;
+  font-size: 10.5px;
   color: var(--muted);
-  font-size: 10px;
   font-weight: 600;
 }
 
 /* ========================================================
-   LIVE PREVIEW PANEL & TOOLBAR
+   PREVIEW PANEL & VIEWPORT CONTROLS
    ======================================================== */
 
 .resume-preview-panel {
-  padding: 20px;
-  position: sticky;
-  top: 86px;
+  padding: 22px;
 }
 
 .preview-toolbar-controls {
@@ -565,8 +643,7 @@
   letter-spacing: 0.5px;
 }
 
-.size-toggle,
-.density-toggle {
+.size-toggle {
   display: flex;
   border: 1px solid var(--border);
   border-radius: 7px;
@@ -574,8 +651,7 @@
   background: var(--soft);
 }
 
-.size-btn,
-.density-btn {
+.size-btn {
   padding: 5px 9.5px;
   font-size: 10.5px;
   font-weight: 600;
@@ -587,19 +663,13 @@
   white-space: nowrap;
 }
 
-.size-btn:hover,
-.density-btn:hover {
+.size-btn:hover {
   color: var(--text);
 }
 
-.size-btn.active,
-.density-btn.active {
+.size-btn.active {
   background: #7c3aed;
   color: #fff;
-  font-weight: 700;
-}
-
-.size-btn.big-btn {
   font-weight: 700;
 }
 
@@ -671,7 +741,7 @@
 }
 
 /* ========================================================
-   AUTHENTIC PAPER CANVAS (210 × 260 mm)
+   AUTHENTIC ISO A4 CANVAS (210 × 297 mm)
    STRICT SINGLE-COLUMN ATS DESIGN — COMPACT & BALANCED
    ======================================================== */
 
@@ -679,10 +749,10 @@
   position: relative;
   width: 100%;
   max-width: 720px;
-  min-height: 891px;
-  aspect-ratio: 210 / 260;
+  min-height: 1018px;
+  aspect-ratio: 210 / 297;
   margin: 0 auto;
-  padding: 26px 32px;
+  padding: 28px 34px;
   border-radius: 2px;
   color: #0f172a;
   background: #ffffff !important;
@@ -698,12 +768,6 @@
 
 .resume-paper-document.serif {
   font-family: Georgia, 'Times New Roman', Times, serif;
-}
-
-.resume-paper-document.compact,
-.resume-paper-document.font-compact {
-  padding: 20px 26px;
-  min-height: 840px;
 }
 
 /* Header (1. Personal Information) */
@@ -722,7 +786,7 @@
 .paper-name {
   margin: 0;
   color: #0f172a;
-  font-size: 21px;
+  font-size: 20px;
   font-weight: 800;
   letter-spacing: 0.6px;
   line-height: 1.15;
@@ -811,7 +875,7 @@
   text-align: justify;
 }
 
-/* Two-column entries within single-column flow */
+/* Entries within single-column flow */
 .paper-entry {
   margin-bottom: 5.5px;
 }
@@ -868,6 +932,13 @@
   color: #475569;
 }
 
+.entry-right-links {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
 .entry-right-link {
   font-size: 9px;
   font-weight: 600;
@@ -877,6 +948,11 @@
 
 .entry-right-link:hover {
   text-decoration: underline;
+}
+
+.link-separator {
+  color: #94a3b8;
+  font-size: 8px;
 }
 
 /* Bullet points */
@@ -915,11 +991,54 @@
   margin: 0;
 }
 
+/* Certifications & Achievements Subgroup */
+.paper-cert-group {
+  margin-bottom: 4px;
+}
+
+.paper-cert-group:last-child {
+  margin-bottom: 0;
+}
+
+.paper-subgroup-title {
+  font-size: 9.6px;
+  font-weight: 750;
+  color: #1e293b;
+  margin: 3px 0 2px;
+}
+
+/* Languages Row */
+.paper-languages-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+  font-size: 9.3px;
+  color: #1e293b;
+}
+
+.language-badge {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 3px;
+}
+
+.lang-level {
+  color: #475569;
+  font-style: italic;
+}
+
+.lang-sep {
+  color: #94a3b8;
+  font-size: 8.5px;
+  margin-left: 4px;
+}
+
 /* ========================================================
    BIG FONT SIZE (BALANCED & HIGH LEGIBILITY ATS LAYOUT)
    ======================================================== */
 .resume-paper-document.font-big {
-  padding: 28px 34px;
+  padding: 30px 36px;
   line-height: 1.48;
 }
 
@@ -928,7 +1047,7 @@
 }
 
 .resume-paper-document.font-big .paper-name {
-  font-size: 23px;
+  font-size: 22px;
   letter-spacing: 0.7px;
 }
 
@@ -1015,15 +1134,28 @@
   font-size: 10px;
 }
 
+.resume-paper-document.font-big .paper-subgroup-title {
+  font-size: 10px;
+}
+
+.resume-paper-document.font-big .paper-languages-row {
+  font-size: 9.6px;
+}
+
 /* ========================================================
    COMPACT FONT SIZE (MAX CONTENT DENSITY)
    ======================================================== */
+.resume-paper-document.font-compact {
+  padding: 22px 28px;
+  min-height: 960px;
+}
+
 .resume-paper-document.font-compact .paper-header {
   margin-bottom: 6px;
 }
 
 .resume-paper-document.font-compact .paper-name {
-  font-size: 19px;
+  font-size: 18px;
 }
 
 .resume-paper-document.font-compact .paper-section {
@@ -1068,8 +1200,8 @@
   gap: 1.8px;
 }
 
-.paper-skill-row {
-  margin: 0;
+.resume-paper-document.font-compact .paper-languages-row {
+  font-size: 8.8px;
 }
 
 .paper-footer-tag {
@@ -1154,8 +1286,8 @@
 
 @media print {
   @page {
-    size: 210mm 260mm portrait;
-    margin: 10mm;
+    size: A4 portrait;
+    margin: 12mm;
   }
   .site-header,
   .site-footer,
