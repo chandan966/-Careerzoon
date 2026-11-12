@@ -25,22 +25,24 @@ const blankResume = {
   phone: '',
   location: '',
   linkedin: '',
+  github: '',
   portfolio: '',
   objective: '',
   skillsCategories: {
     languages: '',
     frameworks: '',
+    databases: '',
     tools: '',
   },
   skills: '',
+  education: [
+    { school: '', degree: '', location: '', years: '', gpa: '' },
+  ],
   experienceList: [
     { company: '', role: '', location: '', dates: '', bullets: '' },
   ],
   projects: [
     { title: '', technologies: '', link: '', description: '' },
-  ],
-  education: [
-    { school: '', degree: '', location: '', years: '', gpa: '' },
   ],
   certifications: '',
   achievements: '',
@@ -54,16 +56,27 @@ const sampleResume = {
   phone: '+91 98765 43210',
   location: 'Bengaluru, India',
   linkedin: 'linkedin.com/in/aanya-sharma',
-  portfolio: 'github.com/aanya-sharma',
+  github: 'github.com/aanya-sharma',
+  portfolio: 'aanyasharma.dev',
   objective:
-    'Results-driven Software Engineer with strong foundations in data structures, algorithms, and full-stack system architecture. Experienced in designing and deploying scalable web applications with React, Node.js, and PostgreSQL. Proven track record of optimizing database queries to reduce API latency by 35% and building resilient microservices in Agile teams.',
+    'Results-driven Software Development Engineer with strong foundations in Data Structures, Algorithms, and Full-Stack Architecture. Experienced in designing and building scalable web applications with React, Node.js, TypeScript, and PostgreSQL. Proven track record of optimizing database indexing to reduce median API latency by 35%, engineering resilient microservices, and automating CI/CD pipelines in Agile teams.',
   skillsCategories: {
-    languages: 'JavaScript (ES6+), TypeScript, Python, Java, SQL, C++',
-    frameworks: 'React.js, Node.js, Express.js, Next.js, Redux Toolkit, Tailwind CSS',
-    tools: 'Git, GitHub, Docker, AWS (EC2, S3), PostgreSQL, MongoDB, Redis, Linux, RESTful APIs',
+    languages: 'JavaScript (ES6+), TypeScript, Python, Java, C++, SQL, HTML5/CSS3',
+    frameworks: 'React.js, Next.js, Node.js, Express.js, Redux Toolkit, Tailwind CSS, Jest',
+    databases: 'PostgreSQL, MongoDB, Redis, Docker, AWS (S3, EC2), Supabase, GraphQL',
+    tools: 'Git, GitHub, Linux, RESTful APIs, CI/CD Pipelines, Agile/Scrum, Postman',
   },
   skills:
-    'JavaScript, TypeScript, Python, Java, SQL, C++, React.js, Node.js, Express.js, PostgreSQL, Docker, AWS, Git, Redis',
+    'JavaScript, TypeScript, Python, Java, SQL, React.js, Node.js, Express.js, PostgreSQL, Docker, AWS, Git, Redis',
+  education: [
+    {
+      school: 'National Institute of Technology Karnataka (NITK)',
+      degree: 'B.Tech in Computer Science & Engineering',
+      location: 'Surathkal, India',
+      years: '2020 – 2024',
+      gpa: 'CGPA: 8.9 / 10 | Relevant Coursework: Data Structures & Algorithms, OS, DBMS, Networks',
+    },
+  ],
   experienceList: [
     {
       company: 'TechNova Solutions',
@@ -80,30 +93,28 @@ const sampleResume = {
       technologies: 'React, Node.js, WebSockets, Redis, Docker',
       link: 'github.com/aanya-sharma/devcollab',
       description:
-        '• Developed a full-stack real-time collaborative code editor supporting multi-user simultaneous document editing using Operational Transformation and WebSockets.\n• Integrated syntax highlighting for 12+ languages with an isolated Docker-based code execution sandbox.\n• Engineered Redis Pub/Sub channels handling 2,000+ concurrent connections with zero dropped messages.',
+        '• Architected a real-time collaborative code editor supporting concurrent multi-user editing with Operational Transformation and WebSockets.\n• Integrated syntax highlighting for 12+ programming languages with an isolated Docker-based code execution sandbox.\n• Engineered Redis Pub/Sub channels handling 2,000+ concurrent socket connections with sub-50ms synchronization latency.',
+    },
+    {
+      title: 'CloudMetrics — Distributed System Monitoring Dashboard',
+      technologies: 'Next.js, TypeScript, PostgreSQL, Docker, AWS',
+      link: 'github.com/aanya-sharma/cloudmetrics',
+      description:
+        '• Designed an interactive cloud monitoring dashboard aggregating real-time CPU, memory, and API latencies across 40+ microservices.\n• Optimized PostgreSQL timeseries aggregation queries, cutting complex analytical response latency by 38%.\n• Implemented secure JWT role-based authentication and automated alerting via webhooks.',
     },
     {
       title: 'AlgoVisualizer — Interactive DSA Learning Platform',
       technologies: 'TypeScript, React, Canvas API, Tailwind CSS',
       link: 'github.com/aanya-sharma/algovis',
       description:
-        '• Engineered an interactive algorithm visualizer demonstrating pathfinding (Dijkstra, A*) and sorting algorithms with custom speed playback and memory tracers.\n• Reached 15,000+ monthly active student learners with 99.9% uptime deployed on Vercel.',
-    },
-  ],
-  education: [
-    {
-      school: 'National Institute of Technology Karnataka (NITK)',
-      degree: 'B.Tech in Computer Science & Engineering',
-      location: 'Surathkal, India',
-      years: '2020 – 2024',
-      gpa: 'CGPA: 8.9 / 10',
+        '• Engineered an interactive algorithm visualizer demonstrating pathfinding (Dijkstra, A*) and sorting with step-by-step memory tracers.\n• Reached 15,000+ monthly active student developers with 99.9% uptime deployed on Vercel.',
     },
   ],
   certifications:
-    '• AWS Certified Cloud Practitioner — Amazon Web Services (2024)\n• Meta Front-End Developer Professional Certificate — Meta / Coursera (2023)',
+    '• AWS Certified Cloud Practitioner — Amazon Web Services (Validation ID: AWS-89214, 2024)\n• Meta Front-End Developer Professional Certificate — Meta / Coursera (2023)',
   achievements:
     '• 1st Place Winner (out of 70+ engineering teams) at National HackIndia Hackathon (2023)\n• Solved 500+ Data Structures & Algorithms problems across LeetCode & Codeforces (Knight rank)',
-  languages: 'English (Professional), Hindi (Native)',
+  languages: 'English (Professional Working Proficiency), Hindi (Native), German (Elementary)',
 };
 
 const templateOptions = [
@@ -148,6 +159,11 @@ function getInitialResume() {
       return {
         ...blankResume,
         ...stored,
+        github: stored.github || (stored.portfolio?.includes('github') ? stored.portfolio : ''),
+        skillsCategories: {
+          ...blankResume.skillsCategories,
+          ...(stored.skillsCategories || {}),
+        },
         education: stored.education?.length ? stored.education : blankResume.education,
         experienceList: stored.experienceList?.length
           ? stored.experienceList
@@ -190,9 +206,10 @@ export default function ResumeBuilder() {
   const skillsList = useMemo(() => {
     if (resume.skillsCategories?.languages || resume.skillsCategories?.frameworks) {
       return [
-        ...resume.skillsCategories.languages.split(','),
-        ...resume.skillsCategories.frameworks.split(','),
-        ...resume.skillsCategories.tools.split(','),
+        ...(resume.skillsCategories.languages || '').split(','),
+        ...(resume.skillsCategories.frameworks || '').split(','),
+        ...(resume.skillsCategories.databases || '').split(','),
+        ...(resume.skillsCategories.tools || '').split(','),
       ]
         .map((s) => s.trim())
         .filter(Boolean);
@@ -208,10 +225,13 @@ export default function ResumeBuilder() {
     if (resume.name.trim()) score += 10;
     if (resume.role.trim()) score += 10;
     if (resume.email.trim() && (resume.phone.trim() || resume.location.trim())) score += 10;
-    if (resume.linkedin.trim() || resume.portfolio.trim()) score += 10;
+    if (resume.linkedin.trim() || resume.github.trim() || resume.portfolio.trim()) score += 10;
     if (resume.objective.trim().length > 40) score += 15;
     if (skillsList.length >= 4) score += 15;
-    if (resume.experienceList?.some((e) => e.company.trim() && e.bullets.trim())) score += 15;
+    if (
+      resume.experienceList?.some((e) => e.company.trim() && e.bullets.trim()) ||
+      resume.projects?.some((p) => p.title.trim() && p.description.trim())
+    ) score += 15;
     if (resume.education.some((e) => e.school.trim() && e.degree.trim())) score += 15;
     return Math.min(100, score);
   }, [resume, skillsList]);
@@ -311,11 +331,11 @@ export default function ResumeBuilder() {
 
     const isBig = fontSize === 'big';
     const isCompact = fontSize === 'compact';
-    const margin = isBig ? 14 : isCompact ? 11 : 13;
+    const margin = isBig ? 13 : isCompact ? 10 : 12;
     const pageWidth = 210;
     const pageHeight = 260;
     const maxWidth = pageWidth - margin * 2;
-    let y = isBig ? 15 : isCompact ? 12 : 14;
+    let y = isBig ? 14 : isCompact ? 11 : 13;
 
     const fontChoice = fontFamily === 'serif' ? 'times' : 'helvetica';
     const isCenter = template === 'ivy-center';
@@ -327,102 +347,147 @@ export default function ResumeBuilder() {
       }
     };
 
-    // Header: Name
+    // 1. PERSONAL INFORMATION (HEADER)
     pdf.setFont(fontChoice, 'bold');
-    pdf.setFontSize(isBig ? 24 : isCompact ? 19 : 21);
+    pdf.setFontSize(isBig ? 22 : isCompact ? 18 : 20);
     pdf.setTextColor(15, 23, 42); // Pure black/slate
 
     if (isCenter) {
       pdf.text(resume.name.toUpperCase(), pageWidth / 2, y, { align: 'center' });
-      y += isBig ? 6 : isCompact ? 4.5 : 5.2;
-
-      if (resume.role) {
-        pdf.setFont(fontChoice, 'normal');
-        pdf.setFontSize(isBig ? 11.5 : isCompact ? 9.5 : 10.5);
-        pdf.setTextColor(51, 65, 85);
-        pdf.text(resume.role, pageWidth / 2, y, { align: 'center' });
-        y += isBig ? 5 : isCompact ? 4 : 4.5;
-      }
-
-      const contacts = [
-        resume.phone,
-        resume.email,
-        resume.location,
-        resume.linkedin,
-        resume.portfolio,
-      ].filter(Boolean);
-      if (contacts.length) {
-        pdf.setFont(fontChoice, 'normal');
-        pdf.setFontSize(isBig ? 9.5 : isCompact ? 8 : 8.8);
-        pdf.setTextColor(51, 65, 85);
-        pdf.text(contacts.join('   |   '), pageWidth / 2, y, { align: 'center' });
-        y += isBig ? 6.5 : isCompact ? 5 : 5.8;
-      }
-    } else {
-      pdf.text(resume.name.toUpperCase(), margin, y);
-      y += isBig ? 6 : isCompact ? 4.5 : 5.2;
+      y += isBig ? 5 : isCompact ? 4.2 : 4.6;
 
       if (resume.role) {
         pdf.setFont(fontChoice, 'bold');
-        pdf.setFontSize(isBig ? 11.5 : isCompact ? 9.5 : 10.5);
+        pdf.setFontSize(isBig ? 10.5 : isCompact ? 9 : 9.8);
         pdf.setTextColor(51, 65, 85);
-        pdf.text(resume.role, margin, y);
-        y += isBig ? 5 : isCompact ? 4 : 4.5;
+        pdf.text(resume.role, pageWidth / 2, y, { align: 'center' });
+        y += isBig ? 4.5 : isCompact ? 3.6 : 4;
       }
 
-      const contacts = [
-        resume.phone,
-        resume.email,
-        resume.location,
-        resume.linkedin,
-        resume.portfolio,
-      ].filter(Boolean);
-      if (contacts.length) {
-        pdf.setFont(fontChoice, 'normal');
-        pdf.setFontSize(isBig ? 9.5 : isCompact ? 8 : 8.8);
+      // Contact Line 1: Phone, Email, Location
+      const contactLine1 = [resume.phone, resume.email, resume.location].filter(Boolean);
+      // Contact Line 2: LinkedIn, GitHub, Portfolio
+      const contactLine2 = [resume.linkedin, resume.github, resume.portfolio].filter(Boolean);
+
+      pdf.setFont(fontChoice, 'normal');
+      pdf.setFontSize(isBig ? 9 : isCompact ? 7.8 : 8.4);
+      pdf.setTextColor(51, 65, 85);
+
+      if (contactLine1.length) {
+        pdf.text(contactLine1.join('   •   '), pageWidth / 2, y, { align: 'center' });
+        y += isBig ? 3.8 : isCompact ? 3.2 : 3.5;
+      }
+      if (contactLine2.length) {
+        pdf.text(contactLine2.join('   •   '), pageWidth / 2, y, { align: 'center' });
+        y += isBig ? 4.8 : isCompact ? 3.8 : 4.2;
+      } else {
+        y += isBig ? 2 : 1.5;
+      }
+    } else {
+      pdf.text(resume.name.toUpperCase(), margin, y);
+      y += isBig ? 5 : isCompact ? 4.2 : 4.6;
+
+      if (resume.role) {
+        pdf.setFont(fontChoice, 'bold');
+        pdf.setFontSize(isBig ? 10.5 : isCompact ? 9 : 9.8);
         pdf.setTextColor(51, 65, 85);
-        pdf.text(contacts.join('   |   '), margin, y);
-        y += isBig ? 6.5 : isCompact ? 5 : 5.8;
+        pdf.text(resume.role, margin, y);
+        y += isBig ? 4.5 : isCompact ? 3.6 : 4;
+      }
+
+      const contactLine1 = [resume.phone, resume.email, resume.location].filter(Boolean);
+      const contactLine2 = [resume.linkedin, resume.github, resume.portfolio].filter(Boolean);
+
+      pdf.setFont(fontChoice, 'normal');
+      pdf.setFontSize(isBig ? 9 : isCompact ? 7.8 : 8.4);
+      pdf.setTextColor(51, 65, 85);
+
+      if (contactLine1.length) {
+        pdf.text(contactLine1.join('   •   '), margin, y);
+        y += isBig ? 3.8 : isCompact ? 3.2 : 3.5;
+      }
+      if (contactLine2.length) {
+        pdf.text(contactLine2.join('   •   '), margin, y);
+        y += isBig ? 4.8 : isCompact ? 3.8 : 4.2;
+      } else {
+        y += isBig ? 2 : 1.5;
       }
     }
 
     const addSectionHeader = (title) => {
       checkPage(12);
       pdf.setFont(fontChoice, 'bold');
-      pdf.setFontSize(isBig ? 11 : isCompact ? 9.5 : 10.2);
+      pdf.setFontSize(isBig ? 10.5 : isCompact ? 9.2 : 9.8);
       pdf.setTextColor(15, 23, 42);
       pdf.text(title.toUpperCase(), margin, y);
-      y += 1.8;
+      y += 1.5;
       pdf.setDrawColor(15, 23, 42);
-      pdf.setLineWidth(0.4);
+      pdf.setLineWidth(0.35);
       pdf.line(margin, y, margin + maxWidth, y);
-      y += isBig ? 4.5 : isCompact ? 3.5 : 4;
+      y += isBig ? 3.8 : isCompact ? 2.8 : 3.2;
     };
 
-    // 1. PROFESSIONAL SUMMARY
+    // 2. PROFESSIONAL SUMMARY
     if (resume.objective?.trim()) {
       addSectionHeader('Professional Summary');
       pdf.setFont(fontChoice, 'normal');
-      pdf.setFontSize(isBig ? 10 : isCompact ? 8.5 : 9.2);
+      pdf.setFontSize(isBig ? 9.5 : isCompact ? 8.2 : 8.8);
       pdf.setTextColor(30, 41, 59);
       const lines = pdf.splitTextToSize(resume.objective.trim(), maxWidth);
       pdf.text(lines, margin, y);
-      y += lines.length * (isBig ? 4.3 : isCompact ? 3.6 : 3.9) + (isBig ? 3 : isCompact ? 2 : 2.5);
+      y += lines.length * (isBig ? 3.8 : isCompact ? 3.2 : 3.5) + (isBig ? 2.5 : isCompact ? 1.5 : 2);
     }
 
-    // 2. TECHNICAL SKILLS
+    // 3. EDUCATION
+    const validEdu = resume.education.filter((e) => e.school?.trim() || e.degree?.trim());
+    if (validEdu.length) {
+      addSectionHeader('Education');
+      validEdu.forEach((edu) => {
+        checkPage(14);
+        // Line 1: School (Bold) on left, Location / Years on right
+        pdf.setFont(fontChoice, 'bold');
+        pdf.setFontSize(isBig ? 10 : isCompact ? 8.6 : 9.2);
+        pdf.setTextColor(15, 23, 42);
+        pdf.text(edu.school || 'University', margin, y);
+
+        const rightDate = [edu.location, edu.years].filter(Boolean).join('   |   ');
+        if (rightDate) {
+          pdf.setFont(fontChoice, 'bold');
+          pdf.setFontSize(isBig ? 9.5 : isCompact ? 8.2 : 8.8);
+          pdf.setTextColor(15, 23, 42);
+          pdf.text(rightDate, margin + maxWidth, y, { align: 'right' });
+        }
+        y += isBig ? 3.8 : isCompact ? 3.2 : 3.5;
+
+        // Line 2: Degree (Italic) on left, GPA on right
+        pdf.setFont(fontChoice, 'italic');
+        pdf.setFontSize(isBig ? 9.5 : isCompact ? 8.2 : 8.8);
+        pdf.setTextColor(71, 85, 105);
+        pdf.text(edu.degree || 'Degree / Major', margin, y);
+
+        if (edu.gpa) {
+          pdf.setFont(fontChoice, 'italic');
+          pdf.setFontSize(isBig ? 9 : isCompact ? 7.8 : 8.4);
+          pdf.text(edu.gpa, margin + maxWidth, y, { align: 'right' });
+        }
+        y += isBig ? 4.2 : isCompact ? 3.5 : 4;
+      });
+    }
+
+    // 4. TECHNICAL SKILLS
     const hasCatSkills =
       resume.skillsCategories?.languages ||
       resume.skillsCategories?.frameworks ||
+      resume.skillsCategories?.databases ||
       resume.skillsCategories?.tools;
     if (hasCatSkills || resume.skills) {
       addSectionHeader('Technical Skills');
-      pdf.setFontSize(isBig ? 10 : isCompact ? 8.5 : 9.2);
+      pdf.setFontSize(isBig ? 9.5 : isCompact ? 8.2 : 8.8);
 
       if (hasCatSkills) {
         const renderCat = (label, val) => {
           if (!val?.trim()) return;
-          checkPage(7);
+          checkPage(6);
           pdf.setFont(fontChoice, 'bold');
           pdf.setTextColor(15, 23, 42);
           pdf.text(`${label}: `, margin, y);
@@ -431,84 +496,85 @@ export default function ResumeBuilder() {
           pdf.setTextColor(30, 41, 59);
           const lines = pdf.splitTextToSize(val.trim(), maxWidth - labelWidth);
           pdf.text(lines, margin + labelWidth, y);
-          y += lines.length * (isBig ? 4.3 : isCompact ? 3.6 : 3.9) + (isBig ? 1.5 : 1);
+          y += lines.length * (isBig ? 3.7 : isCompact ? 3.1 : 3.4) + (isBig ? 1.2 : 0.8);
         };
         renderCat('Languages', resume.skillsCategories.languages);
         renderCat('Frameworks & Libraries', resume.skillsCategories.frameworks);
-        renderCat('Tools, Cloud & Databases', resume.skillsCategories.tools);
-        y += isBig ? 2.5 : isCompact ? 1.5 : 2;
+        renderCat('Databases & Cloud', resume.skillsCategories.databases);
+        renderCat('Tools & Methodologies', resume.skillsCategories.tools);
+        y += isBig ? 2 : isCompact ? 1.2 : 1.5;
       } else {
         checkPage(8);
         pdf.setFont(fontChoice, 'normal');
         pdf.setTextColor(30, 41, 59);
         const lines = pdf.splitTextToSize(resume.skills, maxWidth);
         pdf.text(lines, margin, y);
-        y += lines.length * (isBig ? 4.3 : isCompact ? 3.6 : 3.9) + (isBig ? 3 : isCompact ? 2 : 2.5);
+        y += lines.length * (isBig ? 3.8 : isCompact ? 3.2 : 3.5) + (isBig ? 2 : 1.5);
       }
     }
 
-    // 3. EXPERIENCE
+    // (Optional Experience if filled by user)
     const validExp = resume.experienceList?.filter((e) => e.company?.trim() || e.role?.trim());
     if (validExp && validExp.length) {
-      addSectionHeader('Experience');
+      addSectionHeader('Work Experience');
       validExp.forEach((exp) => {
-        checkPage(18);
+        checkPage(16);
         // Line 1: Job Role (Bold) on left, Dates on right
         pdf.setFont(fontChoice, 'bold');
-        pdf.setFontSize(isBig ? 10.8 : isCompact ? 9 : 9.8);
+        pdf.setFontSize(isBig ? 10 : isCompact ? 8.6 : 9.2);
         pdf.setTextColor(15, 23, 42);
         pdf.text(exp.role || 'Job Role', margin, y);
 
         if (exp.dates) {
           pdf.setFont(fontChoice, 'bold');
-          pdf.setFontSize(isBig ? 10 : isCompact ? 8.5 : 9.2);
+          pdf.setFontSize(isBig ? 9.5 : isCompact ? 8.2 : 8.8);
           pdf.setTextColor(15, 23, 42);
           pdf.text(exp.dates, margin + maxWidth, y, { align: 'right' });
         }
-        y += isBig ? 4.5 : isCompact ? 3.8 : 4.2;
+        y += isBig ? 3.8 : isCompact ? 3.2 : 3.5;
 
         // Line 2: Company (Italic) on left, Location on right
         pdf.setFont(fontChoice, 'italic');
-        pdf.setFontSize(isBig ? 10 : isCompact ? 8.5 : 9.2);
+        pdf.setFontSize(isBig ? 9.5 : isCompact ? 8.2 : 8.8);
         pdf.setTextColor(71, 85, 105);
         pdf.text(exp.company || 'Company', margin, y);
 
         if (exp.location) {
           pdf.setFont(fontChoice, 'italic');
-          pdf.setFontSize(isBig ? 9.5 : isCompact ? 8 : 8.8);
+          pdf.setFontSize(isBig ? 9 : isCompact ? 7.8 : 8.4);
           pdf.text(exp.location, margin + maxWidth, y, { align: 'right' });
         }
-        y += isBig ? 4.8 : isCompact ? 4 : 4.5;
+        y += isBig ? 4 : isCompact ? 3.4 : 3.8;
 
         // Bullets
         if (exp.bullets) {
           pdf.setFont(fontChoice, 'normal');
-          pdf.setFontSize(isBig ? 9.5 : isCompact ? 8 : 8.8);
+          pdf.setFontSize(isBig ? 9.2 : isCompact ? 7.8 : 8.4);
           pdf.setTextColor(30, 41, 59);
           const rawLines = exp.bullets.split('\n');
           rawLines.forEach((line) => {
             if (!line.trim()) return;
-            checkPage(7);
+            checkPage(6);
             const cleanText = line.replace(/^[•\-\*]\s*/, '').trim();
-            const wrapped = pdf.splitTextToSize(cleanText, maxWidth - 5.5);
+            const wrapped = pdf.splitTextToSize(cleanText, maxWidth - 5);
             pdf.text('•', margin + 1.2, y);
-            pdf.text(wrapped, margin + 4.8, y);
-            y += wrapped.length * (isBig ? 4 : isCompact ? 3.4 : 3.8) + (isBig ? 1.2 : 0.8);
+            pdf.text(wrapped, margin + 4.5, y);
+            y += wrapped.length * (isBig ? 3.6 : isCompact ? 3.1 : 3.4) + (isBig ? 0.9 : 0.6);
           });
         }
-        y += isBig ? 3 : isCompact ? 2 : 2.5;
+        y += isBig ? 2.5 : isCompact ? 1.5 : 2;
       });
     }
 
-    // 4. PROJECTS
+    // 5. PROJECTS
     const validProj = resume.projects?.filter((p) => p.title?.trim() || p.description?.trim());
     if (validProj && validProj.length) {
       addSectionHeader('Projects');
       validProj.forEach((proj) => {
-        checkPage(17);
+        checkPage(16);
         // Line 1: Title (Bold) + Tech stack (Italic) on left, Link on right
         pdf.setFont(fontChoice, 'bold');
-        pdf.setFontSize(isBig ? 10.8 : isCompact ? 9 : 9.8);
+        pdf.setFontSize(isBig ? 10 : isCompact ? 8.6 : 9.2);
         pdf.setTextColor(15, 23, 42);
         const titleText = proj.title || 'Project';
         pdf.text(titleText, margin, y);
@@ -516,120 +582,72 @@ export default function ResumeBuilder() {
 
         if (proj.technologies) {
           pdf.setFont(fontChoice, 'italic');
-          pdf.setFontSize(isBig ? 9.5 : isCompact ? 8 : 8.8);
+          pdf.setFontSize(isBig ? 9 : isCompact ? 7.8 : 8.4);
           pdf.setTextColor(100, 116, 139);
           pdf.text(`  |  ${proj.technologies}`, margin + titleWidth, y);
         }
 
         if (proj.link) {
           pdf.setFont(fontChoice, 'normal');
-          pdf.setFontSize(isBig ? 9.5 : isCompact ? 8 : 8.8);
-          pdf.setTextColor(30, 41, 59);
+          pdf.setFontSize(isBig ? 9 : isCompact ? 7.8 : 8.4);
+          pdf.setTextColor(37, 99, 235);
           pdf.text(proj.link, margin + maxWidth, y, { align: 'right' });
         }
-        y += isBig ? 4.5 : isCompact ? 4 : 4.5;
+        y += isBig ? 3.8 : isCompact ? 3.2 : 3.5;
 
         // Bullets or description
         if (proj.description) {
           pdf.setFont(fontChoice, 'normal');
-          pdf.setFontSize(isBig ? 9.5 : isCompact ? 8 : 8.8);
+          pdf.setFontSize(isBig ? 9.2 : isCompact ? 7.8 : 8.4);
           pdf.setTextColor(30, 41, 59);
           const rawLines = proj.description.split('\n');
           rawLines.forEach((line) => {
             if (!line.trim()) return;
-            checkPage(7);
+            checkPage(6);
             const cleanText = line.replace(/^[•\-\*]\s*/, '').trim();
-            const wrapped = pdf.splitTextToSize(cleanText, maxWidth - 5.5);
+            const wrapped = pdf.splitTextToSize(cleanText, maxWidth - 5);
             pdf.text('•', margin + 1.2, y);
-            pdf.text(wrapped, margin + 4.8, y);
-            y += wrapped.length * (isBig ? 4 : isCompact ? 3.4 : 3.8) + (isBig ? 1.2 : 0.8);
+            pdf.text(wrapped, margin + 4.5, y);
+            y += wrapped.length * (isBig ? 3.6 : isCompact ? 3.1 : 3.4) + (isBig ? 0.9 : 0.6);
           });
         }
-        y += isBig ? 3 : isCompact ? 2 : 2.5;
+        y += isBig ? 2.5 : isCompact ? 1.5 : 2;
       });
     }
 
-    // 5. EDUCATION
-    const validEdu = resume.education.filter((e) => e.school?.trim() || e.degree?.trim());
-    if (validEdu.length) {
-      addSectionHeader('Education');
-      validEdu.forEach((edu) => {
-        checkPage(16);
-        // Line 1: Degree & Major (Bold) on left, Dates on right
-        pdf.setFont(fontChoice, 'bold');
-        pdf.setFontSize(isBig ? 10.8 : isCompact ? 9 : 9.8);
-        pdf.setTextColor(15, 23, 42);
-        pdf.text(edu.degree || 'Degree / Major', margin, y);
-
-        const rightDate = edu.years || '';
-        if (rightDate) {
-          pdf.setFont(fontChoice, 'bold');
-          pdf.setFontSize(isBig ? 10 : isCompact ? 8.5 : 9.2);
-          pdf.setTextColor(15, 23, 42);
-          pdf.text(rightDate, margin + maxWidth, y, { align: 'right' });
-        }
-        y += isBig ? 4.5 : isCompact ? 3.8 : 4.2;
-
-        // Line 2: Institution (Italic) on left, Location & GPA on right
-        pdf.setFont(fontChoice, 'italic');
-        pdf.setFontSize(isBig ? 10 : isCompact ? 8.5 : 9.2);
-        pdf.setTextColor(71, 85, 105);
-        pdf.text(edu.school || 'University', margin, y);
-
-        const rightSub = [edu.location, edu.gpa].filter(Boolean).join('   |   ');
-        if (rightSub) {
-          pdf.setFont(fontChoice, 'italic');
-          pdf.setFontSize(isBig ? 9.5 : isCompact ? 8 : 8.8);
-          pdf.text(rightSub, margin + maxWidth, y, { align: 'right' });
-        }
-        y += isBig ? 5 : isCompact ? 4.5 : 5.5;
-      });
-    }
-
-    // 6. CERTIFICATIONS
-    if (resume.certifications?.trim()) {
-      addSectionHeader('Certifications');
+    // 6. CERTIFICATIONS & ACHIEVEMENTS (Combined)
+    const hasCertsOrAch = resume.certifications?.trim() || resume.achievements?.trim();
+    if (hasCertsOrAch) {
+      addSectionHeader('Certifications & Achievements');
       pdf.setFont(fontChoice, 'normal');
-      pdf.setFontSize(isBig ? 9.5 : isCompact ? 8 : 8.8);
+      pdf.setFontSize(isBig ? 9.2 : isCompact ? 7.8 : 8.4);
       pdf.setTextColor(30, 41, 59);
-      const lines = resume.certifications.split('\n');
-      lines.forEach((l) => {
-        if (!l.trim()) return;
-        checkPage(6);
-        const clean = l.replace(/^[•\-\*]\s*/, '').trim();
-        const wrapped = pdf.splitTextToSize(clean, maxWidth - 5.5);
-        pdf.text('•', margin + 1.2, y);
-        pdf.text(wrapped, margin + 4.8, y);
-        y += wrapped.length * (isBig ? 4 : isCompact ? 3.4 : 3.8) + (isBig ? 1.2 : 0.8);
-      });
-      y += isBig ? 2 : isCompact ? 1 : 2;
+
+      const renderBulletLines = (blockText) => {
+        if (!blockText?.trim()) return;
+        const lines = blockText.split('\n');
+        lines.forEach((l) => {
+          if (!l.trim()) return;
+          checkPage(6);
+          const clean = l.replace(/^[•\-\*]\s*/, '').trim();
+          const wrapped = pdf.splitTextToSize(clean, maxWidth - 5);
+          pdf.text('•', margin + 1.2, y);
+          pdf.text(wrapped, margin + 4.5, y);
+          y += wrapped.length * (isBig ? 3.6 : isCompact ? 3.1 : 3.4) + (isBig ? 0.9 : 0.6);
+        });
+      };
+
+      renderBulletLines(resume.certifications);
+      renderBulletLines(resume.achievements);
+      y += isBig ? 2 : isCompact ? 1.2 : 1.5;
     }
 
-    // 7. ACHIEVEMENTS
-    if (resume.achievements?.trim()) {
-      addSectionHeader('Achievements');
-      pdf.setFont(fontChoice, 'normal');
-      pdf.setFontSize(isBig ? 9.5 : isCompact ? 8 : 8.8);
-      pdf.setTextColor(30, 41, 59);
-      const lines = resume.achievements.split('\n');
-      lines.forEach((l) => {
-        if (!l.trim()) return;
-        checkPage(6);
-        const clean = l.replace(/^[•\-\*]\s*/, '').trim();
-        const wrapped = pdf.splitTextToSize(clean, maxWidth - 5.5);
-        pdf.text('•', margin + 1.2, y);
-        pdf.text(wrapped, margin + 4.8, y);
-        y += wrapped.length * (isBig ? 4 : isCompact ? 3.4 : 3.8) + (isBig ? 1.2 : 0.8);
-      });
-      y += isBig ? 2 : isCompact ? 1 : 2;
-    }
-
-    // 8. LANGUAGES
+    // 7. LANGUAGES
     if (resume.languages?.trim()) {
       addSectionHeader('Languages');
-      checkPage(6);
+      checkPage(5);
       pdf.setFont(fontChoice, 'normal');
-      pdf.setFontSize(isBig ? 10 : isCompact ? 8.5 : 9.2);
+      pdf.setFontSize(isBig ? 9.5 : isCompact ? 8.2 : 8.8);
       pdf.setTextColor(30, 41, 59);
       pdf.text(resume.languages.trim(), margin, y);
     }
@@ -762,21 +780,22 @@ export default function ResumeBuilder() {
 
           {/* Form Sections In Requested Sequence */}
           <div className="resume-form">
-            {/* Header / Contact Info */}
-            <ResumeSection title="Name &amp; Contact Information" icon={<Mail size={14} />}>
+            {/* 1. PERSONAL INFORMATION */}
+            <ResumeSection title="1. Personal Information" icon={<Mail size={14} />}>
               <div className="form-grid">
                 <Field label="Full Name" value={resume.name} onChange={(v) => update('name', v)} placeholder="e.g. AANYA SHARMA" />
                 <Field label="Target Headline / Role" value={resume.role} onChange={(v) => update('role', v)} placeholder="e.g. Software Development Engineer" />
                 <Field label="Phone Number" value={resume.phone} onChange={(v) => update('phone', v)} placeholder="+91 98765 43210" />
                 <Field label="Email Address" value={resume.email} onChange={(v) => update('email', v)} placeholder="aanya@example.com" type="email" />
                 <Field label="Location (City, Country)" value={resume.location} onChange={(v) => update('location', v)} placeholder="Bengaluru, India" />
-                <Field label="LinkedIn URL / Handle" value={resume.linkedin} onChange={(v) => update('linkedin', v)} placeholder="linkedin.com/in/username" />
-                <Field label="GitHub / Portfolio" value={resume.portfolio} onChange={(v) => update('portfolio', v)} placeholder="github.com/username" />
+                <Field label="LinkedIn Profile" value={resume.linkedin} onChange={(v) => update('linkedin', v)} placeholder="linkedin.com/in/username" />
+                <Field label="GitHub Profile" value={resume.github} onChange={(v) => update('github', v)} placeholder="github.com/username" />
+                <Field label="Portfolio Website" value={resume.portfolio} onChange={(v) => update('portfolio', v)} placeholder="portfolio.dev" />
               </div>
             </ResumeSection>
 
-            {/* 1. PROFESSIONAL SUMMARY */}
-            <ResumeSection title="Professional Summary" icon={<FileText size={14} />}>
+            {/* 2. PROFESSIONAL SUMMARY */}
+            <ResumeSection title="2. Professional Summary" icon={<FileText size={14} />}>
               <textarea
                 value={resume.objective}
                 onChange={(e) => update('objective', e.target.value)}
@@ -785,33 +804,94 @@ export default function ResumeBuilder() {
               />
             </ResumeSection>
 
-            {/* 2. TECHNICAL SKILLS */}
-            <ResumeSection title="Technical Skills" icon={<Code2 size={14} />}>
+            {/* 3. EDUCATION */}
+            <ResumeSection
+              title="3. Education"
+              icon={<GraduationCap size={14} />}
+              add={() => addGroup('education', { school: '', degree: '', location: '', years: '', gpa: '' })}
+            >
+              {resume.education.map((item, index) => (
+                <div className="repeat-group" key={`edu-${index}`}>
+                  <div className="form-grid">
+                    <Field label="University / College" value={item.school} onChange={(v) => updateGroup('education', index, 'school', v)} placeholder="e.g. NIT Surathkal" />
+                    <Field label="Graduation Year / Dates" value={item.years} onChange={(v) => updateGroup('education', index, 'years', v)} placeholder="e.g. 2020 – 2024" />
+                    <Field label="Degree &amp; Major" value={item.degree} onChange={(v) => updateGroup('education', index, 'degree', v)} placeholder="e.g. B.Tech in Computer Science" />
+                    <Field label="Location (City, Country)" value={item.location} onChange={(v) => updateGroup('education', index, 'location', v)} placeholder="e.g. Surathkal, India" />
+                    <Field label="GPA / Percentage / Coursework (Optional)" value={item.gpa} onChange={(v) => updateGroup('education', index, 'gpa', v)} placeholder="e.g. CGPA: 8.9 / 10 | Relevant Coursework: DSA, OS, DBMS" className="full-field" />
+                  </div>
+                  {resume.education.length > 1 && (
+                    <button type="button" className="remove-row" onClick={() => removeGroup('education', index)} aria-label="Remove education">
+                      <Trash2 size={14} />
+                    </button>
+                  )}
+                </div>
+              ))}
+            </ResumeSection>
+
+            {/* 4. TECHNICAL SKILLS */}
+            <ResumeSection title="4. Technical Skills" icon={<Code2 size={14} />}>
               <div className="skills-categorized-inputs">
                 <Field
                   label="Programming Languages"
                   value={resume.skillsCategories?.languages || ''}
                   onChange={(v) => updateSkillCat('languages', v)}
-                  placeholder="e.g. JavaScript (ES6+), TypeScript, Python, Java, SQL, C++"
+                  placeholder="e.g. JavaScript (ES6+), TypeScript, Python, Java, SQL, C++, HTML5/CSS3"
                 />
                 <Field
                   label="Frameworks &amp; Libraries"
                   value={resume.skillsCategories?.frameworks || ''}
                   onChange={(v) => updateSkillCat('frameworks', v)}
-                  placeholder="e.g. React.js, Node.js, Express.js, Next.js, Redux, Tailwind CSS"
+                  placeholder="e.g. React.js, Next.js, Node.js, Express.js, Redux Toolkit, Tailwind CSS, Jest"
                 />
                 <Field
-                  label="Tools, Cloud &amp; Databases"
+                  label="Databases &amp; Cloud"
+                  value={resume.skillsCategories?.databases || ''}
+                  onChange={(v) => updateSkillCat('databases', v)}
+                  placeholder="e.g. PostgreSQL, MongoDB, Redis, Docker, AWS (S3, EC2), Supabase, GraphQL"
+                />
+                <Field
+                  label="Tools &amp; Methodologies"
                   value={resume.skillsCategories?.tools || ''}
                   onChange={(v) => updateSkillCat('tools', v)}
-                  placeholder="e.g. Git, GitHub, Docker, AWS (S3, EC2), PostgreSQL, MongoDB, Redis, Linux"
+                  placeholder="e.g. Git, GitHub, Linux, RESTful APIs, CI/CD Pipelines, Agile/Scrum, Postman"
                 />
               </div>
             </ResumeSection>
 
-            {/* 3. EXPERIENCE */}
+            {/* 5. PROJECTS */}
             <ResumeSection
-              title="Experience"
+              title="5. Projects"
+              icon={<Code2 size={14} />}
+              add={() => addGroup('projects', { title: '', technologies: '', link: '', description: '' })}
+            >
+              {resume.projects.map((item, index) => (
+                <div className="repeat-group" key={`proj-${index}`}>
+                  <div className="form-grid">
+                    <Field label="Project Title" value={item.title} onChange={(v) => updateGroup('projects', index, 'title', v)} placeholder="e.g. DevCollab Workspace" />
+                    <Field label="Technologies Used" value={item.technologies} onChange={(v) => updateGroup('projects', index, 'technologies', v)} placeholder="e.g. React, Node.js, Redis, Docker" />
+                    <Field label="GitHub / Live Link" value={item.link} onChange={(v) => updateGroup('projects', index, 'link', v)} placeholder="github.com/username/project" />
+                    <label className="field-label full-field">
+                      What you engineered &amp; measurable outcomes (bullets)
+                      <textarea
+                        value={item.description}
+                        onChange={(e) => updateGroup('projects', index, 'description', e.target.value)}
+                        placeholder="• Built a real-time collaborative editor with live multi-cursor syncing over WebSockets.&#10;• Scaled Redis channels to handle 2,000+ concurrent connections with 0 dropped events."
+                        rows="3"
+                      />
+                    </label>
+                  </div>
+                  {resume.projects.length > 1 && (
+                    <button type="button" className="remove-row" onClick={() => removeGroup('projects', index)} aria-label="Remove project">
+                      <Trash2 size={14} />
+                    </button>
+                  )}
+                </div>
+              ))}
+            </ResumeSection>
+
+            {/* Optional Work Experience */}
+            <ResumeSection
+              title="Work Experience (Optional)"
               icon={<Briefcase size={14} />}
               add={() => addGroup('experienceList', { company: '', role: '', location: '', dates: '', bullets: '' })}
             >
@@ -844,7 +924,7 @@ export default function ResumeBuilder() {
                         value={item.bullets}
                         onChange={(e) => updateGroup('experienceList', index, 'bullets', e.target.value)}
                         placeholder="• Architected and deployed 6+ reusable React components, decreasing page load time by 28% for 45k users.&#10;• Engineered RESTful APIs in Node.js, reducing median response time by 35%."
-                        rows="4"
+                        rows="3"
                       />
                     </label>
                   </div>
@@ -857,63 +937,8 @@ export default function ResumeBuilder() {
               ))}
             </ResumeSection>
 
-            {/* 4. PROJECTS */}
-            <ResumeSection
-              title="Projects"
-              icon={<Code2 size={14} />}
-              add={() => addGroup('projects', { title: '', technologies: '', link: '', description: '' })}
-            >
-              {resume.projects.map((item, index) => (
-                <div className="repeat-group" key={`proj-${index}`}>
-                  <div className="form-grid">
-                    <Field label="Project Title" value={item.title} onChange={(v) => updateGroup('projects', index, 'title', v)} placeholder="e.g. DevCollab Workspace" />
-                    <Field label="Technologies Used" value={item.technologies} onChange={(v) => updateGroup('projects', index, 'technologies', v)} placeholder="e.g. React, Node.js, Redis, Docker" />
-                    <Field label="GitHub / Live Link" value={item.link} onChange={(v) => updateGroup('projects', index, 'link', v)} placeholder="github.com/username/project" />
-                    <label className="field-label full-field">
-                      What you engineered &amp; measurable outcomes (bullets)
-                      <textarea
-                        value={item.description}
-                        onChange={(e) => updateGroup('projects', index, 'description', e.target.value)}
-                        placeholder="• Built a real-time collaborative editor with live multi-cursor syncing over WebSockets.&#10;• Scaled Redis channels to handle 2,000+ concurrent connections with 0 dropped events."
-                        rows="3"
-                      />
-                    </label>
-                  </div>
-                  {resume.projects.length > 1 && (
-                    <button type="button" className="remove-row" onClick={() => removeGroup('projects', index)} aria-label="Remove project">
-                      <Trash2 size={14} />
-                    </button>
-                  )}
-                </div>
-              ))}
-            </ResumeSection>
-
-            {/* 5. EDUCATION */}
-            <ResumeSection
-              title="Education"
-              icon={<GraduationCap size={14} />}
-              add={() => addGroup('education', { school: '', degree: '', location: '', years: '', gpa: '' })}
-            >
-              {resume.education.map((item, index) => (
-                <div className="repeat-group" key={`edu-${index}`}>
-                  <div className="form-grid">
-                    <Field label="Degree &amp; Major" value={item.degree} onChange={(v) => updateGroup('education', index, 'degree', v)} placeholder="e.g. B.Tech in Computer Science" />
-                    <Field label="Graduation Year / Dates" value={item.years} onChange={(v) => updateGroup('education', index, 'years', v)} placeholder="e.g. 2020 – 2024" />
-                    <Field label="University / College" value={item.school} onChange={(v) => updateGroup('education', index, 'school', v)} placeholder="e.g. NIT Surathkal" />
-                    <Field label="Location (City, Country)" value={item.location} onChange={(v) => updateGroup('education', index, 'location', v)} placeholder="e.g. Surathkal, India" />
-                    <Field label="GPA / Percentage (Optional)" value={item.gpa} onChange={(v) => updateGroup('education', index, 'gpa', v)} placeholder="e.g. CGPA: 8.9 / 10" />
-                  </div>
-                  {resume.education.length > 1 && (
-                    <button type="button" className="remove-row" onClick={() => removeGroup('education', index)} aria-label="Remove education">
-                      <Trash2 size={14} />
-                    </button>
-                  )}
-                </div>
-              ))}
-            </ResumeSection>
-
-            {/* 6. CERTIFICATIONS */}
-            <ResumeSection title="Certifications" icon={<Award size={14} />}>
+            {/* 6. CERTIFICATIONS & ACHIEVEMENTS */}
+            <ResumeSection title="6. Certifications &amp; Achievements" icon={<Award size={14} />}>
               <label className="field-label full-field">
                 Certifications (1 per line)
                 <textarea
@@ -923,12 +948,8 @@ export default function ResumeBuilder() {
                   rows="2"
                 />
               </label>
-            </ResumeSection>
-
-            {/* 7. ACHIEVEMENTS */}
-            <ResumeSection title="Achievements" icon={<Award size={14} />}>
               <label className="field-label full-field">
-                Honors &amp; Hackathon Achievements (1 per line)
+                Achievements &amp; Honors (1 per line)
                 <textarea
                   value={resume.achievements}
                   onChange={(e) => update('achievements', e.target.value)}
@@ -936,11 +957,15 @@ export default function ResumeBuilder() {
                   rows="2"
                 />
               </label>
+            </ResumeSection>
+
+            {/* 7. LANGUAGES */}
+            <ResumeSection title="7. Languages" icon={<CheckCircle2 size={14} />}>
               <Field
-                label="Languages"
+                label="Languages Spoken"
                 value={resume.languages}
                 onChange={(v) => update('languages', v)}
-                placeholder="e.g. English (Fluent), Hindi (Native)"
+                placeholder="e.g. English (Professional Working Proficiency), Hindi (Native), German (Elementary)"
               />
             </ResumeSection>
           </div>
@@ -1042,29 +1067,80 @@ export default function ResumeBuilder() {
               <article
                 className={`resume-paper-document ${template} ${fontFamily} font-${fontSize}`}
               >
-                {/* Header */}
+                {/* Header (1. Personal Information) */}
                 <header className="paper-header">
                   <h1 className="paper-name">{resume.name || 'YOUR FULL NAME'}</h1>
                   {resume.role && <div className="paper-headline">{resume.role}</div>}
-                  <div className="paper-contact-row">
-                    {[
-                      resume.phone,
-                      resume.email,
-                      resume.location,
-                      resume.linkedin,
-                      resume.portfolio,
-                    ]
-                      .filter(Boolean)
-                      .map((item, idx, arr) => (
-                        <span key={idx} className="paper-contact-item">
-                          {item}
-                          {idx < arr.length - 1 && <span className="contact-separator">|</span>}
+                  <div className="paper-contact-block">
+                    {/* Contact Row 1: Phone, Email, Location */}
+                    <div className="paper-contact-row">
+                      {resume.phone && (
+                        <span className="paper-contact-item">
+                          <a href={`tel:${resume.phone}`}>{resume.phone}</a>
                         </span>
-                      ))}
+                      )}
+                      {resume.phone && resume.email && <span className="contact-separator">•</span>}
+                      {resume.email && (
+                        <span className="paper-contact-item">
+                          <a href={`mailto:${resume.email}`}>{resume.email}</a>
+                        </span>
+                      )}
+                      {(resume.phone || resume.email) && resume.location && (
+                        <span className="contact-separator">•</span>
+                      )}
+                      {resume.location && (
+                        <span className="paper-contact-item">{resume.location}</span>
+                      )}
+                    </div>
+
+                    {/* Contact Row 2: LinkedIn, GitHub, Portfolio */}
+                    {(resume.linkedin || resume.github || resume.portfolio) && (
+                      <div className="paper-contact-row secondary-contact">
+                        {resume.linkedin && (
+                          <span className="paper-contact-item">
+                            <a
+                              href={resume.linkedin.startsWith('http') ? resume.linkedin : `https://${resume.linkedin}`}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              {resume.linkedin.replace(/^https?:\/\/(www\.)?/, '')}
+                            </a>
+                          </span>
+                        )}
+                        {resume.linkedin && (resume.github || resume.portfolio) && (
+                          <span className="contact-separator">•</span>
+                        )}
+                        {resume.github && (
+                          <span className="paper-contact-item">
+                            <a
+                              href={resume.github.startsWith('http') ? resume.github : `https://${resume.github}`}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              {resume.github.replace(/^https?:\/\/(www\.)?/, '')}
+                            </a>
+                          </span>
+                        )}
+                        {resume.github && resume.portfolio && (
+                          <span className="contact-separator">•</span>
+                        )}
+                        {resume.portfolio && (
+                          <span className="paper-contact-item">
+                            <a
+                              href={resume.portfolio.startsWith('http') ? resume.portfolio : `https://${resume.portfolio}`}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              {resume.portfolio.replace(/^https?:\/\/(www\.)?/, '')}
+                            </a>
+                          </span>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </header>
 
-                {/* 1. PROFESSIONAL SUMMARY */}
+                {/* 2. PROFESSIONAL SUMMARY */}
                 {resume.objective?.trim() && (
                   <section className="paper-section">
                     <h2 className="paper-section-heading">PROFESSIONAL SUMMARY</h2>
@@ -1072,9 +1148,33 @@ export default function ResumeBuilder() {
                   </section>
                 )}
 
-                {/* 2. TECHNICAL SKILLS */}
+                {/* 3. EDUCATION */}
+                {resume.education?.some((e) => e.school || e.degree) && (
+                  <section className="paper-section">
+                    <h2 className="paper-section-heading">EDUCATION</h2>
+                    {resume.education
+                      .filter((e) => e.school || e.degree)
+                      .map((edu, idx) => (
+                        <div className="paper-entry" key={idx}>
+                          <div className="paper-entry-row primary">
+                            <strong className="entry-bold">{edu.school || 'University / College'}</strong>
+                            <span className="entry-right-date">
+                              {[edu.location, edu.years].filter(Boolean).join('   |   ')}
+                            </span>
+                          </div>
+                          <div className="paper-entry-row secondary">
+                            <span className="entry-italic">{edu.degree || 'Degree & Major'}</span>
+                            {edu.gpa && <span className="entry-right-sub">{edu.gpa}</span>}
+                          </div>
+                        </div>
+                      ))}
+                  </section>
+                )}
+
+                {/* 4. TECHNICAL SKILLS */}
                 {(resume.skillsCategories?.languages ||
                   resume.skillsCategories?.frameworks ||
+                  resume.skillsCategories?.databases ||
                   resume.skillsCategories?.tools ||
                   resume.skills) && (
                   <section className="paper-section">
@@ -1092,26 +1192,34 @@ export default function ResumeBuilder() {
                           <span className="skill-cat-values">{resume.skillsCategories.frameworks}</span>
                         </div>
                       )}
+                      {resume.skillsCategories?.databases && (
+                        <div className="paper-skill-row">
+                          <strong className="skill-cat-label">Databases &amp; Cloud: </strong>
+                          <span className="skill-cat-values">{resume.skillsCategories.databases}</span>
+                        </div>
+                      )}
                       {resume.skillsCategories?.tools && (
                         <div className="paper-skill-row">
-                          <strong className="skill-cat-label">Tools, Cloud &amp; Databases: </strong>
+                          <strong className="skill-cat-label">Tools &amp; Methodologies: </strong>
                           <span className="skill-cat-values">{resume.skillsCategories.tools}</span>
                         </div>
                       )}
-                      {!resume.skillsCategories?.languages && !resume.skillsCategories?.frameworks && resume.skills && (
-                        <div className="paper-skill-row">
-                          <strong className="skill-cat-label">Skills: </strong>
-                          <span className="skill-cat-values">{resume.skills}</span>
-                        </div>
-                      )}
+                      {!resume.skillsCategories?.languages &&
+                        !resume.skillsCategories?.frameworks &&
+                        resume.skills && (
+                          <div className="paper-skill-row">
+                            <strong className="skill-cat-label">Skills: </strong>
+                            <span className="skill-cat-values">{resume.skills}</span>
+                          </div>
+                        )}
                     </div>
                   </section>
                 )}
 
-                {/* 3. EXPERIENCE */}
-                {resume.experienceList.some((e) => e.company || e.role) && (
+                {/* Optional WORK EXPERIENCE if filled */}
+                {resume.experienceList?.some((e) => e.company || e.role) && (
                   <section className="paper-section">
-                    <h2 className="paper-section-heading">EXPERIENCE</h2>
+                    <h2 className="paper-section-heading">WORK EXPERIENCE</h2>
                     {resume.experienceList
                       .filter((e) => e.company || e.role)
                       .map((exp, idx) => (
@@ -1138,7 +1246,7 @@ export default function ResumeBuilder() {
                   </section>
                 )}
 
-                {/* 4. PROJECTS */}
+                {/* 5. PROJECTS */}
                 {resume.projects?.some((p) => p.title || p.description) && (
                   <section className="paper-section">
                     <h2 className="paper-section-heading">PROJECTS</h2>
@@ -1173,58 +1281,28 @@ export default function ResumeBuilder() {
                   </section>
                 )}
 
-                {/* 5. EDUCATION */}
-                {resume.education.some((e) => e.school || e.degree) && (
+                {/* 6. CERTIFICATIONS & ACHIEVEMENTS */}
+                {(resume.certifications?.trim() || resume.achievements?.trim()) && (
                   <section className="paper-section">
-                    <h2 className="paper-section-heading">EDUCATION</h2>
-                    {resume.education
-                      .filter((e) => e.school || e.degree)
-                      .map((edu, idx) => (
-                        <div className="paper-entry" key={idx}>
-                          <div className="paper-entry-row primary">
-                            <strong className="entry-bold">{edu.degree || 'Degree / Major'}</strong>
-                            <span className="entry-right-date">{edu.years}</span>
-                          </div>
-                          <div className="paper-entry-row secondary">
-                            <span className="entry-italic">{edu.school || 'University'}</span>
-                            <span className="entry-right-sub">
-                              {[edu.location, edu.gpa].filter(Boolean).join('   |   ')}
-                            </span>
-                          </div>
-                        </div>
-                      ))}
-                  </section>
-                )}
-
-                {/* 6. CERTIFICATIONS */}
-                {resume.certifications?.trim() && (
-                  <section className="paper-section">
-                    <h2 className="paper-section-heading">CERTIFICATIONS</h2>
+                    <h2 className="paper-section-heading">CERTIFICATIONS &amp; ACHIEVEMENTS</h2>
                     <ul className="paper-bullet-list">
-                      {resume.certifications.split('\n').map((line, idx) => {
-                        const clean = line.replace(/^[•\-\*]\s*/, '').trim();
-                        if (!clean) return null;
-                        return <li key={idx}>{clean}</li>;
-                      })}
+                      {resume.certifications?.trim() &&
+                        resume.certifications.split('\n').map((line, idx) => {
+                          const clean = line.replace(/^[•\-\*]\s*/, '').trim();
+                          if (!clean) return null;
+                          return <li key={`cert-${idx}`}>{clean}</li>;
+                        })}
+                      {resume.achievements?.trim() &&
+                        resume.achievements.split('\n').map((line, idx) => {
+                          const clean = line.replace(/^[•\-\*]\s*/, '').trim();
+                          if (!clean) return null;
+                          return <li key={`ach-${idx}`}>{clean}</li>;
+                        })}
                     </ul>
                   </section>
                 )}
 
-                {/* 7. ACHIEVEMENTS */}
-                {resume.achievements?.trim() && (
-                  <section className="paper-section">
-                    <h2 className="paper-section-heading">ACHIEVEMENTS</h2>
-                    <ul className="paper-bullet-list">
-                      {resume.achievements.split('\n').map((line, idx) => {
-                        const clean = line.replace(/^[•\-\*]\s*/, '').trim();
-                        if (!clean) return null;
-                        return <li key={idx}>{clean}</li>;
-                      })}
-                    </ul>
-                  </section>
-                )}
-
-                {/* 8. LANGUAGES (Optional) */}
+                {/* 7. LANGUAGES */}
                 {resume.languages?.trim() && (
                   <section className="paper-section">
                     <h2 className="paper-section-heading">LANGUAGES</h2>

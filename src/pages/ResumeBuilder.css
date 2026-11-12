@@ -672,7 +672,7 @@
 
 /* ========================================================
    AUTHENTIC PAPER CANVAS (210 × 260 mm)
-   STRICT SINGLE-COLUMN ATS DESIGN
+   STRICT SINGLE-COLUMN ATS DESIGN — COMPACT & BALANCED
    ======================================================== */
 
 .resume-paper-document {
@@ -682,12 +682,12 @@
   min-height: 891px;
   aspect-ratio: 210 / 260;
   margin: 0 auto;
-  padding: 34px 40px;
+  padding: 26px 32px;
   border-radius: 2px;
   color: #0f172a;
   background: #ffffff !important;
-  box-shadow: 0 14px 40px rgba(15, 23, 42, 0.14), 0 2px 6px rgba(15, 23, 42, 0.05);
-  line-height: 1.48;
+  box-shadow: 0 12px 36px rgba(15, 23, 42, 0.12), 0 2px 6px rgba(15, 23, 42, 0.04);
+  line-height: 1.45;
   display: flex;
   flex-direction: column;
 }
@@ -702,13 +702,13 @@
 
 .resume-paper-document.compact,
 .resume-paper-document.font-compact {
-  padding: 24px 30px;
+  padding: 20px 26px;
   min-height: 840px;
 }
 
-/* Header */
+/* Header (1. Personal Information) */
 .paper-header {
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 .resume-paper-document.ivy-center .paper-header {
@@ -719,33 +719,37 @@
   text-align: left;
 }
 
-.resume-paper-document.compact .paper-header,
-.resume-paper-document.font-compact .paper-header {
-  margin-bottom: 8px;
-}
-
 .paper-name {
   margin: 0;
   color: #0f172a;
-  font-size: 22px;
+  font-size: 21px;
   font-weight: 800;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.6px;
+  line-height: 1.15;
   text-transform: uppercase;
 }
 
 .paper-headline {
-  margin: 3px 0 5px;
+  margin: 2px 0 3px;
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 700;
   color: #334155;
+  letter-spacing: 0.2px;
+}
+
+.paper-contact-block {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 3px;
 }
 
 .paper-contact-row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 6px;
-  font-size: 9.5px;
+  gap: 4px 6px;
+  font-size: 9.3px;
   color: #334155;
 }
 
@@ -760,62 +764,56 @@
 .paper-contact-item {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+}
+
+.paper-contact-item a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.paper-contact-item a:hover {
+  color: #2563eb;
+  text-decoration: underline;
 }
 
 .contact-separator {
   color: #94a3b8;
-  font-size: 9px;
+  font-size: 8.5px;
+  user-select: none;
 }
 
 /* Sections - Exact Sequence */
 .paper-section {
-  margin-top: 12px;
+  margin-top: 8.5px;
 }
 
-.resume-paper-document.compact .paper-section,
-.resume-paper-document.font-compact .paper-section {
-  margin-top: 8px;
+.paper-section:first-of-type {
+  margin-top: 5px;
 }
 
 .paper-section-heading {
-  margin: 0 0 5px;
-  padding-bottom: 2px;
+  margin: 0 0 3.5px;
+  padding-bottom: 1.5px;
   font-size: 10.5px;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.6px;
   color: #0f172a;
   border-bottom: 1.2px solid #0f172a;
 }
 
-.resume-paper-document.compact .paper-section-heading,
-.resume-paper-document.font-compact .paper-section-heading {
-  font-size: 9.5px;
-  margin-bottom: 4px;
-}
-
 .paper-paragraph {
   margin: 0;
-  font-size: 9.5px;
-  line-height: 1.55;
+  font-size: 9.4px;
+  line-height: 1.48;
   color: #1e293b;
-}
-
-.resume-paper-document.compact .paper-paragraph,
-.resume-paper-document.font-compact .paper-paragraph {
-  font-size: 8.8px;
-  line-height: 1.45;
+  text-align: justify;
 }
 
 /* Two-column entries within single-column flow */
 .paper-entry {
-  margin-bottom: 8px;
-}
-
-.resume-paper-document.compact .paper-entry,
-.resume-paper-document.font-compact .paper-entry {
-  margin-bottom: 5px;
+  margin-bottom: 5.5px;
 }
 
 .paper-entry:last-child {
@@ -830,7 +828,7 @@
 }
 
 .paper-entry-row.primary .entry-bold {
-  font-size: 10.5px;
+  font-size: 10.2px;
   font-weight: 750;
   color: #0f172a;
 }
@@ -844,32 +842,17 @@
 }
 
 .paper-entry-row.secondary .entry-italic {
-  font-size: 9.5px;
+  font-size: 9.4px;
   font-style: italic;
   color: #334155;
 }
 
 .paper-entry-row.secondary .entry-right-sub {
-  font-size: 9px;
+  font-size: 8.8px;
   color: #475569;
   font-style: italic;
   white-space: nowrap;
   text-align: right;
-}
-
-.resume-paper-document.compact .paper-entry-row.primary .entry-bold,
-.resume-paper-document.font-compact .paper-entry-row.primary .entry-bold {
-  font-size: 9.5px;
-}
-.resume-paper-document.compact .paper-entry-row.secondary .entry-italic,
-.resume-paper-document.font-compact .paper-entry-row.secondary .entry-italic {
-  font-size: 8.8px;
-}
-.resume-paper-document.compact .paper-entry-row.primary .entry-right-date,
-.resume-paper-document.compact .paper-entry-row.secondary .entry-right-sub,
-.resume-paper-document.font-compact .paper-entry-row.primary .entry-right-date,
-.resume-paper-document.font-compact .paper-entry-row.secondary .entry-right-sub {
-  font-size: 8.5px;
 }
 
 .entry-title-with-stack {
@@ -889,147 +872,200 @@
   font-size: 9px;
   font-weight: 600;
   color: #2563eb;
+  text-decoration: none;
+}
+
+.entry-right-link:hover {
+  text-decoration: underline;
 }
 
 /* Bullet points */
 .paper-bullet-list {
-  margin: 3px 0 0;
-  padding-left: 18px;
+  margin: 2px 0 0;
+  padding-left: 15px;
   list-style-type: disc;
 }
 
 .paper-bullet-list li {
-  font-size: 9.5px;
-  line-height: 1.55;
+  font-size: 9.2px;
+  line-height: 1.45;
   color: #1e293b;
-  margin-bottom: 2px;
+  margin-bottom: 1.8px;
 }
 
-.resume-paper-document.compact .paper-bullet-list li,
-.resume-paper-document.font-compact .paper-bullet-list li {
-  font-size: 8.8px;
-  line-height: 1.42;
-  margin-bottom: 1.5px;
+.paper-bullet-list li:last-child {
+  margin-bottom: 0;
 }
 
 /* Skills Matrix */
 .paper-skills-matrix {
   display: grid;
-  gap: 3px;
-  font-size: 9.5px;
-  line-height: 1.5;
+  gap: 2.2px;
+  font-size: 9.3px;
+  line-height: 1.45;
   color: #1e293b;
-}
-
-.resume-paper-document.compact .paper-skills-matrix,
-.resume-paper-document.font-compact .paper-skills-matrix {
-  font-size: 8.8px;
-  gap: 2px;
-}
-
-/* ========================================================
-   BIG FONT SIZE (HIGH LEGIBILITY ATS A4 LAYOUT)
-   ======================================================== */
-.resume-paper-document.font-big {
-  padding: 42px 46px;
-  line-height: 1.55;
-}
-
-.resume-paper-document.font-big .paper-header {
-  margin-bottom: 14px;
-}
-
-.resume-paper-document.font-big .paper-name {
-  font-size: 26px;
-  letter-spacing: 1px;
-}
-
-.resume-paper-document.font-big .paper-headline {
-  font-size: 12.5px;
-  font-weight: 700;
-  margin: 4px 0 6px;
-}
-
-.resume-paper-document.font-big .paper-contact-row {
-  font-size: 10.5px;
-  gap: 8px;
-}
-
-.resume-paper-document.font-big .contact-separator {
-  font-size: 10px;
-}
-
-.resume-paper-document.font-big .paper-section {
-  margin-top: 14px;
-}
-
-.resume-paper-document.font-big .paper-section-heading {
-  font-size: 12px;
-  letter-spacing: 1px;
-  margin-bottom: 6px;
-  padding-bottom: 3px;
-  border-bottom: 1.5px solid #0f172a;
-}
-
-.resume-paper-document.font-big .paper-paragraph {
-  font-size: 10.5px;
-  line-height: 1.62;
-}
-
-.resume-paper-document.font-big .paper-entry {
-  margin-bottom: 10px;
-}
-
-.resume-paper-document.font-big .paper-entry-row.primary .entry-bold {
-  font-size: 11.8px;
-  font-weight: 800;
-}
-
-.resume-paper-document.font-big .paper-entry-row.primary .entry-right-date {
-  font-size: 11px;
-  font-weight: 750;
-}
-
-.resume-paper-document.font-big .paper-entry-row.secondary .entry-italic {
-  font-size: 10.5px;
-}
-
-.resume-paper-document.font-big .paper-entry-row.secondary .entry-right-sub {
-  font-size: 10px;
-}
-
-.resume-paper-document.font-big .entry-tech-stack {
-  font-size: 10px;
-}
-
-.resume-paper-document.font-big .entry-right-link {
-  font-size: 10px;
-}
-
-.resume-paper-document.font-big .paper-bullet-list {
-  margin: 4px 0 0;
-  padding-left: 20px;
-}
-
-.resume-paper-document.font-big .paper-bullet-list li {
-  font-size: 10.5px;
-  line-height: 1.62;
-  margin-bottom: 3px;
-}
-
-.resume-paper-document.font-big .paper-skills-matrix {
-  font-size: 10.5px;
-  line-height: 1.6;
-  gap: 4px;
-}
-
-.resume-paper-document.font-big .skill-cat-label {
-  font-size: 11px;
 }
 
 .skill-cat-label {
   font-weight: 750;
   color: #0f172a;
+}
+
+.paper-skill-row {
+  margin: 0;
+}
+
+/* ========================================================
+   BIG FONT SIZE (BALANCED & HIGH LEGIBILITY ATS LAYOUT)
+   ======================================================== */
+.resume-paper-document.font-big {
+  padding: 28px 34px;
+  line-height: 1.48;
+}
+
+.resume-paper-document.font-big .paper-header {
+  margin-bottom: 9px;
+}
+
+.resume-paper-document.font-big .paper-name {
+  font-size: 23px;
+  letter-spacing: 0.7px;
+}
+
+.resume-paper-document.font-big .paper-headline {
+  font-size: 11.5px;
+  font-weight: 700;
+  margin: 2px 0 3px;
+}
+
+.resume-paper-document.font-big .paper-contact-row {
+  font-size: 9.8px;
+  gap: 4px 7px;
+}
+
+.resume-paper-document.font-big .contact-separator {
+  font-size: 9px;
+}
+
+.resume-paper-document.font-big .paper-section {
+  margin-top: 9px;
+}
+
+.resume-paper-document.font-big .paper-section-heading {
+  font-size: 11px;
+  letter-spacing: 0.7px;
+  margin-bottom: 3.5px;
+  padding-bottom: 1.5px;
+  border-bottom: 1.3px solid #0f172a;
+}
+
+.resume-paper-document.font-big .paper-paragraph {
+  font-size: 9.8px;
+  line-height: 1.5;
+}
+
+.resume-paper-document.font-big .paper-entry {
+  margin-bottom: 6px;
+}
+
+.resume-paper-document.font-big .paper-entry-row.primary .entry-bold {
+  font-size: 10.6px;
+  font-weight: 800;
+}
+
+.resume-paper-document.font-big .paper-entry-row.primary .entry-right-date {
+  font-size: 10px;
+  font-weight: 750;
+}
+
+.resume-paper-document.font-big .paper-entry-row.secondary .entry-italic {
+  font-size: 9.8px;
+}
+
+.resume-paper-document.font-big .paper-entry-row.secondary .entry-right-sub {
+  font-size: 9.2px;
+}
+
+.resume-paper-document.font-big .entry-tech-stack {
+  font-size: 9.2px;
+}
+
+.resume-paper-document.font-big .entry-right-link {
+  font-size: 9.2px;
+}
+
+.resume-paper-document.font-big .paper-bullet-list {
+  margin: 2px 0 0;
+  padding-left: 16px;
+}
+
+.resume-paper-document.font-big .paper-bullet-list li {
+  font-size: 9.5px;
+  line-height: 1.48;
+  margin-bottom: 2px;
+}
+
+.resume-paper-document.font-big .paper-skills-matrix {
+  font-size: 9.5px;
+  line-height: 1.48;
+  gap: 2.5px;
+}
+
+.resume-paper-document.font-big .skill-cat-label {
+  font-size: 10px;
+}
+
+/* ========================================================
+   COMPACT FONT SIZE (MAX CONTENT DENSITY)
+   ======================================================== */
+.resume-paper-document.font-compact .paper-header {
+  margin-bottom: 6px;
+}
+
+.resume-paper-document.font-compact .paper-name {
+  font-size: 19px;
+}
+
+.resume-paper-document.font-compact .paper-section {
+  margin-top: 6.5px;
+}
+
+.resume-paper-document.font-compact .paper-section-heading {
+  font-size: 9.5px;
+  margin-bottom: 2.5px;
+}
+
+.resume-paper-document.font-compact .paper-paragraph {
+  font-size: 8.8px;
+  line-height: 1.4;
+}
+
+.resume-paper-document.font-compact .paper-entry {
+  margin-bottom: 4px;
+}
+
+.resume-paper-document.font-compact .paper-entry-row.primary .entry-bold {
+  font-size: 9.4px;
+}
+
+.resume-paper-document.font-compact .paper-entry-row.secondary .entry-italic {
+  font-size: 8.8px;
+}
+
+.resume-paper-document.font-compact .paper-entry-row.primary .entry-right-date,
+.resume-paper-document.font-compact .paper-entry-row.secondary .entry-right-sub {
+  font-size: 8.5px;
+}
+
+.resume-paper-document.font-compact .paper-bullet-list li {
+  font-size: 8.8px;
+  line-height: 1.4;
+  margin-bottom: 1.2px;
+}
+
+.resume-paper-document.font-compact .paper-skills-matrix {
+  font-size: 8.8px;
+  gap: 1.8px;
 }
 
 .paper-skill-row {
