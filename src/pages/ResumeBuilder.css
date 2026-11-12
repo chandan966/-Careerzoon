@@ -1,5 +1,5 @@
 /* ========================================================
-   CAREERZOON PROFESSIONAL RESUME BUILDER
+   CAREERZOON PROFESSIONAL SINGLE-COLUMN ATS A4 CV
    ======================================================== */
 
 .resume-workspace {
@@ -24,6 +24,7 @@
   padding: 22px;
 }
 
+.resume-panel-head,
 .preview-head {
   display: flex;
   align-items: center;
@@ -112,7 +113,7 @@
   color: var(--text);
 }
 
-/* Template Picker */
+/* Template Picker & Font Selector */
 .template-picker-section {
   padding: 16px 0;
   border-bottom: 1px solid var(--border);
@@ -150,22 +151,12 @@
 .template-card-btn:hover {
   border-color: var(--purple);
   background: var(--surface);
-  transform: translateY(-1px);
 }
 
 .template-card-btn.active {
   border-color: var(--purple);
   background: var(--surface);
   box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.22);
-}
-
-.template-swatch {
-  width: 14px;
-  height: 14px;
-  flex: 0 0 auto;
-  border-radius: 50%;
-  border: 2px solid #fff;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15);
 }
 
 .template-card-texts {
@@ -182,6 +173,42 @@
 .template-card-desc {
   color: var(--muted);
   font-size: 9.5px;
+}
+
+.font-picker-row {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.font-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.font-toggle {
+  display: flex;
+  gap: 6px;
+}
+
+.font-btn {
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--soft);
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.font-btn.active {
+  background: #7c3aed;
+  color: #fff;
+  border-color: #7c3aed;
 }
 
 /* ATS Score Meter */
@@ -605,7 +632,8 @@
 }
 
 /* ========================================================
-   AUTHENTIC A4 PAPER CANVAS
+   AUTHENTIC A4 PAPER CANVAS (210 × 297 mm)
+   STRICT SINGLE-COLUMN ATS DESIGN
    ======================================================== */
 
 .resume-paper-document {
@@ -620,10 +648,17 @@
   color: #0f172a;
   background: #ffffff !important;
   box-shadow: 0 14px 40px rgba(15, 23, 42, 0.14), 0 2px 6px rgba(15, 23, 42, 0.05);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   line-height: 1.48;
   display: flex;
   flex-direction: column;
+}
+
+.resume-paper-document.sans {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.resume-paper-document.serif {
+  font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
 .resume-paper-document.compact {
@@ -631,31 +666,17 @@
   min-height: 960px;
 }
 
-.paper-footer-tag {
-  margin-top: auto;
-  padding-top: 14px;
-  border-top: 1px dashed #e2e8f0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  color: #94a3b8;
-  font-size: 7.5px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.paper-top-accent-bar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-}
-
-/* Paper Header */
+/* Header */
 .paper-header {
   margin-bottom: 12px;
+}
+
+.resume-paper-document.ivy-center .paper-header {
+  text-align: center;
+}
+
+.resume-paper-document.ivy-left .paper-header {
+  text-align: left;
 }
 
 .resume-paper-document.compact .paper-header {
@@ -665,44 +686,54 @@
 .paper-name {
   margin: 0;
   color: #0f172a;
-  font-size: 21px;
+  font-size: 22px;
   font-weight: 800;
-  letter-spacing: -0.2px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
 }
 
 .paper-headline {
-  margin: 3px 0 6px;
+  margin: 3px 0 5px;
   font-size: 11px;
   font-weight: 600;
-  color: #475569;
+  color: #334155;
 }
 
 .paper-contact-row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
   font-size: 9.5px;
-  color: #475569;
+  color: #334155;
+}
+
+.resume-paper-document.ivy-center .paper-contact-row {
+  justify-content: center;
+}
+
+.resume-paper-document.ivy-left .paper-contact-row {
+  justify-content: flex-start;
 }
 
 .paper-contact-item {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
 }
 
-.paper-contact-item svg {
-  color: #64748b;
+.contact-separator {
+  color: #94a3b8;
+  font-size: 9px;
 }
 
-/* Paper Sections */
+/* Sections - Exact Sequence */
 .paper-section {
-  margin-top: 13px;
+  margin-top: 12px;
 }
 
 .resume-paper-document.compact .paper-section {
-  margin-top: 9px;
+  margin-top: 8px;
 }
 
 .paper-section-heading {
@@ -711,9 +742,9 @@
   font-size: 10.5px;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.7px;
+  letter-spacing: 0.8px;
   color: #0f172a;
-  border-bottom: 1.2px solid #334155;
+  border-bottom: 1.2px solid #0f172a;
 }
 
 .resume-paper-document.compact .paper-section-heading {
@@ -725,7 +756,7 @@
   margin: 0;
   font-size: 9.5px;
   line-height: 1.55;
-  color: #334155;
+  color: #1e293b;
 }
 
 .resume-paper-document.compact .paper-paragraph {
@@ -733,7 +764,7 @@
   line-height: 1.45;
 }
 
-/* Two-column entries */
+/* Two-column entries within single-column flow */
 .paper-entry {
   margin-bottom: 8px;
 }
@@ -762,7 +793,7 @@
 .paper-entry-row.primary .entry-right-date {
   font-size: 9.5px;
   font-weight: 700;
-  color: #1e293b;
+  color: #0f172a;
   white-space: nowrap;
   text-align: right;
 }
@@ -770,12 +801,12 @@
 .paper-entry-row.secondary .entry-italic {
   font-size: 9.5px;
   font-style: italic;
-  color: #475569;
+  color: #334155;
 }
 
 .paper-entry-row.secondary .entry-right-sub {
   font-size: 9px;
-  color: #64748b;
+  color: #475569;
   font-style: italic;
   white-space: nowrap;
   text-align: right;
@@ -802,29 +833,26 @@
 .entry-tech-stack {
   font-size: 9px;
   font-style: italic;
-  color: #64748b;
+  color: #475569;
 }
 
 .entry-right-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
   font-size: 9px;
   font-weight: 600;
-  color: #6366f1;
+  color: #2563eb;
 }
 
 /* Bullet points */
 .paper-bullet-list {
   margin: 3px 0 0;
-  padding-left: 17px;
+  padding-left: 18px;
   list-style-type: disc;
 }
 
 .paper-bullet-list li {
   font-size: 9.5px;
   line-height: 1.55;
-  color: #334155;
+  color: #1e293b;
   margin-bottom: 2px;
 }
 
@@ -840,7 +868,7 @@
   gap: 3px;
   font-size: 9.5px;
   line-height: 1.5;
-  color: #334155;
+  color: #1e293b;
 }
 
 .resume-paper-document.compact .paper-skills-matrix {
@@ -853,166 +881,22 @@
   color: #0f172a;
 }
 
-.paper-skill-pills {
+.paper-skill-row {
+  margin: 0;
+}
+
+.paper-footer-tag {
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px dashed #e2e8f0;
   display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-}
-
-.paper-skill-pill {
-  padding: 3px 7px;
-  border-radius: 4px;
-  border: 1px solid #cbd5e1;
-  background: #f8fafc;
-  color: #1e293b;
-  font-size: 9px;
+  align-items: center;
+  justify-content: space-between;
+  color: #94a3b8;
+  font-size: 7.5px;
   font-weight: 600;
-}
-
-/* ========================================================
-   TEMPLATE 1: IVY LEAGUE / JAKE'S ATS (GOLD STANDARD)
-   ======================================================== */
-
-.resume-paper-document.ivy .paper-header {
-  text-align: center;
-}
-
-.resume-paper-document.ivy .paper-name {
-  font-size: 22px;
-  font-weight: 800;
-  letter-spacing: 0.8px;
   text-transform: uppercase;
-}
-
-.resume-paper-document.ivy .paper-headline {
-  text-align: center;
-  font-size: 10.5px;
-}
-
-.resume-paper-document.ivy .paper-contact-row {
-  justify-content: center;
-  gap: 7px;
-}
-
-.resume-paper-document.ivy .paper-contact-item svg {
-  display: none;
-}
-
-.resume-paper-document.ivy .paper-contact-item:not(:last-child)::after {
-  content: ' | ';
-  margin-left: 7px;
-  color: #94a3b8;
-}
-
-.resume-paper-document.ivy .paper-section-heading {
-  border-bottom: 1px solid #1e293b;
-  color: #0f172a;
-}
-
-/* ========================================================
-   TEMPLATE 2: MODERN TECH PRO (TEAL)
-   ======================================================== */
-
-.resume-paper-document.modern .paper-top-accent-bar {
-  background: #0d9488;
-}
-
-.resume-paper-document.modern .paper-headline {
-  color: #0d9488;
-}
-
-.resume-paper-document.modern .paper-contact-item svg {
-  color: #0d9488;
-}
-
-.resume-paper-document.modern .paper-section-heading {
-  color: #0f766e;
-  border-bottom: 1.5px solid #0d9488;
-}
-
-.resume-paper-document.modern .entry-right-link {
-  color: #0d9488;
-}
-
-.resume-paper-document.modern .paper-skill-pill {
-  background: #f0fdfa;
-  border-color: #99f6e4;
-  color: #0f766e;
-}
-
-/* ========================================================
-   TEMPLATE 3: SILICON VALLEY DEV (INDIGO)
-   ======================================================== */
-
-.resume-paper-document.tech .paper-top-accent-bar {
-  background: #6366f1;
-}
-
-.resume-paper-document.tech .paper-headline {
-  color: #6366f1;
-}
-
-.resume-paper-document.tech .paper-contact-item svg {
-  color: #6366f1;
-}
-
-.resume-paper-document.tech .paper-section-heading {
-  color: #4f46e5;
-  border-bottom: 1.5px solid #6366f1;
-}
-
-.resume-paper-document.tech .entry-right-link {
-  color: #4f46e5;
-}
-
-.resume-paper-document.tech .paper-skill-pill {
-  background: #eef2ff;
-  border-color: #c7d2fe;
-  color: #4338ca;
-}
-
-/* ========================================================
-   TEMPLATE 4: EXECUTIVE CORPORATE (NAVY)
-   ======================================================== */
-
-.resume-paper-document.classic {
-  font-family: Georgia, 'Times New Roman', serif;
-}
-
-.resume-paper-document.classic .paper-header {
-  text-align: center;
-}
-
-.resume-paper-document.classic .paper-name {
-  color: #1e3a8a;
-  font-size: 22px;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.resume-paper-document.classic .paper-headline {
-  text-align: center;
-  font-style: italic;
-}
-
-.resume-paper-document.classic .paper-contact-row {
-  justify-content: center;
-  gap: 7px;
-}
-
-.resume-paper-document.classic .paper-contact-item svg {
-  display: none;
-}
-
-.resume-paper-document.classic .paper-contact-item:not(:last-child)::after {
-  content: ' • ';
-  margin-left: 7px;
-  color: #94a3b8;
-}
-
-.resume-paper-document.classic .paper-section-heading {
-  color: #1e3a8a;
-  border-bottom: 1.5px solid #1e3a8a;
+  letter-spacing: 0.5px;
 }
 
 .privacy-note {
