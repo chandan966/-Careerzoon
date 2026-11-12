@@ -28,4 +28,5 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .not-found { min-height: 55vh; display: flex; align-items: center; justify-content: center; flex-direction: column; color: var(--muted); }
 .not-found h1 { margin: 0; color: var(--text); font: 800 30px 'Manrope',sans-serif; }
 .not-found a { color: var(--purple); font-size: 12px; }
+.page-loader { min-height: 55vh; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 14px; }
 @media (prefers-reduced-motion: reduce) { *,*::before,*::after { scroll-behavior: auto!important; animation-duration: .01ms!important; animation-iteration-count: 1!important; transition-duration: .01ms!important; } }

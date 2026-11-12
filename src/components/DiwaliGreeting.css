@@ -1,1 +1,37 @@
-.diwali-greeting { margin: 0; padding: 2px 12px; color: var(--text); background: var(--page); font-size: 13px; line-height: 1.2; text-align: center; white-space: nowrap; }
+.diwali-greeting {
+  margin: 0;
+  padding: 6px 14px;
+  color: #7c2d12;
+  background: #fef3c7;
+  font-size: 13px;
+  line-height: 1.4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border-bottom: 1px solid #fde68a;
+  text-align: center;
+}
+.dark .diwali-greeting {
+  color: #fef08a;
+  background: #451a03;
+  border-bottom-color: #78350f;
+}
+.diwali-dismiss {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+  opacity: 0.7;
+}
+.diwali-dismiss:hover {
+  opacity: 1;
+}
+@media print {
+  .diwali-greeting {
+    display: none !important;
+  }
+}

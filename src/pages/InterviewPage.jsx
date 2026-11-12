@@ -1,5 +1,7 @@
-import { ArrowDown, ArrowRight, BookOpen, CheckCircle2, ChevronDown } from 'lucide-react';
+import { useState, useMemo } from 'react';
+import { ArrowDown, ArrowRight, Award, BookOpen, CheckCircle2, ChevronDown, HelpCircle, RotateCcw } from 'lucide-react';
 import placementGuide from '../data/placement-preparation-guide.md?raw';
+import { questions } from '../data/content.js';
 import './InterviewPage.css';
 
 function formatInlineMarkdown(text) {
@@ -181,6 +183,163 @@ const placementSteps = [
   },
 ];
 
+function PlacementQuiz() {
+  const [selectedTopic, setSelectedTopic] = useState('All');
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [score, setScore] = useState(0);
+  const [isFinished, setIsFinished] = useState(false);
+
+  const topics = useMemo(() => ['All', ...new Set(questions.map((q) => q.topic))], []);
+
+  const activeQuestions = useMemo(() => {
+    if (selectedTopic === 'All') return questions;
+    return questions.filter((q) => q.topic === selectedTopic);
+  }, [selectedTopic]);
+
+  const currentQ = activeQuestions[currentIndex] || activeQuestions[0];
+
+  function handleSelectTopic(topic) {
+    setSelectedTopic(topic);
+    setCurrentIndex(0);
+    setSelectedOption(null);
+    setScore(0);
+    setIsFinished(false);
+  }
+
+  function handleOptionClick(index) {
+    if (selectedOption !== null || !currentQ) return;
+    setSelectedOption(index);
+    if (index === currentQ.answer) {
+      setScore((prev) => prev + 1);
+    }
+  }
+
+  function handleNext() {
+    if (currentIndex + 1 < activeQuestions.length) {
+      setCurrentIndex((prev) => prev + 1);
+      setSelectedOption(null);
+    } else {
+      setIsFinished(true);
+    }
+  }
+
+  function handleRestart() {
+    setCurrentIndex(0);
+    setSelectedOption(null);
+    setScore(0);
+    setIsFinished(false);
+  }
+
+  return (
+    <section className="placement-quiz-section" aria-labelledby="placement-quiz-title">
+      <div className="placement-quiz-header">
+        <div className="quiz-header-badge"><HelpCircle size={18} /></div>
+        <div>
+          <span className="eyebrow">INTERACTIVE PRACTICE QUIZ</span>
+          <h2 id="placement-quiz-title">Test your placement readiness</h2>
+          <p>Work through topic-based multiple choice questions, get immediate feedback with explanations, and track your accuracy.</p>
+        </div>
+      </div>
+
+      <div className="quiz-topic-bar" role="tablist" aria-label="Quiz topics">
+        {topics.map((t) => (
+          <button
+            key={t}
+            type="button"
+            role="tab"
+            aria-selected={selectedTopic === t}
+            className={`quiz-topic-btn ${selectedTopic === t ? 'active' : ''}`}
+            onClick={() => handleSelectTopic(t)}
+          >
+            {t}
+          </button>
+        ))}
+      </div>
+
+      {isFinished ? (
+        <div className="quiz-finish-card">
+          <div className="quiz-finish-icon"><Award size={36} /></div>
+          <h3>Quiz Complete!</h3>
+          <p className="quiz-score-display">
+            You scored <strong>{score}</strong> out of <strong>{activeQuestions.length}</strong> ({Math.round((score / (activeQuestions.length || 1)) * 100)}%)
+          </p>
+          <p className="quiz-score-message">
+            {score === activeQuestions.length
+              ? 'Outstanding! You mastered all questions in this category.'
+              : score >= activeQuestions.length / 2
+              ? 'Well done! Review the topics below to solidify your understanding.'
+              : 'Keep practicing! Review the detailed placement study guide below and try again.'}
+          </p>
+          <button type="button" className="button-primary quiz-restart-btn" onClick={handleRestart}>
+            <RotateCcw size={15} /> Retake Quiz
+          </button>
+        </div>
+      ) : currentQ ? (
+        <div className="quiz-card">
+          <div className="quiz-card-meta">
+            <div className="quiz-meta-pills">
+              <span className="quiz-pill topic">{currentQ.topic}</span>
+              <span className={`quiz-pill difficulty ${(currentQ.difficulty || 'Easy').toLowerCase()}`}>{currentQ.difficulty || 'Easy'}</span>
+            </div>
+            <div className="quiz-meta-counter">
+              Question {currentIndex + 1} of {activeQuestions.length}
+            </div>
+          </div>
+
+          <h3 className="quiz-question-text">{currentQ.question}</h3>
+
+          <div className="quiz-options-list">
+            {currentQ.options.map((option, idx) => {
+              const isSelected = selectedOption === idx;
+              const isCorrect = idx === currentQ.answer;
+              let optionClass = 'quiz-option-button';
+              if (selectedOption !== null) {
+                if (isCorrect) optionClass += ' correct';
+                else if (isSelected) optionClass += ' incorrect';
+              }
+              return (
+                <button
+                  key={option}
+                  type="button"
+                  disabled={selectedOption !== null}
+                  onClick={() => handleOptionClick(idx)}
+                  className={optionClass}
+                >
+                  <span className="quiz-option-letter">{String.fromCharCode(65 + idx)}</span>
+                  <span className="quiz-option-text">{option}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {selectedOption !== null && (
+            <div className={`quiz-feedback-box ${selectedOption === currentQ.answer ? 'success' : 'info'}`}>
+              <b>{selectedOption === currentQ.answer ? '✓ Correct!' : `✕ The correct answer is: ${currentQ.options[currentQ.answer]}`}</b>
+              <p>{currentQ.explanation}</p>
+            </div>
+          )}
+
+          <div className="quiz-footer-bar">
+            <span className="quiz-current-score">
+              Score: <strong>{score}</strong> / {activeQuestions.length}
+            </span>
+            <button
+              type="button"
+              className="button-primary quiz-next-btn"
+              disabled={selectedOption === null}
+              onClick={handleNext}
+            >
+              {currentIndex + 1 === activeQuestions.length ? 'Finish Quiz' : 'Next Question'}
+              <ArrowRight size={15} />
+            </button>
+          </div>
+        </div>
+      ) : null}
+    </section>
+  );
+}
+
 export default function InterviewPage() {
   return (
     <main className="placement-page">
@@ -225,6 +384,8 @@ export default function InterviewPage() {
             </li>
           ))}
         </ol>
+
+        <PlacementQuiz />
 
         <details className="placement-guide">
           <summary>

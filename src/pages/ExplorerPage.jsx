@@ -167,12 +167,35 @@ function TopicCheckbox({ topic, index, roadmap, progress, onToggle }) {
   return <label className={`topic-check ${complete ? 'complete' : ''}`}><input type="checkbox" checked={complete} onChange={() => onToggle(roadmap, topic)} /><span className="topic-check-icon"><CircleCheck size={17} /></span><span><small>STEP {String(index + 1).padStart(2, '0')}</small>{topic}</span></label>;
 }
 
+function safeHostname(u) {
+  try {
+    return new URL(u).hostname.replace(/^www\./, '');
+  } catch {
+    return 'Official resource';
+  }
+}
+
 function ResourceLinks({ urls, fallback, primary }) {
   const links = [
     ...(primary ? [primary] : []),
-    ...(urls || []).map((url) => ({ title: new URL(url).hostname.replace(/^www\./, ''), url })),
+    ...(urls || []).map((item) => {
+      if (!item) return null;
+      if (typeof item === 'object' && item.url) {
+        return {
+          title: item.title || safeHostname(item.url),
+          url: item.url,
+        };
+      }
+      if (typeof item === 'string') {
+        return {
+          title: safeHostname(item),
+          url: item,
+        };
+      }
+      return null;
+    }).filter(Boolean),
   ];
-  if (!links.length) links.push(...resources.filter((resource) => `${resource.type} ${resource.title} ${resource.description}`.toLowerCase().includes(String(fallback).toLowerCase())).slice(0, 2));
+  if (!links.length) links.push(...resources.filter((resource) => `${resource.type} ${resource.title} ${resource.description}`.toLowerCase().includes(String(fallback || '').toLowerCase())).slice(0, 2));
   return <div className="detail-resources"><h3>Free learning resources</h3>{links.length ? links.map((resource) => <a key={resource.url} href={resource.url} target="_blank" rel="noopener noreferrer">{resource.title} <ExternalLink size={13} /></a>) : <a href="https://www.freecodecamp.org/learn/" target="_blank" rel="noopener noreferrer">freeCodeCamp — free project-based courses <ExternalLink size={13} /></a>}</div>;
 }
 

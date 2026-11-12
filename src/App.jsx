@@ -2,15 +2,16 @@ import { lazy, Suspense, useEffect, useState } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar.jsx';
 import Footer from './components/Footer.jsx';
-import Home from './pages/Home.jsx';
-import ExplorerPage from './pages/ExplorerPage.jsx';
-import ResumeBuilder from './pages/ResumeBuilder.jsx';
-import InterviewPage from './pages/InterviewPage.jsx';
-import ToolsPage from './pages/ToolsPage.jsx';
-import InfoPage from './pages/InfoPage.jsx';
-import StaticPolicy from './pages/StaticPolicy.jsx';
 import CookieConsent from './components/CookieConsent.jsx';
 import DiwaliGreeting from './components/DiwaliGreeting.jsx';
+
+const Home = lazy(() => import('./pages/Home.jsx'));
+const ExplorerPage = lazy(() => import('./pages/ExplorerPage.jsx'));
+const ResumeBuilder = lazy(() => import('./pages/ResumeBuilder.jsx'));
+const InterviewPage = lazy(() => import('./pages/InterviewPage.jsx'));
+const ToolsPage = lazy(() => import('./pages/ToolsPage.jsx'));
+const InfoPage = lazy(() => import('./pages/InfoPage.jsx'));
+const StaticPolicy = lazy(() => import('./pages/StaticPolicy.jsx'));
 const ToolDetailPage = lazy(() => import('./pages/ToolDetailPage.jsx'));
 
 const pageTitles = {
@@ -103,7 +104,7 @@ export default function App() {
     updateMeta('meta[property="og:url"]', ['property', 'og:url'], canonical.href);
   }, [location.pathname, location.hash]);
 
-  return <div className="app-shell"><Navbar darkMode={darkMode} onToggleTheme={() => setDarkMode((value) => !value)} /><DiwaliGreeting /><Routes>
+  return <div className="app-shell"><Navbar darkMode={darkMode} onToggleTheme={() => setDarkMode((value) => !value)} /><DiwaliGreeting /><Suspense fallback={<div className="page-loader">Loading Careerzoon…</div>}><Routes>
     <Route path="/" element={<Home />} />
     <Route path="/jobs" element={<ExplorerPage key="jobs" page="jobs" />} />
     <Route path="/internships" element={<ExplorerPage key="internships" page="internships" />} />
@@ -114,7 +115,7 @@ export default function App() {
     <Route path="/resume-builder" element={<ResumeBuilder />} />
     <Route path="/interview" element={<InterviewPage />} />
     <Route path="/tools" element={<ToolsPage />} />
-    <Route path="/tools/:toolSlug" element={<Suspense fallback={<main className="tool-detail-not-found">Loading tool guide…</main>}><ToolDetailPage /></Suspense>} />
+    <Route path="/tools/:toolSlug" element={<ToolDetailPage />} />
     <Route path="/guidance" element={<ExplorerPage key="guidance" page="guidance" />} />
     <Route path="/about" element={<InfoPage page="about" />} />
     <Route path="/contact" element={<InfoPage page="contact" />} />
@@ -122,5 +123,5 @@ export default function App() {
     <Route path="/terms" element={<StaticPolicy kind="terms" />} />
     <Route path="/disclaimer" element={<StaticPolicy kind="disclaimer" />} />
     <Route path="*" element={<main className="not-found"><h1>Page not found</h1><p>Let’s help you find your next step.</p><a href="/">Back to Careerzoon home</a></main>} />
-  </Routes><CookieConsent /><Footer /></div>;
+  </Routes></Suspense><CookieConsent /><Footer /></div>;
 }

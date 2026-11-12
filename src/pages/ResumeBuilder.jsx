@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Download, FileText, Plus, Printer, Trash2 } from 'lucide-react';
+import { Download, FileText, Plus, Printer, Trash2, Upload, Sparkles } from 'lucide-react';
 import './ResumeBuilder.css';
 
 const blankResume = {
@@ -31,12 +31,57 @@ export default function ResumeBuilder() {
   }, [resume]);
 
   const skills = useMemo(() => resume.skills.split(',').map((skill) => skill.trim()).filter(Boolean), [resume.skills]);
+
+  const atsScore = useMemo(() => {
+    let score = 0;
+    if (resume.name.trim()) score += 10;
+    if (resume.role.trim()) score += 10;
+    if (resume.email.trim()) score += 10;
+    if (resume.phone.trim() || resume.location.trim()) score += 10;
+    if (resume.objective.trim().length > 30) score += 15;
+    if (resume.education.some((item) => item.school.trim() && item.degree.trim())) score += 15;
+    if (skills.length >= 3) score += 15;
+    if (resume.experience.trim().length > 30 || resume.projects.some((item) => item.title.trim() && item.description.trim())) score += 15;
+    return Math.min(100, score);
+  }, [resume, skills]);
+
   function update(field, value) { setResume((current) => ({ ...current, [field]: value })); }
   function updateGroup(group, index, field, value) {
     setResume((current) => ({ ...current, [group]: current[group].map((entry, itemIndex) => itemIndex === index ? { ...entry, [field]: value } : entry) }));
   }
   function addGroup(group, entry) { setResume((current) => ({ ...current, [group]: [...current[group], entry] })); }
   function removeGroup(group, index) { setResume((current) => ({ ...current, [group]: current[group].filter((_, itemIndex) => itemIndex !== index) })); }
+
+  function exportJson() {
+    const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(resume, null, 2));
+    const downloadAnchor = document.createElement('a');
+    const safeName = resume.name.trim().replace(/[^a-z0-9]+/gi, '-').toLowerCase() || 'resume';
+    downloadAnchor.setAttribute('href', dataStr);
+    downloadAnchor.setAttribute('download', `${safeName}-careerzoon-backup.json`);
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+    setNotice('Resume backup file exported successfully.');
+  }
+
+  function importJson(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const parsed = JSON.parse(e.target.result);
+        if (parsed && typeof parsed === 'object') {
+          setResume({ ...blankResume, ...parsed });
+          setNotice('Resume backup restored successfully!');
+        }
+      } catch {
+        setNotice('Invalid backup file. Please select a valid JSON backup.');
+      }
+    };
+    reader.readAsText(file);
+  }
+
   async function downloadPdf() {
     if (!resume.name.trim()) {
       setNotice('Add your name before downloading your resume.');
@@ -47,6 +92,12 @@ export default function ResumeBuilder() {
     const margin = 18;
     const maxWidth = 174;
     let y = 22;
+
+    const isModern = template === 'modern';
+    const primaryColor = isModern ? [15, 23, 42] : [32, 37, 55];
+    const accentColor = isModern ? [14, 116, 144] : [111, 63, 189];
+    const subtextColor = isModern ? [71, 85, 105] : [95, 105, 120];
+
     const addLine = (text, size = 10, bold = false, color = [47, 55, 75]) => {
       pdf.setFont('helvetica', bold ? 'bold' : 'normal');
       pdf.setFontSize(size);
@@ -56,13 +107,29 @@ export default function ResumeBuilder() {
       pdf.text(lines, margin, y);
       y += lines.length * (size * .48) + (size > 14 ? 4 : 3);
     };
-    addLine(resume.name, 22, true, [32, 37, 55]);
-    if (resume.role) addLine(resume.role, 11, true, [111, 63, 189]);
-    addLine([resume.email, resume.phone, resume.location, resume.portfolio].filter(Boolean).join('  |  '), 9, false, [95, 105, 120]);
+
+    addLine(resume.name, 22, true, primaryColor);
+    if (resume.role) addLine(resume.role, 11, true, accentColor);
+    addLine([resume.email, resume.phone, resume.location, resume.portfolio].filter(Boolean).join('  |  '), 9, false, subtextColor);
+
+    if (isModern) {
+      y += 2;
+      pdf.setDrawColor(...accentColor);
+      pdf.setLineWidth(0.6);
+      pdf.line(margin, y, margin + maxWidth, y);
+      y += 4;
+    }
+
     const section = (heading, body) => {
       if (!body) return;
       y += 3;
-      addLine(heading.toUpperCase(), 10, true, [111, 63, 189]);
+      addLine(heading.toUpperCase(), 10, true, accentColor);
+      if (isModern) {
+        pdf.setDrawColor(226, 232, 240);
+        pdf.setLineWidth(0.3);
+        pdf.line(margin, y, margin + maxWidth, y);
+        y += 2;
+      }
       addLine(body, 9);
     };
     section('Profile', resume.objective);
@@ -78,27 +145,172 @@ export default function ResumeBuilder() {
     setNotice('Your PDF resume is ready to download.');
   }
 
-  return <main className="resume-page"><div className="page-hero"><div className="page-hero-inner"><span className="eyebrow">FREE RESUME BUILDER</span><h1>Make your next move stand out.</h1><p>Create a clear, ATS-friendly resume. Your information stays on this device—no account or upload required.</p><div className="page-hero-meta"><span>✓ Saved privately in your browser</span><span>✓ Download a PDF or print</span></div></div></div><div className="resume-workspace"><section className="resume-form-panel"><div className="resume-panel-head"><div><span className="eyebrow">YOUR DETAILS</span><h2>Build your resume</h2></div><label className="template-picker">Template<select value={template} onChange={(event) => setTemplate(event.target.value)}><option value="classic">Classic ATS</option><option value="modern">Modern minimal</option></select></label></div>
-    <div className="resume-form">
-      <ResumeSection title="Personal information"><div className="form-grid"><Field label="Full name" value={resume.name} onChange={(value) => update('name', value)} placeholder="e.g. Aanya Sharma" /><Field label="Target role" value={resume.role} onChange={(value) => update('role', value)} placeholder="e.g. Junior Frontend Developer" /><Field label="Email" value={resume.email} onChange={(value) => update('email', value)} placeholder="you@example.com" type="email" /><Field label="Phone" value={resume.phone} onChange={(value) => update('phone', value)} placeholder="+91 98765 43210" /><Field label="Location" value={resume.location} onChange={(value) => update('location', value)} placeholder="City, Country" /><Field label="Portfolio / LinkedIn" value={resume.portfolio} onChange={(value) => update('portfolio', value)} placeholder="linkedin.com/in/you" /></div></ResumeSection>
-      <ResumeSection title="Career summary"><textarea value={resume.objective} onChange={(event) => update('objective', event.target.value)} placeholder="Write 2–3 concise sentences about your strengths and the role you’re pursuing." rows="3" /></ResumeSection>
-      <ResumeSection title="Education" add={() => addGroup('education', { school: '', degree: '', years: '' })}>{resume.education.map((item, index) => <div className="repeat-group" key={`education-${index}`}><div className="form-grid"><Field label="Institution" value={item.school} onChange={(value) => updateGroup('education', index, 'school', value)} placeholder="University or college" /><Field label="Degree / course" value={item.degree} onChange={(value) => updateGroup('education', index, 'degree', value)} placeholder="B.Tech, Computer Science" /><Field label="Years" value={item.years} onChange={(value) => updateGroup('education', index, 'years', value)} placeholder="2022 – 2026" /></div>{resume.education.length > 1 && <button className="remove-row" onClick={() => removeGroup('education', index)} aria-label="Remove education"><Trash2 size={14} /></button>}</div>)}</ResumeSection>
-      <ResumeSection title="Technical skills"><Field label="Skills (comma separated)" value={resume.skills} onChange={(value) => update('skills', value)} placeholder="JavaScript, React, Git, SQL" /></ResumeSection>
-      <ResumeSection title="Experience"><textarea value={resume.experience} onChange={(event) => update('experience', event.target.value)} placeholder="Role, organization and dates. Describe your impact with clear action verbs and measurable results." rows="4" /></ResumeSection>
-      <ResumeSection title="Projects" add={() => addGroup('projects', { title: '', description: '', link: '' })}>{resume.projects.map((item, index) => <div className="repeat-group" key={`project-${index}`}><div className="form-grid"><Field label="Project name" value={item.title} onChange={(value) => updateGroup('projects', index, 'title', value)} placeholder="e.g. Campus events app" /><Field label="Project link" value={item.link} onChange={(value) => updateGroup('projects', index, 'link', value)} placeholder="github.com/you/project" /><label className="field-label full-field">What you built<textarea value={item.description} onChange={(event) => updateGroup('projects', index, 'description', event.target.value)} placeholder="Tools used, your contribution and the outcome." rows="2" /></label></div>{resume.projects.length > 1 && <button className="remove-row" onClick={() => removeGroup('projects', index)} aria-label="Remove project"><Trash2 size={14} /></button>}</div>)}</ResumeSection>
-      <ResumeSection title="Certifications & achievements"><Field label="Certifications" value={resume.certifications} onChange={(value) => update('certifications', value)} placeholder="Certification — issuer, year" /><Field label="Achievements" value={resume.achievements} onChange={(value) => update('achievements', value)} placeholder="Awards, competitions, contributions" /><Field label="Languages" value={resume.languages} onChange={(value) => update('languages', value)} placeholder="English, Hindi" /></ResumeSection>
-    </div>
-    {notice && <p className="resume-notice" role="status">{notice}</p>}
-    <div className="resume-actions"><button className="button-primary" onClick={downloadPdf}><Download size={15} /> Download PDF</button><button className="resume-print" onClick={() => window.print()}><Printer size={15} /> Print</button><span>Saved automatically on this device</span></div>
-  </section>
-  <aside className="resume-preview-panel"><div className="preview-head"><div><span className="eyebrow">LIVE PREVIEW</span><h2>{template === 'classic' ? 'Classic ATS' : 'Modern minimal'}</h2></div><FileText size={18} /></div><article className={`resume-preview ${template}`}><header><h1>{resume.name || 'Your Name'}</h1>{resume.role && <h2>{resume.role}</h2>}<p>{[resume.email, resume.phone, resume.location, resume.portfolio].filter(Boolean).join('  ·  ') || 'email@example.com  ·  City, Country'}</p></header>
-    {resume.objective && <PreviewSection title="Profile"><p>{resume.objective}</p></PreviewSection>}
-    {resume.education.some((item) => item.school || item.degree) && <PreviewSection title="Education">{resume.education.filter((item) => item.school || item.degree).map((item, index) => <p key={index}><b>{item.degree || 'Degree / course'}</b><br />{item.school}{item.years ? ` · ${item.years}` : ''}</p>)}</PreviewSection>}
-    {skills.length > 0 && <PreviewSection title="Technical skills"><div className="preview-skills">{skills.map((skill) => <span key={skill}>{skill}</span>)}</div></PreviewSection>}
-    {resume.experience && <PreviewSection title="Experience"><p className="preserve-lines">{resume.experience}</p></PreviewSection>}
-    {resume.projects.some((item) => item.title || item.description) && <PreviewSection title="Projects">{resume.projects.filter((item) => item.title || item.description).map((item, index) => <p key={index}><b>{item.title || 'Project'}</b><br /><span className="preserve-lines">{item.description}</span></p>)}</PreviewSection>}
-    {resume.certifications && <PreviewSection title="Certifications"><p className="preserve-lines">{resume.certifications}</p></PreviewSection>}{resume.achievements && <PreviewSection title="Achievements"><p className="preserve-lines">{resume.achievements}</p></PreviewSection>}{resume.languages && <PreviewSection title="Languages"><p>{resume.languages}</p></PreviewSection>}
-    </article><div className="privacy-note">Your resume details are stored only in this browser’s local storage.</div></aside></div></main>;
+  return (
+    <main className="resume-page">
+      <div className="page-hero">
+        <div className="page-hero-inner">
+          <span className="eyebrow">FREE RESUME BUILDER</span>
+          <h1>Make your next move stand out.</h1>
+          <p>Create a clear, ATS-friendly resume. Your information stays on this device—no account or upload required.</p>
+          <div className="page-hero-meta">
+            <span>✓ Saved privately in your browser</span>
+            <span>✓ Download a PDF or print</span>
+          </div>
+        </div>
+      </div>
+      <div className="resume-workspace">
+        <section className="resume-form-panel">
+          <div className="resume-panel-head">
+            <div>
+              <span className="eyebrow">YOUR DETAILS</span>
+              <h2>Build your resume</h2>
+            </div>
+            <div className="resume-top-controls">
+              <label className="template-picker">
+                Template
+                <select value={template} onChange={(event) => setTemplate(event.target.value)}>
+                  <option value="classic">Classic ATS</option>
+                  <option value="modern">Modern minimal</option>
+                </select>
+              </label>
+            </div>
+          </div>
+
+          <div className="ats-score-box">
+            <div className="ats-score-header">
+              <span><Sparkles size={14} /> ATS Readiness Score: <b>{atsScore}/100</b> ({atsScore >= 80 ? 'Strong' : atsScore >= 50 ? 'Good' : 'Needs details'})</span>
+              <small>{atsScore >= 80 ? 'Ready to apply' : 'Complete remaining sections'}</small>
+            </div>
+            <div className="ats-score-bar">
+              <div className="ats-score-fill" style={{ width: `${atsScore}%` }} />
+            </div>
+          </div>
+
+          <div className="resume-form">
+            <ResumeSection title="Personal information">
+              <div className="form-grid">
+                <Field label="Full name" value={resume.name} onChange={(value) => update('name', value)} placeholder="e.g. Aanya Sharma" />
+                <Field label="Target role" value={resume.role} onChange={(value) => update('role', value)} placeholder="e.g. Junior Frontend Developer" />
+                <Field label="Email" value={resume.email} onChange={(value) => update('email', value)} placeholder="you@example.com" type="email" />
+                <Field label="Phone" value={resume.phone} onChange={(value) => update('phone', value)} placeholder="+91 98765 43210" />
+                <Field label="Location" value={resume.location} onChange={(value) => update('location', value)} placeholder="City, Country" />
+                <Field label="Portfolio / LinkedIn" value={resume.portfolio} onChange={(value) => update('portfolio', value)} placeholder="linkedin.com/in/you" />
+              </div>
+            </ResumeSection>
+            <ResumeSection title="Career summary">
+              <textarea value={resume.objective} onChange={(event) => update('objective', event.target.value)} placeholder="Write 2–3 concise sentences about your strengths and the role you’re pursuing." rows="3" />
+            </ResumeSection>
+            <ResumeSection title="Education" add={() => addGroup('education', { school: '', degree: '', years: '' })}>
+              {resume.education.map((item, index) => (
+                <div className="repeat-group" key={`education-${index}`}>
+                  <div className="form-grid">
+                    <Field label="Institution" value={item.school} onChange={(value) => updateGroup('education', index, 'school', value)} placeholder="University or college" />
+                    <Field label="Degree / course" value={item.degree} onChange={(value) => updateGroup('education', index, 'degree', value)} placeholder="B.Tech, Computer Science" />
+                    <Field label="Years" value={item.years} onChange={(value) => updateGroup('education', index, 'years', value)} placeholder="2022 – 2026" />
+                  </div>
+                  {resume.education.length > 1 && (
+                    <button className="remove-row" onClick={() => removeGroup('education', index)} aria-label="Remove education">
+                      <Trash2 size={14} />
+                    </button>
+                  )}
+                </div>
+              ))}
+            </ResumeSection>
+            <ResumeSection title="Technical skills">
+              <Field label="Skills (comma separated)" value={resume.skills} onChange={(value) => update('skills', value)} placeholder="JavaScript, React, Git, SQL" />
+            </ResumeSection>
+            <ResumeSection title="Experience">
+              <textarea value={resume.experience} onChange={(event) => update('experience', event.target.value)} placeholder="Role, organization and dates. Describe your impact with clear action verbs and measurable results." rows="4" />
+            </ResumeSection>
+            <ResumeSection title="Projects" add={() => addGroup('projects', { title: '', description: '', link: '' })}>
+              {resume.projects.map((item, index) => (
+                <div className="repeat-group" key={`project-${index}`}>
+                  <div className="form-grid">
+                    <Field label="Project name" value={item.title} onChange={(value) => updateGroup('projects', index, 'title', value)} placeholder="e.g. Campus events app" />
+                    <Field label="Project link" value={item.link} onChange={(value) => updateGroup('projects', index, 'link', value)} placeholder="github.com/you/project" />
+                    <label className="field-label full-field">
+                      What you built
+                      <textarea value={item.description} onChange={(event) => updateGroup('projects', index, 'description', event.target.value)} placeholder="Tools used, your contribution and the outcome." rows="2" />
+                    </label>
+                  </div>
+                  {resume.projects.length > 1 && (
+                    <button className="remove-row" onClick={() => removeGroup('projects', index)} aria-label="Remove project">
+                      <Trash2 size={14} />
+                    </button>
+                  )}
+                </div>
+              ))}
+            </ResumeSection>
+            <ResumeSection title="Certifications & achievements">
+              <Field label="Certifications" value={resume.certifications} onChange={(value) => update('certifications', value)} placeholder="Certification — issuer, year" />
+              <Field label="Achievements" value={resume.achievements} onChange={(value) => update('achievements', value)} placeholder="Awards, competitions, contributions" />
+              <Field label="Languages" value={resume.languages} onChange={(value) => update('languages', value)} placeholder="English, Hindi" />
+            </ResumeSection>
+          </div>
+          {notice && <p className="resume-notice" role="status">{notice}</p>}
+          <div className="resume-actions">
+            <button className="button-primary" onClick={downloadPdf}>
+              <Download size={15} /> Download PDF
+            </button>
+            <button className="resume-print" onClick={() => window.print()}>
+              <Printer size={15} /> Print
+            </button>
+            <div className="resume-backup-buttons">
+              <button type="button" className="resume-backup-btn" onClick={exportJson} title="Export resume JSON backup">
+                Backup JSON
+              </button>
+              <label className="resume-backup-btn" title="Import resume JSON backup">
+                Restore JSON
+                <input type="file" accept=".json" onChange={importJson} style={{ display: 'none' }} />
+              </label>
+            </div>
+            <span>Saved privately in browser</span>
+          </div>
+        </section>
+        <aside className="resume-preview-panel">
+          <div className="preview-head">
+            <div>
+              <span className="eyebrow">LIVE PREVIEW</span>
+              <h2>{template === 'classic' ? 'Classic ATS' : 'Modern minimal'}</h2>
+            </div>
+            <FileText size={18} />
+          </div>
+          <article className={`resume-preview ${template}`}>
+            <header>
+              <h1>{resume.name || 'Your Name'}</h1>
+              {resume.role && <h2>{resume.role}</h2>}
+              <p>{[resume.email, resume.phone, resume.location, resume.portfolio].filter(Boolean).join('  ·  ') || 'email@example.com  ·  City, Country'}</p>
+            </header>
+            {resume.objective && <PreviewSection title="Profile"><p>{resume.objective}</p></PreviewSection>}
+            {resume.education.some((item) => item.school || item.degree) && (
+              <PreviewSection title="Education">
+                {resume.education.filter((item) => item.school || item.degree).map((item, index) => (
+                  <p key={index}><b>{item.degree || 'Degree / course'}</b><br />{item.school}{item.years ? ` · ${item.years}` : ''}</p>
+                ))}
+              </PreviewSection>
+            )}
+            {skills.length > 0 && (
+              <PreviewSection title="Technical skills">
+                <div className="preview-skills">{skills.map((skill) => <span key={skill}>{skill}</span>)}</div>
+              </PreviewSection>
+            )}
+            {resume.experience && <PreviewSection title="Experience"><p className="preserve-lines">{resume.experience}</p></PreviewSection>}
+            {resume.projects.some((item) => item.title || item.description) && (
+              <PreviewSection title="Projects">
+                {resume.projects.filter((item) => item.title || item.description).map((item, index) => (
+                  <p key={index}><b>{item.title || 'Project'}</b><br /><span className="preserve-lines">{item.description}</span></p>
+                ))}
+              </PreviewSection>
+            )}
+            {resume.certifications && <PreviewSection title="Certifications"><p className="preserve-lines">{resume.certifications}</p></PreviewSection>}
+            {resume.achievements && <PreviewSection title="Achievements"><p className="preserve-lines">{resume.achievements}</p></PreviewSection>}
+            {resume.languages && <PreviewSection title="Languages"><p>{resume.languages}</p></PreviewSection>}
+          </article>
+          <div className="privacy-note">Your resume details are stored only in this browser’s local storage.</div>
+        </aside>
+      </div>
+    </main>
+  );
 }
 
 function Field({ label, value, onChange, placeholder, type = 'text' }) {

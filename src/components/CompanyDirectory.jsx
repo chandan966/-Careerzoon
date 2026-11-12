@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Building2, ExternalLink, Search } from 'lucide-react';
 import CompanyLogo from './CompanyLogo.jsx';
 import './CompanyDirectory.css';
@@ -16,15 +17,23 @@ export default function CompanyDirectory({
   onSectorChange,
   onOpen,
 }) {
-  const sortedCompanies = [...companies].sort((a, b) => collator.compare(a.name, b.name));
-  const groups = new Map();
-  sortedCompanies.forEach((company) => {
-    const firstCharacter = company.name.trim().charAt(0).toUpperCase();
-    const letter = /^[A-Z]$/.test(firstCharacter) ? firstCharacter : '#';
-    groups.set(letter, [...(groups.get(letter) || []), company]);
-  });
-  const letters = [...groups.keys()];
-  const companyNumbers = new Map(sortedCompanies.map((company, index) => [company.name, index + 1]));
+  const { sortedCompanies, groups, letters, companyNumbers } = useMemo(() => {
+    const sorted = [...companies].sort((a, b) => collator.compare(a.name, b.name));
+    const grouped = new Map();
+    sorted.forEach((company) => {
+      const firstCharacter = company.name.trim().charAt(0).toUpperCase();
+      const letter = /^[A-Z]$/.test(firstCharacter) ? firstCharacter : '#';
+      const list = grouped.get(letter);
+      if (list) {
+        list.push(company);
+      } else {
+        grouped.set(letter, [company]);
+      }
+    });
+    const letterKeys = [...grouped.keys()];
+    const numbers = new Map(sorted.map((company, index) => [company.name, index + 1]));
+    return { sortedCompanies: sorted, groups: grouped, letters: letterKeys, companyNumbers: numbers };
+  }, [companies]);
 
   function resetFilters() {
     onQueryChange('');

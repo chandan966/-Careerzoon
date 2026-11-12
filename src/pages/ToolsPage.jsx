@@ -16,8 +16,21 @@ const initialChecks = (key, items) => {
   try { return JSON.parse(localStorage.getItem(key) || '{}'); } catch { return {}; }
 };
 
+const toolsNavList = [
+  { id: 'Software Tools Directory', label: 'Tools Directory' },
+  { id: 'Career Finder', label: 'Career Finder' },
+  { id: 'Skill Gap', label: 'Skill Gap Plan' },
+  { id: 'Salary Estimator', label: 'Salary Estimator' },
+  { id: 'Application Tracker', label: 'Job Tracker' },
+  { id: 'Cover Letter', label: 'Cover Letter' },
+  { id: 'Coding Quiz', label: 'Coding Quiz' },
+  { id: 'Portfolio Checklist', label: 'Portfolio Checklist' },
+  { id: 'Learning Momentum', label: 'Learning Checklist' },
+  { id: 'CSS', label: 'CSS Visualizer' },
+];
+
 export default function ToolsPage() {
-  const activeTool = 'Software Tools Directory';
+  const [activeTool, setActiveTool] = useState('Software Tools Directory');
   const [interests, setInterests] = useState([]);
   const [knownSkills, setKnownSkills] = useState([]);
   const [targetRole, setTargetRole] = useState(careers[0].title);
@@ -98,7 +111,7 @@ export default function ToolsPage() {
     return <div className="tool-content"><div className="tool-intro"><h2>Keep your learning momentum.</h2><p>A simple browser-saved checklist to help turn career goals into consistent steps.</p></div><Checklist items={defaultLearning} checks={learning} onToggle={(item) => toggleCheck('learning', item, setLearning, 'careerzoon-learning-checklist')} /><div className="check-progress"><span>{defaultLearning.filter((item) => learning[item]).length} of {defaultLearning.length} complete</span><div><i style={{ width: `${defaultLearning.filter((item) => learning[item]).length / defaultLearning.length * 100}%` }} /></div></div><Link className="tool-resource-link" to="/roadmaps">Pick a learning roadmap <ArrowRight size={14} /></Link></div>;
   }
 
-  return <main className="tools-page"><div className="page-hero"><div className="page-hero-inner"><span className="eyebrow">YOUR STUDENT TOOLKIT</span><h1>Find, install, and learn the tools behind your career.</h1><p>Explore official software downloads, step-by-step setup guides, practical projects, and helpful student tools. No login or backend required.</p><div className="page-hero-meta"><span>✓ Official vendor links</span><span>✓ Bookmarks stay in your browser</span></div></div></div><div className="tools-workspace"><section className="tool-panel">{renderTool()}</section></div></main>;
+  return <main className="tools-page"><div className="page-hero"><div className="page-hero-inner"><span className="eyebrow">YOUR STUDENT TOOLKIT</span><h1>Find, install, and learn the tools behind your career.</h1><p>Explore official software downloads, step-by-step setup guides, practical projects, and helpful student tools. No login or backend required.</p><div className="page-hero-meta"><span>✓ Official vendor links</span><span>✓ Bookmarks stay in your browser</span></div></div></div><div className="tools-workspace"><nav className="tools-nav-bar" role="tablist" aria-label="Student toolkit options">{toolsNavList.map((tool) => <button key={tool.id} type="button" role="tab" aria-selected={activeTool === tool.id} className={`tool-nav-btn ${activeTool === tool.id ? 'active' : ''}`} onClick={() => setActiveTool(tool.id)}>{tool.label}</button>)}</nav><section className="tool-panel">{renderTool()}</section></div></main>;
 }
 
 function Checklist({ items, checks, onToggle }) {
