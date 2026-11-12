@@ -24,7 +24,6 @@
   padding: 22px;
 }
 
-.resume-panel-head,
 .preview-head {
   display: flex;
   align-items: center;
@@ -34,9 +33,30 @@
   border-bottom: 1px solid var(--border);
 }
 
+.preview-eyebrow-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.a4-size-indicator {
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: #ede9fe;
+  color: #6d28d9;
+  font: 750 9px/1.3 'DM Sans', sans-serif;
+  letter-spacing: 0.3px;
+}
+
+.dark .a4-size-indicator {
+  background: #2e2445;
+  color: #d8b4fe;
+}
+
 .resume-panel-head .eyebrow,
 .preview-head .eyebrow {
-  margin-bottom: 3px;
+  margin-bottom: 0;
   font-size: 9px;
   letter-spacing: 0.8px;
 }
@@ -591,21 +611,38 @@
 .resume-paper-document {
   position: relative;
   width: 100%;
-  max-width: 660px;
-  min-height: 880px;
+  max-width: 720px;
+  min-height: 1018px;
+  aspect-ratio: 210 / 297;
   margin: 0 auto;
-  padding: 34px 36px;
+  padding: 38px 42px;
   border-radius: 2px;
   color: #0f172a;
   background: #ffffff !important;
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12), 0 1px 3px rgba(15, 23, 42, 0.05);
+  box-shadow: 0 14px 40px rgba(15, 23, 42, 0.14), 0 2px 6px rgba(15, 23, 42, 0.05);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  line-height: 1.45;
+  line-height: 1.48;
+  display: flex;
+  flex-direction: column;
 }
 
 .resume-paper-document.compact {
-  padding: 24px 28px;
-  min-height: 800px;
+  padding: 26px 32px;
+  min-height: 960px;
+}
+
+.paper-footer-tag {
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px dashed #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #94a3b8;
+  font-size: 7.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .paper-top-accent-bar {
@@ -1045,6 +1082,10 @@
    ======================================================== */
 
 @media print {
+  @page {
+    size: A4 portrait;
+    margin: 12mm;
+  }
   .site-header,
   .site-footer,
   .page-hero,
@@ -1053,7 +1094,8 @@
   .privacy-note,
   .cookie-consent-bar,
   .diwali-greeting,
-  .resume-notice {
+  .resume-notice,
+  .paper-footer-tag {
     display: none !important;
   }
   .resume-workspace {
@@ -1081,6 +1123,7 @@
     width: 100%;
     max-width: 100%;
     min-height: 0;
+    aspect-ratio: auto;
     border: 0;
     box-shadow: none;
     padding: 0;

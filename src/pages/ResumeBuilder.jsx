@@ -320,11 +320,11 @@ export default function ResumeBuilder() {
     const pdf = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',
-      format: 'a4',
+      format: [210, 297], // Exact A4 Dimensions: 210 x 297 mm (8.27 x 11.69 in)
     });
 
     const isCompact = density === 'compact';
-    const margin = isCompact ? 14 : 16;
+    const margin = isCompact ? 13 : 15;
     const pageWidth = 210;
     const maxWidth = pageWidth - margin * 2;
     let y = isCompact ? 14 : 16;
@@ -698,8 +698,8 @@ export default function ResumeBuilder() {
         .replace(/[^a-z0-9]+/gi, '-')
         .replace(/^-+|-+$/g, '')
         .toLowerCase() || 'resume';
-    pdf.save(`${safeFilename}-careerzoon.pdf`);
-    setNotice('Your professional CV has been downloaded successfully!');
+    pdf.save(`${safeFilename}-A4-resume.pdf`);
+    setNotice('Your professional A4 CV (210 × 297 mm) has been downloaded successfully!');
     setTimeout(() => setNotice(''), 4000);
   }
 
@@ -707,14 +707,14 @@ export default function ResumeBuilder() {
     <main className="resume-page">
       <div className="page-hero">
         <div className="page-hero-inner">
-          <span className="eyebrow">JOB-READY RESUME BUILDER</span>
-          <h1>Build a high-converting, ATS-winning resume.</h1>
-          <p>Designed using top engineering hiring rubrics (FAANG, Big Tech &amp; Global Startups). Choose proven ATS formats, craft quantifiable impact bullet points, and land interviews.</p>
+          <span className="eyebrow">PROFESSIONAL A4 CV BUILDER</span>
+          <h1>Build a high-converting, ATS-winning CV.</h1>
+          <p>Standard A4 format (210 × 297 mm · 8.27 × 11.69 in) designed to match top engineering hiring rubrics (Google, Microsoft, TCS, Infosys &amp; Global Startups). Choose proven ATS formats, craft quantifiable impact bullet points, and land the job.</p>
           <div className="page-hero-meta">
+            <span>✓ A4 Standard (210 × 297 mm)</span>
+            <span>✓ 1-Page Compact Fit</span>
             <span>✓ 100% Free &amp; Private</span>
-            <span>✓ 1-Page Compact Mode</span>
-            <span>✓ High-ATS LaTeX Quality</span>
-            <span>✓ Instant PDF Export</span>
+            <span>✓ High-Res Vector PDF</span>
           </div>
         </div>
       </div>
@@ -989,7 +989,7 @@ export default function ResumeBuilder() {
           {/* Action Buttons */}
           <div className="resume-actions">
             <button type="button" className="button-primary download-btn" onClick={downloadPdf}>
-              <Download size={15} /> Download PDF (A4)
+              <Download size={15} /> Download A4 PDF (210 × 297 mm)
             </button>
             <button type="button" className="resume-print" onClick={() => window.print()}>
               <Printer size={15} /> Print
@@ -1011,7 +1011,10 @@ export default function ResumeBuilder() {
         <aside className="resume-preview-panel">
           <div className="preview-head">
             <div>
-              <span className="eyebrow">LIVE WYSIWYG PREVIEW</span>
+              <div className="preview-eyebrow-row">
+                <span className="eyebrow">A4 CV DOCUMENT</span>
+                <span className="a4-size-indicator">210 × 297 mm · 8.27 × 11.69 in</span>
+              </div>
               <h2>{templateOptions.find((t) => t.id === template)?.name}</h2>
             </div>
             <div className="preview-toolbar-controls">
@@ -1268,6 +1271,12 @@ export default function ResumeBuilder() {
                     <p className="paper-paragraph">{resume.languages}</p>
                   </section>
                 )}
+
+                {/* ISO A4 Standard Sheet Footer */}
+                <footer className="paper-footer-tag">
+                  <span>ISO 216 Standard A4 — 210 × 297 mm (8.27 × 11.69 in)</span>
+                  <span>ATS-Optimized · Page 1 of 1</span>
+                </footer>
               </article>
             </div>
           </div>
