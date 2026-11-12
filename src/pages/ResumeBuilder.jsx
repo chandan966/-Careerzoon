@@ -5,7 +5,6 @@ import {
   CheckCircle2,
   Code2,
   Download,
-  ExternalLink,
   FileText,
   GraduationCap,
   Mail,
@@ -176,7 +175,7 @@ export default function ResumeBuilder() {
   const [resume, setResume] = useState(getInitialResume);
   const [template, setTemplate] = useState('ivy-center');
   const [fontFamily, setFontFamily] = useState('sans');
-  const [density, setDensity] = useState('compact');
+  const [fontSize, setFontSize] = useState('big'); // Default to 'big' as requested
   const [zoom, setZoom] = useState(100);
   const [notice, setNotice] = useState('');
 
@@ -310,11 +309,12 @@ export default function ResumeBuilder() {
       format: [210, 297], // Exact A4 Dimensions: 210 x 297 mm (8.27 x 11.69 in)
     });
 
-    const isCompact = density === 'compact';
-    const margin = isCompact ? 13 : 15;
+    const isBig = fontSize === 'big';
+    const isCompact = fontSize === 'compact';
+    const margin = isBig ? 15 : isCompact ? 12 : 14;
     const pageWidth = 210;
     const maxWidth = pageWidth - margin * 2;
-    let y = isCompact ? 14 : 16;
+    let y = isBig ? 16 : isCompact ? 13 : 15;
 
     const fontChoice = fontFamily === 'serif' ? 'times' : 'helvetica';
     const isCenter = template === 'ivy-center';
@@ -328,19 +328,19 @@ export default function ResumeBuilder() {
 
     // Header: Name
     pdf.setFont(fontChoice, 'bold');
-    pdf.setFontSize(isCompact ? 19 : 21);
+    pdf.setFontSize(isBig ? 24 : isCompact ? 19 : 21);
     pdf.setTextColor(15, 23, 42); // Pure black/slate
 
     if (isCenter) {
       pdf.text(resume.name.toUpperCase(), pageWidth / 2, y, { align: 'center' });
-      y += isCompact ? 4.5 : 5.5;
+      y += isBig ? 6 : isCompact ? 4.5 : 5.2;
 
       if (resume.role) {
         pdf.setFont(fontChoice, 'normal');
-        pdf.setFontSize(isCompact ? 9.5 : 10.5);
+        pdf.setFontSize(isBig ? 11.5 : isCompact ? 9.5 : 10.5);
         pdf.setTextColor(51, 65, 85);
         pdf.text(resume.role, pageWidth / 2, y, { align: 'center' });
-        y += isCompact ? 4 : 4.5;
+        y += isBig ? 5 : isCompact ? 4 : 4.5;
       }
 
       const contacts = [
@@ -352,21 +352,21 @@ export default function ResumeBuilder() {
       ].filter(Boolean);
       if (contacts.length) {
         pdf.setFont(fontChoice, 'normal');
-        pdf.setFontSize(isCompact ? 8 : 8.5);
+        pdf.setFontSize(isBig ? 9.5 : isCompact ? 8 : 8.8);
         pdf.setTextColor(51, 65, 85);
         pdf.text(contacts.join('   |   '), pageWidth / 2, y, { align: 'center' });
-        y += isCompact ? 5 : 6;
+        y += isBig ? 6.5 : isCompact ? 5 : 5.8;
       }
     } else {
       pdf.text(resume.name.toUpperCase(), margin, y);
-      y += isCompact ? 4.5 : 5.5;
+      y += isBig ? 6 : isCompact ? 4.5 : 5.2;
 
       if (resume.role) {
         pdf.setFont(fontChoice, 'bold');
-        pdf.setFontSize(isCompact ? 9.5 : 10.5);
+        pdf.setFontSize(isBig ? 11.5 : isCompact ? 9.5 : 10.5);
         pdf.setTextColor(51, 65, 85);
         pdf.text(resume.role, margin, y);
-        y += isCompact ? 4 : 4.5;
+        y += isBig ? 5 : isCompact ? 4 : 4.5;
       }
 
       const contacts = [
@@ -378,35 +378,35 @@ export default function ResumeBuilder() {
       ].filter(Boolean);
       if (contacts.length) {
         pdf.setFont(fontChoice, 'normal');
-        pdf.setFontSize(isCompact ? 8 : 8.5);
+        pdf.setFontSize(isBig ? 9.5 : isCompact ? 8 : 8.8);
         pdf.setTextColor(51, 65, 85);
         pdf.text(contacts.join('   |   '), margin, y);
-        y += isCompact ? 5 : 6;
+        y += isBig ? 6.5 : isCompact ? 5 : 5.8;
       }
     }
 
     const addSectionHeader = (title) => {
       checkPage(12);
       pdf.setFont(fontChoice, 'bold');
-      pdf.setFontSize(isCompact ? 9.5 : 10);
+      pdf.setFontSize(isBig ? 11 : isCompact ? 9.5 : 10.2);
       pdf.setTextColor(15, 23, 42);
       pdf.text(title.toUpperCase(), margin, y);
       y += 1.8;
       pdf.setDrawColor(15, 23, 42);
       pdf.setLineWidth(0.4);
       pdf.line(margin, y, margin + maxWidth, y);
-      y += isCompact ? 3.5 : 4;
+      y += isBig ? 4.5 : isCompact ? 3.5 : 4;
     };
 
     // 1. PROFESSIONAL SUMMARY
     if (resume.objective?.trim()) {
       addSectionHeader('Professional Summary');
       pdf.setFont(fontChoice, 'normal');
-      pdf.setFontSize(isCompact ? 8.5 : 9);
+      pdf.setFontSize(isBig ? 10 : isCompact ? 8.5 : 9.2);
       pdf.setTextColor(30, 41, 59);
       const lines = pdf.splitTextToSize(resume.objective.trim(), maxWidth);
       pdf.text(lines, margin, y);
-      y += lines.length * (isCompact ? 3.6 : 4) + (isCompact ? 2 : 3);
+      y += lines.length * (isBig ? 4.3 : isCompact ? 3.6 : 3.9) + (isBig ? 3 : isCompact ? 2 : 2.5);
     }
 
     // 2. TECHNICAL SKILLS
@@ -416,12 +416,12 @@ export default function ResumeBuilder() {
       resume.skillsCategories?.tools;
     if (hasCatSkills || resume.skills) {
       addSectionHeader('Technical Skills');
-      pdf.setFontSize(isCompact ? 8.5 : 9);
+      pdf.setFontSize(isBig ? 10 : isCompact ? 8.5 : 9.2);
 
       if (hasCatSkills) {
         const renderCat = (label, val) => {
           if (!val?.trim()) return;
-          checkPage(6);
+          checkPage(7);
           pdf.setFont(fontChoice, 'bold');
           pdf.setTextColor(15, 23, 42);
           pdf.text(`${label}: `, margin, y);
@@ -430,19 +430,19 @@ export default function ResumeBuilder() {
           pdf.setTextColor(30, 41, 59);
           const lines = pdf.splitTextToSize(val.trim(), maxWidth - labelWidth);
           pdf.text(lines, margin + labelWidth, y);
-          y += lines.length * (isCompact ? 3.6 : 4) + (isCompact ? 1 : 1.5);
+          y += lines.length * (isBig ? 4.3 : isCompact ? 3.6 : 3.9) + (isBig ? 1.5 : 1);
         };
         renderCat('Languages', resume.skillsCategories.languages);
         renderCat('Frameworks & Libraries', resume.skillsCategories.frameworks);
         renderCat('Tools, Cloud & Databases', resume.skillsCategories.tools);
-        y += isCompact ? 1.5 : 2.5;
+        y += isBig ? 2.5 : isCompact ? 1.5 : 2;
       } else {
         checkPage(8);
         pdf.setFont(fontChoice, 'normal');
         pdf.setTextColor(30, 41, 59);
         const lines = pdf.splitTextToSize(resume.skills, maxWidth);
         pdf.text(lines, margin, y);
-        y += lines.length * (isCompact ? 3.6 : 4) + (isCompact ? 2 : 3);
+        y += lines.length * (isBig ? 4.3 : isCompact ? 3.6 : 3.9) + (isBig ? 3 : isCompact ? 2 : 2.5);
       }
     }
 
@@ -451,51 +451,51 @@ export default function ResumeBuilder() {
     if (validExp && validExp.length) {
       addSectionHeader('Experience');
       validExp.forEach((exp) => {
-        checkPage(16);
+        checkPage(18);
         // Line 1: Job Role (Bold) on left, Dates on right
         pdf.setFont(fontChoice, 'bold');
-        pdf.setFontSize(isCompact ? 9 : 9.5);
+        pdf.setFontSize(isBig ? 10.8 : isCompact ? 9 : 9.8);
         pdf.setTextColor(15, 23, 42);
         pdf.text(exp.role || 'Job Role', margin, y);
 
         if (exp.dates) {
           pdf.setFont(fontChoice, 'bold');
-          pdf.setFontSize(isCompact ? 8.5 : 9);
+          pdf.setFontSize(isBig ? 10 : isCompact ? 8.5 : 9.2);
           pdf.setTextColor(15, 23, 42);
           pdf.text(exp.dates, margin + maxWidth, y, { align: 'right' });
         }
-        y += isCompact ? 3.8 : 4.2;
+        y += isBig ? 4.5 : isCompact ? 3.8 : 4.2;
 
         // Line 2: Company (Italic) on left, Location on right
         pdf.setFont(fontChoice, 'italic');
-        pdf.setFontSize(isCompact ? 8.5 : 9);
+        pdf.setFontSize(isBig ? 10 : isCompact ? 8.5 : 9.2);
         pdf.setTextColor(71, 85, 105);
         pdf.text(exp.company || 'Company', margin, y);
 
         if (exp.location) {
           pdf.setFont(fontChoice, 'italic');
-          pdf.setFontSize(isCompact ? 8 : 8.5);
+          pdf.setFontSize(isBig ? 9.5 : isCompact ? 8 : 8.8);
           pdf.text(exp.location, margin + maxWidth, y, { align: 'right' });
         }
-        y += isCompact ? 4 : 4.5;
+        y += isBig ? 4.8 : isCompact ? 4 : 4.5;
 
         // Bullets
         if (exp.bullets) {
           pdf.setFont(fontChoice, 'normal');
-          pdf.setFontSize(isCompact ? 8 : 8.5);
+          pdf.setFontSize(isBig ? 9.5 : isCompact ? 8 : 8.8);
           pdf.setTextColor(30, 41, 59);
           const rawLines = exp.bullets.split('\n');
           rawLines.forEach((line) => {
             if (!line.trim()) return;
-            checkPage(6);
+            checkPage(7);
             const cleanText = line.replace(/^[•\-\*]\s*/, '').trim();
             const wrapped = pdf.splitTextToSize(cleanText, maxWidth - 5.5);
             pdf.text('•', margin + 1.2, y);
             pdf.text(wrapped, margin + 4.8, y);
-            y += wrapped.length * (isCompact ? 3.4 : 3.8) + (isCompact ? 0.8 : 1.2);
+            y += wrapped.length * (isBig ? 4 : isCompact ? 3.4 : 3.8) + (isBig ? 1.2 : 0.8);
           });
         }
-        y += isCompact ? 2 : 3;
+        y += isBig ? 3 : isCompact ? 2 : 2.5;
       });
     }
 
@@ -504,10 +504,10 @@ export default function ResumeBuilder() {
     if (validProj && validProj.length) {
       addSectionHeader('Projects');
       validProj.forEach((proj) => {
-        checkPage(15);
+        checkPage(17);
         // Line 1: Title (Bold) + Tech stack (Italic) on left, Link on right
         pdf.setFont(fontChoice, 'bold');
-        pdf.setFontSize(isCompact ? 9 : 9.5);
+        pdf.setFontSize(isBig ? 10.8 : isCompact ? 9 : 9.8);
         pdf.setTextColor(15, 23, 42);
         const titleText = proj.title || 'Project';
         pdf.text(titleText, margin, y);
@@ -515,36 +515,36 @@ export default function ResumeBuilder() {
 
         if (proj.technologies) {
           pdf.setFont(fontChoice, 'italic');
-          pdf.setFontSize(isCompact ? 8 : 8.5);
+          pdf.setFontSize(isBig ? 9.5 : isCompact ? 8 : 8.8);
           pdf.setTextColor(100, 116, 139);
           pdf.text(`  |  ${proj.technologies}`, margin + titleWidth, y);
         }
 
         if (proj.link) {
           pdf.setFont(fontChoice, 'normal');
-          pdf.setFontSize(isCompact ? 8 : 8.5);
+          pdf.setFontSize(isBig ? 9.5 : isCompact ? 8 : 8.8);
           pdf.setTextColor(30, 41, 59);
           pdf.text(proj.link, margin + maxWidth, y, { align: 'right' });
         }
-        y += isCompact ? 4 : 4.5;
+        y += isBig ? 4.5 : isCompact ? 4 : 4.5;
 
         // Bullets or description
         if (proj.description) {
           pdf.setFont(fontChoice, 'normal');
-          pdf.setFontSize(isCompact ? 8 : 8.5);
+          pdf.setFontSize(isBig ? 9.5 : isCompact ? 8 : 8.8);
           pdf.setTextColor(30, 41, 59);
           const rawLines = proj.description.split('\n');
           rawLines.forEach((line) => {
             if (!line.trim()) return;
-            checkPage(6);
+            checkPage(7);
             const cleanText = line.replace(/^[•\-\*]\s*/, '').trim();
             const wrapped = pdf.splitTextToSize(cleanText, maxWidth - 5.5);
             pdf.text('•', margin + 1.2, y);
             pdf.text(wrapped, margin + 4.8, y);
-            y += wrapped.length * (isCompact ? 3.4 : 3.8) + (isCompact ? 0.8 : 1.2);
+            y += wrapped.length * (isBig ? 4 : isCompact ? 3.4 : 3.8) + (isBig ? 1.2 : 0.8);
           });
         }
-        y += isCompact ? 2 : 3;
+        y += isBig ? 3 : isCompact ? 2 : 2.5;
       });
     }
 
@@ -553,35 +553,35 @@ export default function ResumeBuilder() {
     if (validEdu.length) {
       addSectionHeader('Education');
       validEdu.forEach((edu) => {
-        checkPage(14);
+        checkPage(16);
         // Line 1: Degree & Major (Bold) on left, Dates on right
         pdf.setFont(fontChoice, 'bold');
-        pdf.setFontSize(isCompact ? 9 : 9.5);
+        pdf.setFontSize(isBig ? 10.8 : isCompact ? 9 : 9.8);
         pdf.setTextColor(15, 23, 42);
         pdf.text(edu.degree || 'Degree / Major', margin, y);
 
         const rightDate = edu.years || '';
         if (rightDate) {
           pdf.setFont(fontChoice, 'bold');
-          pdf.setFontSize(isCompact ? 8.5 : 9);
+          pdf.setFontSize(isBig ? 10 : isCompact ? 8.5 : 9.2);
           pdf.setTextColor(15, 23, 42);
           pdf.text(rightDate, margin + maxWidth, y, { align: 'right' });
         }
-        y += isCompact ? 3.8 : 4.2;
+        y += isBig ? 4.5 : isCompact ? 3.8 : 4.2;
 
         // Line 2: Institution (Italic) on left, Location & GPA on right
         pdf.setFont(fontChoice, 'italic');
-        pdf.setFontSize(isCompact ? 8.5 : 9);
+        pdf.setFontSize(isBig ? 10 : isCompact ? 8.5 : 9.2);
         pdf.setTextColor(71, 85, 105);
         pdf.text(edu.school || 'University', margin, y);
 
         const rightSub = [edu.location, edu.gpa].filter(Boolean).join('   |   ');
         if (rightSub) {
           pdf.setFont(fontChoice, 'italic');
-          pdf.setFontSize(isCompact ? 8 : 8.5);
+          pdf.setFontSize(isBig ? 9.5 : isCompact ? 8 : 8.8);
           pdf.text(rightSub, margin + maxWidth, y, { align: 'right' });
         }
-        y += isCompact ? 4.5 : 5.5;
+        y += isBig ? 5 : isCompact ? 4.5 : 5.5;
       });
     }
 
@@ -589,46 +589,46 @@ export default function ResumeBuilder() {
     if (resume.certifications?.trim()) {
       addSectionHeader('Certifications');
       pdf.setFont(fontChoice, 'normal');
-      pdf.setFontSize(isCompact ? 8 : 8.5);
+      pdf.setFontSize(isBig ? 9.5 : isCompact ? 8 : 8.8);
       pdf.setTextColor(30, 41, 59);
       const lines = resume.certifications.split('\n');
       lines.forEach((l) => {
         if (!l.trim()) return;
-        checkPage(5);
+        checkPage(6);
         const clean = l.replace(/^[•\-\*]\s*/, '').trim();
         const wrapped = pdf.splitTextToSize(clean, maxWidth - 5.5);
         pdf.text('•', margin + 1.2, y);
         pdf.text(wrapped, margin + 4.8, y);
-        y += wrapped.length * (isCompact ? 3.4 : 3.8) + (isCompact ? 0.8 : 1.2);
+        y += wrapped.length * (isBig ? 4 : isCompact ? 3.4 : 3.8) + (isBig ? 1.2 : 0.8);
       });
-      y += isCompact ? 1 : 2;
+      y += isBig ? 2 : isCompact ? 1 : 2;
     }
 
     // 7. ACHIEVEMENTS
     if (resume.achievements?.trim()) {
       addSectionHeader('Achievements');
       pdf.setFont(fontChoice, 'normal');
-      pdf.setFontSize(isCompact ? 8 : 8.5);
+      pdf.setFontSize(isBig ? 9.5 : isCompact ? 8 : 8.8);
       pdf.setTextColor(30, 41, 59);
       const lines = resume.achievements.split('\n');
       lines.forEach((l) => {
         if (!l.trim()) return;
-        checkPage(5);
+        checkPage(6);
         const clean = l.replace(/^[•\-\*]\s*/, '').trim();
         const wrapped = pdf.splitTextToSize(clean, maxWidth - 5.5);
         pdf.text('•', margin + 1.2, y);
         pdf.text(wrapped, margin + 4.8, y);
-        y += wrapped.length * (isCompact ? 3.4 : 3.8) + (isCompact ? 0.8 : 1.2);
+        y += wrapped.length * (isBig ? 4 : isCompact ? 3.4 : 3.8) + (isBig ? 1.2 : 0.8);
       });
-      y += isCompact ? 1 : 2;
+      y += isBig ? 2 : isCompact ? 1 : 2;
     }
 
     // 8. LANGUAGES
     if (resume.languages?.trim()) {
       addSectionHeader('Languages');
-      checkPage(5);
+      checkPage(6);
       pdf.setFont(fontChoice, 'normal');
-      pdf.setFontSize(isCompact ? 8.5 : 9);
+      pdf.setFontSize(isBig ? 10 : isCompact ? 8.5 : 9.2);
       pdf.setTextColor(30, 41, 59);
       pdf.text(resume.languages.trim(), margin, y);
     }
@@ -654,7 +654,7 @@ export default function ResumeBuilder() {
           <div className="page-hero-meta">
             <span>✓ Exact A4 (210 × 297 mm)</span>
             <span>✓ Single-Column ATS Layout</span>
-            <span>✓ Zero Graphic Clutter</span>
+            <span>✓ Big Font Size Option</span>
             <span>✓ 100% Private &amp; Free</span>
           </div>
         </div>
@@ -978,24 +978,38 @@ export default function ResumeBuilder() {
               <h2>{templateOptions.find((t) => t.id === template)?.name}</h2>
             </div>
             <div className="preview-toolbar-controls">
-              <div className="density-toggle" role="group" aria-label="Page density">
-                <button
-                  type="button"
-                  className={`density-btn ${density === 'compact' ? 'active' : ''}`}
-                  onClick={() => setDensity('compact')}
-                  title="Optimize spacing to fit on 1 single page"
-                >
-                  1-Page Fit
-                </button>
-                <button
-                  type="button"
-                  className={`density-btn ${density === 'standard' ? 'active' : ''}`}
-                  onClick={() => setDensity('standard')}
-                  title="Standard comfortable spacing"
-                >
-                  Standard
-                </button>
+              {/* Font Size Selector: Compact, Regular, Big Font */}
+              <div className="font-size-toolbar-group" role="group" aria-label="Font size selection">
+                <span className="toolbar-label">Size:</span>
+                <div className="size-toggle">
+                  <button
+                    type="button"
+                    className={`size-btn ${fontSize === 'compact' ? 'active' : ''}`}
+                    onClick={() => setFontSize('compact')}
+                    title="Compact Font (fits maximum content on 1 page)"
+                  >
+                    Compact
+                  </button>
+                  <button
+                    type="button"
+                    className={`size-btn ${fontSize === 'regular' ? 'active' : ''}`}
+                    onClick={() => setFontSize('regular')}
+                    title="Regular Standard Font"
+                  >
+                    Regular
+                  </button>
+                  <button
+                    type="button"
+                    className={`size-btn big-btn ${fontSize === 'big' ? 'active' : ''}`}
+                    onClick={() => setFontSize('big')}
+                    title="Big Font Size (large, bold and highly readable)"
+                  >
+                    Big Font 🔠
+                  </button>
+                </div>
               </div>
+
+              {/* Viewport Zoom */}
               <div className="zoom-controls">
                 <button
                   type="button"
@@ -1025,7 +1039,7 @@ export default function ResumeBuilder() {
             >
               {/* Paper Canvas */}
               <article
-                className={`resume-paper-document ${template} ${fontFamily} ${density}`}
+                className={`resume-paper-document ${template} ${fontFamily} font-${fontSize}`}
               >
                 {/* Header */}
                 <header className="paper-header">
