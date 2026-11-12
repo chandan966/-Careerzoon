@@ -1,13 +1,91 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Download, FileText, Plus, Printer, Trash2, Upload, Sparkles } from 'lucide-react';
+import {
+  Award,
+  BookOpen,
+  Briefcase,
+  CheckCircle2,
+  Code2,
+  Download,
+  ExternalLink,
+  FileText,
+  Globe,
+  GraduationCap,
+  Mail,
+  MapPin,
+  Phone,
+  Plus,
+  Printer,
+  RotateCcw,
+  Sparkles,
+  Trash2,
+  Upload,
+} from 'lucide-react';
 import './ResumeBuilder.css';
 
 const blankResume = {
-  name: '', role: '', email: '', phone: '', location: '', portfolio: '', objective: '',
+  name: '',
+  role: '',
+  email: '',
+  phone: '',
+  location: '',
+  portfolio: '',
+  objective: '',
   education: [{ school: '', degree: '', years: '' }],
   projects: [{ title: '', description: '', link: '' }],
-  skills: '', experience: '', certifications: '', achievements: '', languages: '',
+  skills: '',
+  experience: '',
+  certifications: '',
+  achievements: '',
+  languages: '',
 };
+
+const sampleResume = {
+  name: 'Aanya Sharma',
+  role: 'Software Development Engineer',
+  email: 'aanya.sharma@example.com',
+  phone: '+91 98765 43210',
+  location: 'Bengaluru, India',
+  portfolio: 'github.com/aanya-sharma',
+  objective:
+    'Results-driven software engineer with strong foundations in full-stack web development, data structures, and database design. Experienced in building responsive React applications and robust Node.js APIs with a focus on performance and clean architecture.',
+  education: [
+    {
+      school: 'National Institute of Technology',
+      degree: 'B.Tech in Computer Science & Engineering',
+      years: '2020 – 2024',
+    },
+  ],
+  skills:
+    'JavaScript, TypeScript, React, Node.js, Express, Python, SQL, PostgreSQL, Git, Docker, REST APIs, Tailwind CSS',
+  experience:
+    'Software Engineer Intern · TechNova Solutions (Jan 2024 – Jun 2024)\n• Developed and shipped 8+ responsive React components, improving page load performance by 28% across high-traffic user dashboards.\n• Designed and integrated RESTful endpoints with Node.js and PostgreSQL, optimizing database queries to reduce API latency by 35%.\n• Collaborated closely in an Agile engineering team of 6, participating in sprint planning, code reviews, and automated CI/CD pipeline deployments.',
+  projects: [
+    {
+      title: 'DevCollab — Realtime Developer Workspace',
+      link: 'github.com/aanya-sharma/devcollab',
+      description:
+        'Engineered a full-stack collaborative markdown editor with live syntax highlighting, multi-user document syncing via WebSockets, and secure JWT-based authentication.',
+    },
+    {
+      title: 'AlgoVisualizer — Interactive DSA Learning Tool',
+      link: 'github.com/aanya-sharma/algovis',
+      description:
+        'Built an interactive browser-based visualization platform for graph pathfinding and sorting algorithms with step-by-step playback controls, serving over 12,000 student learners.',
+    },
+  ],
+  certifications:
+    'AWS Certified Cloud Practitioner (2024) · Meta Frontend Developer Certificate (2023)',
+  achievements:
+    'Ranked Top 5% in University Coding Hackathon (2023) · Solved 450+ Data Structures & Algorithms problems on LeetCode',
+  languages: 'English (Professional), Hindi (Native)',
+};
+
+const templateOptions = [
+  { id: 'modern', name: 'Modern Professional', desc: 'Tech & Startups', accent: '#0d9488' },
+  { id: 'classic', name: 'Executive Classic', desc: 'Corporate & Enterprise', accent: '#1e3a8a' },
+  { id: 'tech', name: 'Tech / Engineering', desc: 'Developers & Code', accent: '#6366f1' },
+  { id: 'minimal', name: 'Minimalist Clean', desc: 'ATS Pure & Minimal', accent: '#374151' },
+];
 
 function getResume() {
   try {
@@ -20,8 +98,9 @@ function getResume() {
 
 export default function ResumeBuilder() {
   const [resume, setResume] = useState(getResume);
-  const [template, setTemplate] = useState('classic');
+  const [template, setTemplate] = useState('modern');
   const [notice, setNotice] = useState('');
+
   useEffect(() => {
     try {
       localStorage.setItem('careerzoon-resume', JSON.stringify(resume));
@@ -30,7 +109,10 @@ export default function ResumeBuilder() {
     }
   }, [resume]);
 
-  const skills = useMemo(() => resume.skills.split(',').map((skill) => skill.trim()).filter(Boolean), [resume.skills]);
+  const skills = useMemo(
+    () => resume.skills.split(',').map((skill) => skill.trim()).filter(Boolean),
+    [resume.skills]
+  );
 
   const atsScore = useMemo(() => {
     let score = 0;
@@ -41,16 +123,50 @@ export default function ResumeBuilder() {
     if (resume.objective.trim().length > 30) score += 15;
     if (resume.education.some((item) => item.school.trim() && item.degree.trim())) score += 15;
     if (skills.length >= 3) score += 15;
-    if (resume.experience.trim().length > 30 || resume.projects.some((item) => item.title.trim() && item.description.trim())) score += 15;
+    if (
+      resume.experience.trim().length > 30 ||
+      resume.projects.some((item) => item.title.trim() && item.description.trim())
+    ) {
+      score += 15;
+    }
     return Math.min(100, score);
   }, [resume, skills]);
 
-  function update(field, value) { setResume((current) => ({ ...current, [field]: value })); }
-  function updateGroup(group, index, field, value) {
-    setResume((current) => ({ ...current, [group]: current[group].map((entry, itemIndex) => itemIndex === index ? { ...entry, [field]: value } : entry) }));
+  function update(field, value) {
+    setResume((current) => ({ ...current, [field]: value }));
   }
-  function addGroup(group, entry) { setResume((current) => ({ ...current, [group]: [...current[group], entry] })); }
-  function removeGroup(group, index) { setResume((current) => ({ ...current, [group]: current[group].filter((_, itemIndex) => itemIndex !== index) })); }
+
+  function updateGroup(group, index, field, value) {
+    setResume((current) => ({
+      ...current,
+      [group]: current[group].map((entry, itemIndex) =>
+        itemIndex === index ? { ...entry, [field]: value } : entry
+      ),
+    }));
+  }
+
+  function addGroup(group, entry) {
+    setResume((current) => ({ ...current, [group]: [...current[group], entry] }));
+  }
+
+  function removeGroup(group, index) {
+    setResume((current) => ({
+      ...current,
+      [group]: current[group].filter((_, itemIndex) => itemIndex !== index),
+    }));
+  }
+
+  function handleLoadSample() {
+    setResume(sampleResume);
+    setNotice('Sample resume loaded! You can now customize all fields with your own details.');
+  }
+
+  function handleReset() {
+    if (window.confirm('Reset resume to a clean blank form?')) {
+      setResume(blankResume);
+      setNotice('Resume form cleared.');
+    }
+  }
 
   function exportJson() {
     const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(resume, null, 2));
@@ -84,129 +200,293 @@ export default function ResumeBuilder() {
 
   async function downloadPdf() {
     if (!resume.name.trim()) {
-      setNotice('Add your name before downloading your resume.');
+      setNotice('Please enter your full name before downloading your resume.');
       return;
     }
     const { jsPDF } = await import('jspdf');
-    const pdf = new jsPDF();
+    const pdf = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: 'a4',
+    });
+
     const margin = 18;
-    const maxWidth = 174;
-    let y = 22;
+    const pageWidth = 210;
+    const maxWidth = pageWidth - margin * 2;
+    let y = 20;
 
-    const isModern = template === 'modern';
-    const primaryColor = isModern ? [15, 23, 42] : [32, 37, 55];
-    const accentColor = isModern ? [14, 116, 144] : [111, 63, 189];
-    const subtextColor = isModern ? [71, 85, 105] : [95, 105, 120];
+    const themes = {
+      modern: {
+        primary: [15, 23, 42],
+        accent: [13, 148, 136],
+        subtext: [71, 85, 105],
+        divider: [204, 251, 241],
+        ruleWidth: 0.6,
+        topBar: true,
+        topBarColor: [13, 148, 136],
+      },
+      classic: {
+        primary: [15, 23, 42],
+        accent: [30, 58, 138],
+        subtext: [71, 85, 105],
+        divider: [203, 213, 225],
+        ruleWidth: 0.5,
+        topBar: false,
+      },
+      tech: {
+        primary: [15, 23, 42],
+        accent: [99, 102, 241],
+        subtext: [79, 70, 229],
+        divider: [224, 231, 255],
+        ruleWidth: 0.7,
+        topBar: true,
+        topBarColor: [99, 102, 241],
+      },
+      minimal: {
+        primary: [17, 24, 39],
+        accent: [55, 65, 81],
+        subtext: [107, 114, 128],
+        divider: [229, 231, 235],
+        ruleWidth: 0.35,
+        topBar: false,
+      },
+    };
 
-    const addLine = (text, size = 10, bold = false, color = [47, 55, 75]) => {
+    const theme = themes[template] || themes.modern;
+
+    if (theme.topBar) {
+      pdf.setFillColor(...theme.topBarColor);
+      pdf.rect(0, 0, pageWidth, 4, 'F');
+      y = 22;
+    }
+
+    const addText = (text, size = 10, bold = false, color = [47, 55, 75], spacing = 2) => {
+      if (!text) return;
       pdf.setFont('helvetica', bold ? 'bold' : 'normal');
       pdf.setFontSize(size);
       pdf.setTextColor(...color);
-      const lines = pdf.splitTextToSize(text || ' ', maxWidth);
-      if (y + lines.length * (size * .48) > 278) { pdf.addPage(); y = 20; }
+      const lines = pdf.splitTextToSize(text, maxWidth);
+      const lineHeight = size * 0.42;
+      if (y + lines.length * lineHeight > 278) {
+        pdf.addPage();
+        y = 20;
+      }
       pdf.text(lines, margin, y);
-      y += lines.length * (size * .48) + (size > 14 ? 4 : 3);
+      y += lines.length * lineHeight + spacing;
     };
 
-    addLine(resume.name, 22, true, primaryColor);
-    if (resume.role) addLine(resume.role, 11, true, accentColor);
-    addLine([resume.email, resume.phone, resume.location, resume.portfolio].filter(Boolean).join('  |  '), 9, false, subtextColor);
-
-    if (isModern) {
-      y += 2;
-      pdf.setDrawColor(...accentColor);
-      pdf.setLineWidth(0.6);
-      pdf.line(margin, y, margin + maxWidth, y);
-      y += 4;
+    addText(resume.name, 22, true, theme.primary, 1);
+    if (resume.role) {
+      addText(resume.role, 11, true, theme.accent, 2);
     }
 
-    const section = (heading, body) => {
-      if (!body) return;
-      y += 3;
-      addLine(heading.toUpperCase(), 10, true, accentColor);
-      if (isModern) {
-        pdf.setDrawColor(226, 232, 240);
-        pdf.setLineWidth(0.3);
-        pdf.line(margin, y, margin + maxWidth, y);
-        y += 2;
+    const contactList = [resume.email, resume.phone, resume.location, resume.portfolio].filter(Boolean);
+    if (contactList.length) {
+      addText(contactList.join('   |   '), 8.5, false, theme.subtext, 3);
+    }
+
+    pdf.setDrawColor(...theme.accent);
+    pdf.setLineWidth(theme.ruleWidth);
+    pdf.line(margin, y, margin + maxWidth, y);
+    y += 5;
+
+    const addSection = (heading, content) => {
+      if (!content) return;
+      if (Array.isArray(content) && content.length === 0) return;
+      if (typeof content === 'string' && !content.trim()) return;
+
+      if (y > 255) {
+        pdf.addPage();
+        y = 20;
       }
-      addLine(body, 9);
+
+      addText(heading.toUpperCase(), 10, true, theme.accent, 1.5);
+      pdf.setDrawColor(...theme.divider);
+      pdf.setLineWidth(0.35);
+      pdf.line(margin, y, margin + maxWidth, y);
+      y += 3.5;
+
+      if (typeof content === 'string') {
+        const items = content.split('\n');
+        items.forEach((item) => {
+          if (!item.trim()) return;
+          addText(item.trim(), 9, false, [51, 65, 85], 1.8);
+        });
+      } else if (Array.isArray(content)) {
+        content.forEach((item) => {
+          if (!item) return;
+          addText(item, 9, false, [51, 65, 85], 2);
+        });
+      }
+      y += 2.5;
     };
-    section('Profile', resume.objective);
-    section('Education', resume.education.map((item) => [item.degree, item.school, item.years].filter(Boolean).join(' — ')).filter(Boolean).join('\n'));
-    section('Skills', skills.join('  ·  '));
-    section('Experience', resume.experience);
-    section('Projects', resume.projects.map((item) => [item.title, item.description, item.link].filter(Boolean).join(' — ')).filter(Boolean).join('\n'));
-    section('Certifications', resume.certifications);
-    section('Achievements', resume.achievements);
-    section('Languages', resume.languages);
-    const safeFilename = resume.name.trim().replace(/[^a-z0-9]+/gi, '-').replace(/^-+|-+$/g, '').toLowerCase() || 'careerzoon';
+
+    addSection('Professional Summary', resume.objective);
+
+    const educationContent = resume.education
+      .filter((e) => e.school || e.degree)
+      .map((e) => [e.degree, e.school, e.years].filter(Boolean).join('   —   '));
+    addSection('Education', educationContent);
+
+    if (skills.length > 0) {
+      addSection('Technical Skills', skills.join('   ·   '));
+    }
+
+    addSection('Experience', resume.experience);
+
+    const projectContent = resume.projects
+      .filter((p) => p.title || p.description)
+      .map((p) => {
+        let str = p.title || 'Project';
+        if (p.link) str += ` (${p.link})`;
+        if (p.description) str += `\n${p.description}`;
+        return str;
+      });
+    addSection('Key Projects', projectContent);
+
+    addSection('Certifications', resume.certifications);
+    addSection('Achievements & Honors', resume.achievements);
+    addSection('Languages', resume.languages);
+
+    const safeFilename =
+      resume.name
+        .trim()
+        .replace(/[^a-z0-9]+/gi, '-')
+        .replace(/^-+|-+$/g, '')
+        .toLowerCase() || 'careerzoon';
     pdf.save(`${safeFilename}-resume.pdf`);
-    setNotice('Your PDF resume is ready to download.');
+    setNotice('Your professional PDF resume has been downloaded successfully.');
   }
 
   return (
     <main className="resume-page">
       <div className="page-hero">
         <div className="page-hero-inner">
-          <span className="eyebrow">FREE RESUME BUILDER</span>
-          <h1>Make your next move stand out.</h1>
-          <p>Create a clear, ATS-friendly resume. Your information stays on this device—no account or upload required.</p>
+          <span className="eyebrow">PROFESSIONAL RESUME BUILDER</span>
+          <h1>Create an ATS-ready resume that gets noticed.</h1>
+          <p>Choose from curated professional templates, edit in real time, and download a publication-grade PDF. Your data stays 100% private on your device.</p>
           <div className="page-hero-meta">
-            <span>✓ Saved privately in your browser</span>
-            <span>✓ Download a PDF or print</span>
+            <span>✓ 100% Free &amp; Private</span>
+            <span>✓ ATS-Optimized Formats</span>
+            <span>✓ Vector PDF Download</span>
+            <span>✓ Instant Print</span>
           </div>
         </div>
       </div>
+
       <div className="resume-workspace">
         <section className="resume-form-panel">
           <div className="resume-panel-head">
             <div>
-              <span className="eyebrow">YOUR DETAILS</span>
-              <h2>Build your resume</h2>
+              <span className="eyebrow">RESUME EDITOR</span>
+              <h2>Fill your details</h2>
             </div>
-            <div className="resume-top-controls">
-              <label className="template-picker">
-                Template
-                <select value={template} onChange={(event) => setTemplate(event.target.value)}>
-                  <option value="classic">Classic ATS</option>
-                  <option value="modern">Modern minimal</option>
-                </select>
-              </label>
+            <div className="resume-panel-head-actions">
+              <button
+                type="button"
+                className="resume-quick-btn sample"
+                onClick={handleLoadSample}
+                title="Fill with professional example data"
+              >
+                <Sparkles size={13} /> Load Sample
+              </button>
+              <button
+                type="button"
+                className="resume-quick-btn reset"
+                onClick={handleReset}
+                title="Clear all fields"
+              >
+                <RotateCcw size={13} /> Clear
+              </button>
+            </div>
+          </div>
+
+          <div className="template-picker-section">
+            <span className="template-section-label">Select Professional Template:</span>
+            <div className="template-picker-grid" role="tablist" aria-label="Resume templates">
+              {templateOptions.map((t) => (
+                <button
+                  key={t.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={template === t.id}
+                  className={`template-card-btn ${template === t.id ? 'active' : ''}`}
+                  onClick={() => setTemplate(t.id)}
+                >
+                  <span className="template-swatch" style={{ background: t.accent }} />
+                  <span className="template-card-texts">
+                    <strong className="template-card-name">{t.name}</strong>
+                    <small className="template-card-desc">{t.desc}</small>
+                  </span>
+                </button>
+              ))}
             </div>
           </div>
 
           <div className="ats-score-box">
             <div className="ats-score-header">
-              <span><Sparkles size={14} /> ATS Readiness Score: <b>{atsScore}/100</b> ({atsScore >= 80 ? 'Strong' : atsScore >= 50 ? 'Good' : 'Needs details'})</span>
-              <small>{atsScore >= 80 ? 'Ready to apply' : 'Complete remaining sections'}</small>
+              <span>
+                <Sparkles size={14} /> ATS Readiness Score: <b>{atsScore}/100</b>
+              </span>
+              <span className={`ats-score-badge ${atsScore >= 80 ? 'strong' : atsScore >= 50 ? 'good' : 'warning'}`}>
+                {atsScore >= 80 ? 'Strong ATS Match' : atsScore >= 50 ? 'Good Start' : 'Needs More Detail'}
+              </span>
             </div>
             <div className="ats-score-bar">
-              <div className="ats-score-fill" style={{ width: `${atsScore}%` }} />
+              <div
+                className="ats-score-fill"
+                style={{
+                  width: `${atsScore}%`,
+                  background:
+                    atsScore >= 80
+                      ? 'linear-gradient(90deg, #10b981, #059669)'
+                      : atsScore >= 50
+                      ? 'linear-gradient(90deg, #f59e0b, #10b981)'
+                      : 'linear-gradient(90deg, #ef4444, #f59e0b)',
+                }}
+              />
             </div>
+            <p className="ats-score-tip">
+              {atsScore < 50
+                ? 'Tip: Add target role, education, and at least 3 skills to reach 50+.'
+                : atsScore < 80
+                ? 'Tip: Include a 2-3 sentence career summary and at least one project or work experience.'
+                : 'Great job! Your resume has strong ATS coverage with all key sections filled.'}
+            </p>
           </div>
 
           <div className="resume-form">
-            <ResumeSection title="Personal information">
+            <ResumeSection title="Personal information" icon={<Briefcase size={14} />}>
               <div className="form-grid">
                 <Field label="Full name" value={resume.name} onChange={(value) => update('name', value)} placeholder="e.g. Aanya Sharma" />
-                <Field label="Target role" value={resume.role} onChange={(value) => update('role', value)} placeholder="e.g. Junior Frontend Developer" />
+                <Field label="Target role" value={resume.role} onChange={(value) => update('role', value)} placeholder="e.g. Software Development Engineer" />
                 <Field label="Email" value={resume.email} onChange={(value) => update('email', value)} placeholder="you@example.com" type="email" />
                 <Field label="Phone" value={resume.phone} onChange={(value) => update('phone', value)} placeholder="+91 98765 43210" />
-                <Field label="Location" value={resume.location} onChange={(value) => update('location', value)} placeholder="City, Country" />
-                <Field label="Portfolio / LinkedIn" value={resume.portfolio} onChange={(value) => update('portfolio', value)} placeholder="linkedin.com/in/you" />
+                <Field label="Location" value={resume.location} onChange={(value) => update('location', value)} placeholder="Bengaluru, India" />
+                <Field label="Portfolio / LinkedIn / GitHub" value={resume.portfolio} onChange={(value) => update('portfolio', value)} placeholder="github.com/your-username" />
               </div>
             </ResumeSection>
-            <ResumeSection title="Career summary">
-              <textarea value={resume.objective} onChange={(event) => update('objective', event.target.value)} placeholder="Write 2–3 concise sentences about your strengths and the role you’re pursuing." rows="3" />
+
+            <ResumeSection title="Career summary" icon={<FileText size={14} />}>
+              <textarea
+                value={resume.objective}
+                onChange={(event) => update('objective', event.target.value)}
+                placeholder="Write 2–3 concise sentences highlighting your core technical competencies, engineering strengths, and career goals."
+                rows="3"
+              />
             </ResumeSection>
-            <ResumeSection title="Education" add={() => addGroup('education', { school: '', degree: '', years: '' })}>
+
+            <ResumeSection
+              title="Education"
+              icon={<GraduationCap size={14} />}
+              add={() => addGroup('education', { school: '', degree: '', years: '' })}
+            >
               {resume.education.map((item, index) => (
                 <div className="repeat-group" key={`education-${index}`}>
                   <div className="form-grid">
-                    <Field label="Institution" value={item.school} onChange={(value) => updateGroup('education', index, 'school', value)} placeholder="University or college" />
-                    <Field label="Degree / course" value={item.degree} onChange={(value) => updateGroup('education', index, 'degree', value)} placeholder="B.Tech, Computer Science" />
-                    <Field label="Years" value={item.years} onChange={(value) => updateGroup('education', index, 'years', value)} placeholder="2022 – 2026" />
+                    <Field label="Institution" value={item.school} onChange={(value) => updateGroup('education', index, 'school', value)} placeholder="e.g. National Institute of Technology" />
+                    <Field label="Degree / Branch" value={item.degree} onChange={(value) => updateGroup('education', index, 'degree', value)} placeholder="e.g. B.Tech in Computer Science" />
+                    <Field label="Graduation Year" value={item.years} onChange={(value) => updateGroup('education', index, 'years', value)} placeholder="e.g. 2020 – 2024" />
                   </div>
                   {resume.education.length > 1 && (
                     <button className="remove-row" onClick={() => removeGroup('education', index)} aria-label="Remove education">
@@ -216,21 +496,43 @@ export default function ResumeBuilder() {
                 </div>
               ))}
             </ResumeSection>
-            <ResumeSection title="Technical skills">
-              <Field label="Skills (comma separated)" value={resume.skills} onChange={(value) => update('skills', value)} placeholder="JavaScript, React, Git, SQL" />
+
+            <ResumeSection title="Technical skills" icon={<Code2 size={14} />}>
+              <Field
+                label="Skills (comma separated)"
+                value={resume.skills}
+                onChange={(value) => update('skills', value)}
+                placeholder="e.g. JavaScript, TypeScript, React, Node.js, Express, Python, SQL, PostgreSQL, Git, Docker"
+              />
             </ResumeSection>
-            <ResumeSection title="Experience">
-              <textarea value={resume.experience} onChange={(event) => update('experience', event.target.value)} placeholder="Role, organization and dates. Describe your impact with clear action verbs and measurable results." rows="4" />
+
+            <ResumeSection title="Experience" icon={<Briefcase size={14} />}>
+              <textarea
+                value={resume.experience}
+                onChange={(event) => update('experience', event.target.value)}
+                placeholder="Role, organization, and dates. Use action bullet points (•) describing your technical impact and measurable results."
+                rows="5"
+              />
             </ResumeSection>
-            <ResumeSection title="Projects" add={() => addGroup('projects', { title: '', description: '', link: '' })}>
+
+            <ResumeSection
+              title="Key projects"
+              icon={<Code2 size={14} />}
+              add={() => addGroup('projects', { title: '', description: '', link: '' })}
+            >
               {resume.projects.map((item, index) => (
                 <div className="repeat-group" key={`project-${index}`}>
                   <div className="form-grid">
-                    <Field label="Project name" value={item.title} onChange={(value) => updateGroup('projects', index, 'title', value)} placeholder="e.g. Campus events app" />
-                    <Field label="Project link" value={item.link} onChange={(value) => updateGroup('projects', index, 'link', value)} placeholder="github.com/you/project" />
+                    <Field label="Project title" value={item.title} onChange={(value) => updateGroup('projects', index, 'title', value)} placeholder="e.g. DevCollab — Realtime Workspace" />
+                    <Field label="Repository / Live Demo link" value={item.link} onChange={(value) => updateGroup('projects', index, 'link', value)} placeholder="github.com/username/project" />
                     <label className="field-label full-field">
-                      What you built
-                      <textarea value={item.description} onChange={(event) => updateGroup('projects', index, 'description', event.target.value)} placeholder="Tools used, your contribution and the outcome." rows="2" />
+                      Project description &amp; technical stack
+                      <textarea
+                        value={item.description}
+                        onChange={(event) => updateGroup('projects', index, 'description', event.target.value)}
+                        placeholder="Technologies used, architecture choices, your contribution, and measurable outcomes."
+                        rows="2"
+                      />
                     </label>
                   </div>
                   {resume.projects.length > 1 && (
@@ -241,18 +543,21 @@ export default function ResumeBuilder() {
                 </div>
               ))}
             </ResumeSection>
-            <ResumeSection title="Certifications & achievements">
-              <Field label="Certifications" value={resume.certifications} onChange={(value) => update('certifications', value)} placeholder="Certification — issuer, year" />
-              <Field label="Achievements" value={resume.achievements} onChange={(value) => update('achievements', value)} placeholder="Awards, competitions, contributions" />
-              <Field label="Languages" value={resume.languages} onChange={(value) => update('languages', value)} placeholder="English, Hindi" />
+
+            <ResumeSection title="Certifications, honors &amp; languages" icon={<Award size={14} />}>
+              <Field label="Certifications" value={resume.certifications} onChange={(value) => update('certifications', value)} placeholder="e.g. AWS Certified Cloud Practitioner (2024)" />
+              <Field label="Achievements &amp; Hackathons" value={resume.achievements} onChange={(value) => update('achievements', value)} placeholder="e.g. Top 5% in University Hackathon, 450+ LeetCode problems" />
+              <Field label="Languages" value={resume.languages} onChange={(value) => update('languages', value)} placeholder="e.g. English (Fluent), Hindi (Native)" />
             </ResumeSection>
           </div>
+
           {notice && <p className="resume-notice" role="status">{notice}</p>}
+
           <div className="resume-actions">
-            <button className="button-primary" onClick={downloadPdf}>
+            <button type="button" className="button-primary download-btn" onClick={downloadPdf}>
               <Download size={15} /> Download PDF
             </button>
-            <button className="resume-print" onClick={() => window.print()}>
+            <button type="button" className="resume-print" onClick={() => window.print()}>
               <Printer size={15} /> Print
             </button>
             <div className="resume-backup-buttons">
@@ -264,49 +569,145 @@ export default function ResumeBuilder() {
                 <input type="file" accept=".json" onChange={importJson} style={{ display: 'none' }} />
               </label>
             </div>
-            <span>Saved privately in browser</span>
+            <span className="privacy-badge">🔒 100% Local Storage</span>
           </div>
         </section>
+
         <aside className="resume-preview-panel">
           <div className="preview-head">
             <div>
-              <span className="eyebrow">LIVE PREVIEW</span>
-              <h2>{template === 'classic' ? 'Classic ATS' : 'Modern minimal'}</h2>
+              <span className="eyebrow">LIVE A4 PREVIEW</span>
+              <h2>
+                {templateOptions.find((t) => t.id === template)?.name || 'Modern Professional'}
+              </h2>
             </div>
-            <FileText size={18} />
+            <div className="preview-format-tag">
+              <FileText size={14} />
+              <span>A4 Document</span>
+            </div>
           </div>
-          <article className={`resume-preview ${template}`}>
-            <header>
-              <h1>{resume.name || 'Your Name'}</h1>
-              {resume.role && <h2>{resume.role}</h2>}
-              <p>{[resume.email, resume.phone, resume.location, resume.portfolio].filter(Boolean).join('  ·  ') || 'email@example.com  ·  City, Country'}</p>
-            </header>
-            {resume.objective && <PreviewSection title="Profile"><p>{resume.objective}</p></PreviewSection>}
-            {resume.education.some((item) => item.school || item.degree) && (
-              <PreviewSection title="Education">
-                {resume.education.filter((item) => item.school || item.degree).map((item, index) => (
-                  <p key={index}><b>{item.degree || 'Degree / course'}</b><br />{item.school}{item.years ? ` · ${item.years}` : ''}</p>
-                ))}
-              </PreviewSection>
-            )}
-            {skills.length > 0 && (
-              <PreviewSection title="Technical skills">
-                <div className="preview-skills">{skills.map((skill) => <span key={skill}>{skill}</span>)}</div>
-              </PreviewSection>
-            )}
-            {resume.experience && <PreviewSection title="Experience"><p className="preserve-lines">{resume.experience}</p></PreviewSection>}
-            {resume.projects.some((item) => item.title || item.description) && (
-              <PreviewSection title="Projects">
-                {resume.projects.filter((item) => item.title || item.description).map((item, index) => (
-                  <p key={index}><b>{item.title || 'Project'}</b><br /><span className="preserve-lines">{item.description}</span></p>
-                ))}
-              </PreviewSection>
-            )}
-            {resume.certifications && <PreviewSection title="Certifications"><p className="preserve-lines">{resume.certifications}</p></PreviewSection>}
-            {resume.achievements && <PreviewSection title="Achievements"><p className="preserve-lines">{resume.achievements}</p></PreviewSection>}
-            {resume.languages && <PreviewSection title="Languages"><p>{resume.languages}</p></PreviewSection>}
-          </article>
-          <div className="privacy-note">Your resume details are stored only in this browser’s local storage.</div>
+
+          <div className="resume-preview-wrapper">
+            <article className={`resume-preview ${template}`}>
+              {(template === 'modern' || template === 'tech') && <div className="preview-top-accent" />}
+              <header className="resume-preview-header">
+                <h1 className="preview-name">{resume.name || 'Your Full Name'}</h1>
+                <h2 className="preview-role">{resume.role || 'Your Professional Headline / Target Role'}</h2>
+                <div className="preview-contact-bar">
+                  {resume.email ? (
+                    <span className="contact-item">
+                      <Mail size={12} /> {resume.email}
+                    </span>
+                  ) : (
+                    <span className="contact-item placeholder">
+                      <Mail size={12} /> email@example.com
+                    </span>
+                  )}
+                  {resume.phone && (
+                    <span className="contact-item">
+                      <Phone size={12} /> {resume.phone}
+                    </span>
+                  )}
+                  {resume.location && (
+                    <span className="contact-item">
+                      <MapPin size={12} /> {resume.location}
+                    </span>
+                  )}
+                  {resume.portfolio && (
+                    <span className="contact-item">
+                      <Globe size={12} /> {resume.portfolio}
+                    </span>
+                  )}
+                </div>
+              </header>
+
+              {resume.objective && (
+                <PreviewSection title="Professional Summary">
+                  <p className="preview-body-text">{resume.objective}</p>
+                </PreviewSection>
+              )}
+
+              {resume.education.some((item) => item.school || item.degree) && (
+                <PreviewSection title="Education">
+                  {resume.education
+                    .filter((item) => item.school || item.degree)
+                    .map((item, index) => (
+                      <div className="preview-entry" key={index}>
+                        <div className="preview-entry-head">
+                          <strong className="entry-title">{item.degree || 'Degree / Course of Study'}</strong>
+                          {item.years && <span className="entry-date">{item.years}</span>}
+                        </div>
+                        <div className="entry-sub">{item.school || 'University / Institution'}</div>
+                      </div>
+                    ))}
+                </PreviewSection>
+              )}
+
+              {skills.length > 0 && (
+                <PreviewSection title="Technical Skills">
+                  <div className="preview-skills">
+                    {skills.map((skill) => (
+                      <span className="skill-chip" key={skill}>
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </PreviewSection>
+              )}
+
+              {resume.experience && (
+                <PreviewSection title="Experience">
+                  <div className="preview-body-text preserve-lines">{resume.experience}</div>
+                </PreviewSection>
+              )}
+
+              {resume.projects.some((item) => item.title || item.description) && (
+                <PreviewSection title="Key Projects">
+                  {resume.projects
+                    .filter((item) => item.title || item.description)
+                    .map((item, index) => (
+                      <div className="preview-entry" key={index}>
+                        <div className="preview-entry-head">
+                          <strong className="entry-title">{item.title || 'Project Name'}</strong>
+                          {item.link && (
+                            <span className="entry-link">
+                              <ExternalLink size={10} /> {item.link}
+                            </span>
+                          )}
+                        </div>
+                        {item.description && (
+                          <div className="preview-body-text preserve-lines entry-desc">
+                            {item.description}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                </PreviewSection>
+              )}
+
+              {resume.certifications && (
+                <PreviewSection title="Certifications">
+                  <div className="preview-body-text preserve-lines">{resume.certifications}</div>
+                </PreviewSection>
+              )}
+
+              {resume.achievements && (
+                <PreviewSection title="Achievements &amp; Honors">
+                  <div className="preview-body-text preserve-lines">{resume.achievements}</div>
+                </PreviewSection>
+              )}
+
+              {resume.languages && (
+                <PreviewSection title="Languages">
+                  <div className="preview-body-text">{resume.languages}</div>
+                </PreviewSection>
+              )}
+            </article>
+          </div>
+
+          <div className="privacy-note">
+            <CheckCircle2 size={13} /> Stored privately in browser local storage. No server uploads.
+          </div>
         </aside>
       </div>
     </main>
@@ -314,11 +715,38 @@ export default function ResumeBuilder() {
 }
 
 function Field({ label, value, onChange, placeholder, type = 'text' }) {
-  return <label className="field-label">{label}<input type={type} value={value} onChange={(event) => onChange(event.target.value)} placeholder={placeholder} /></label>;
+  return (
+    <label className="field-label">
+      {label}
+      <input type={type} value={value} onChange={(event) => onChange(event.target.value)} placeholder={placeholder} />
+    </label>
+  );
 }
-function ResumeSection({ title, children, add }) {
-  return <section className="resume-section"><div className="resume-section-title"><h3>{title}</h3>{add && <button onClick={add}><Plus size={13} /> Add</button>}</div>{children}</section>;
+
+function ResumeSection({ title, icon, children, add }) {
+  return (
+    <section className="resume-section">
+      <div className="resume-section-title">
+        <h3>
+          {icon}
+          <span>{title}</span>
+        </h3>
+        {add && (
+          <button type="button" onClick={add}>
+            <Plus size={13} /> Add
+          </button>
+        )}
+      </div>
+      {children}
+    </section>
+  );
 }
+
 function PreviewSection({ title, children }) {
-  return <section className="preview-section"><h3>{title}</h3>{children}</section>;
+  return (
+    <section className="preview-section">
+      <h3 className="preview-section-title">{title}</h3>
+      {children}
+    </section>
+  );
 }
